@@ -26,7 +26,7 @@ public class SchedulerRunnable implements Runnable{
 
 
     public void end() throws SchedulerException{
-        scheduler.shutdown(true);
+        scheduler.shutdown(false);
     }
 
     public Scheduler getScheduler() {

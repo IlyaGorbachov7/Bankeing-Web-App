@@ -23,13 +23,12 @@ public class SchedulerListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
-        logger.info("Finishing scheduled tasks.");
         try {
             SchedulerDispatcher.getInstance().end();
         } catch (Exception e) {
             logger.error("Failed to finish scheduled jobs.",e);
             throw new RuntimeException("Failed to finish scheduled jobs.",e);
         }
-
+        logger.info("Finishing scheduled tasks.");
     }
 }

@@ -54,11 +54,12 @@ public final class ConnectionPool {
     private void initPoolData() throws ConnectionPoolException {
         Locale.setDefault(Locale.ENGLISH);
 
-        try(Connection connection = DriverManager.getConnection(databaseURL, user, password)) {
+        try{
             Class.forName(driverName);
             givenAwayConnectionsQueue = new ArrayBlockingQueue<>(poolSize);
             connectionQueue = new ArrayBlockingQueue<>(poolSize);
             for (int i = 0; i < poolSize; i++) {
+                Connection connection = DriverManager.getConnection(databaseURL, user, password);
                 PooledConnection pooledConnection = new PooledConnection(connection);
                 connectionQueue.add(pooledConnection);
             }
