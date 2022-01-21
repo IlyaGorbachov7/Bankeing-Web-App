@@ -82,6 +82,6 @@ public class SqlOperationDAO implements by.epam.baranovsky.banking.dao.Operation
     @Override
     public List<Operation> findByCriteria(Criteria<? extends EntityParameters.OperationParam> criteria) throws DAOException {
         Query query = criteria.generateQuery(SQL_SELECT_ALL);
-        return queryMaster.executeQuery(query.getQuery(), query.getParameters());
+        return queryMaster.executeQuery(query.getSqlQueryString(), query.getParameters());
     }
 }

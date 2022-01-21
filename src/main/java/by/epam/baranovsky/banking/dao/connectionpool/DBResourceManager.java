@@ -4,12 +4,12 @@ import java.util.ResourceBundle;
 
 public class DBResourceManager {
 
-    private final static DBResourceManager instance = new DBResourceManager();
-    private final static String RESOURCE_DB_PARAMS_BUNDLE="db";
+    private static final DBResourceManager instance = new DBResourceManager();
+    private static final String RESOURCE_DB_PARAMS_BUNDLE="db";
 
     private final ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_DB_PARAMS_BUNDLE);
 
-    private DBResourceManager() { }
+    private DBResourceManager() {}
 
     public static DBResourceManager getInstance(){
         return instance;

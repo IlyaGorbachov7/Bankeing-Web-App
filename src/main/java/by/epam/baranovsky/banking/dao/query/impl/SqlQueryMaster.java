@@ -6,7 +6,6 @@ import by.epam.baranovsky.banking.dao.exception.DAOException;
 import by.epam.baranovsky.banking.dao.query.Query;
 import by.epam.baranovsky.banking.dao.query.QueryMaster;
 import by.epam.baranovsky.banking.dao.rowmapper.RowMapper;
-import by.epam.baranovsky.banking.entity.Entity;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
@@ -100,7 +99,7 @@ public class SqlQueryMaster<T> implements QueryMaster<T> {
             int firstQueryGeneratedKey = -1;
             boolean idSet = false;
             for (Query query : queries) {
-                PreparedStatement statement = connection.prepareStatement(query.getQuery(), Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement statement = connection.prepareStatement(query.getSqlQueryString(), Statement.RETURN_GENERATED_KEYS);
                 setStatementParams(statement, query.getParameters());
                 statement.executeUpdate();
                 ResultSet generatedKeys = statement.getGeneratedKeys();

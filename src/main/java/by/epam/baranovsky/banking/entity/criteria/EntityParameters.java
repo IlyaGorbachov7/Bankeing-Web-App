@@ -57,7 +57,8 @@ public class EntityParameters {
         YEARLY_INTEREST(DBMetadata.LOANS_INTEREST),
         ISSUE_DATE(DBMetadata.LOANS_ISSUE_DATE),
         DUE_DATE(DBMetadata.LOANS_DUE_DATE),
-        USER(DBMetadata.LOANS_USER_ID);
+        USER(DBMetadata.LOANS_USER_ID),
+        STATUS(DBMetadata.LOANS_STATUS_ID);
 
         private final String column;
 
@@ -74,7 +75,6 @@ public class EntityParameters {
     public enum PenaltyParams implements EntityEnum{
         VALUE(DBMetadata.PENALTIES_VALUE),
         NOTICE(DBMetadata.PENALTIES_NOTICE),
-        DUE_DATE(DBMetadata.PENALTIES_DUE_DATE),
         PAYMENT_ACC(DBMetadata.PENALTIES_PAYMENT_ACC_ID),
         TYPE_ID(DBMetadata.PENALTIES_TYPE_ID),
         TYPE_NAME(DBMetadata.PENALTY_TYPE_NAME),

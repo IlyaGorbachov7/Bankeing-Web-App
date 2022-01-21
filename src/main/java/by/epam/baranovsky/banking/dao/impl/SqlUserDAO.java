@@ -12,7 +12,6 @@ import by.epam.baranovsky.banking.entity.User;
 import by.epam.baranovsky.banking.entity.criteria.Criteria;
 import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
 
-import java.sql.Date;
 import java.util.List;
 
 public class SqlUserDAO implements UserDAO {
@@ -68,7 +67,7 @@ public class SqlUserDAO implements UserDAO {
     @Override
     public List<User> findByCriteria(Criteria<? extends EntityParameters.UserParams> criteria) throws DAOException {
         Query query = criteria.generateQuery(SQL_SELECT_ALL);
-        return queryMaster.executeQuery(query.getQuery(), query.getParameters());
+        return queryMaster.executeQuery(query.getSqlQueryString(), query.getParameters());
     }
 
     @Override

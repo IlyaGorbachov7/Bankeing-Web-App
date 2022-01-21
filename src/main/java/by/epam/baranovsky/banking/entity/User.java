@@ -4,11 +4,7 @@ import lombok.Data;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.Serial;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 @Data
 public class User extends Entity {

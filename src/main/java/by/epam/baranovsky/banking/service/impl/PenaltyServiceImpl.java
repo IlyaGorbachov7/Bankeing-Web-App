@@ -3,7 +3,6 @@ package by.epam.baranovsky.banking.service.impl;
 import by.epam.baranovsky.banking.dao.PenaltyDAO;
 import by.epam.baranovsky.banking.dao.exception.DAOException;
 import by.epam.baranovsky.banking.dao.factory.impl.SqlDAOFactory;
-import by.epam.baranovsky.banking.entity.Loan;
 import by.epam.baranovsky.banking.entity.Penalty;
 import by.epam.baranovsky.banking.entity.criteria.Criteria;
 import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
@@ -17,7 +16,7 @@ import java.util.List;
 
 public class PenaltyServiceImpl implements PenaltyService {
 
-    private volatile static PenaltyServiceImpl instance = null;
+    private static volatile PenaltyServiceImpl instance = null;
     private final PenaltyValidator validator = new PenaltyValidator();
     private final PenaltyDAO penaltyDAO = SqlDAOFactory.getInstance().getPenaltyDAO();
 

@@ -19,4 +19,5 @@ public class RequestParamName {
     public static final String PARAM_NAME_ROLE="role";
     public static final String PARAM_NAME_DEFAULT_PAGE="default_page";
 
+    private RequestParamName() {}
 }

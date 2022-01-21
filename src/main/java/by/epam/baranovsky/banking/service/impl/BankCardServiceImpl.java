@@ -13,9 +13,9 @@ import java.util.List;
 
 public class BankCardServiceImpl implements BankCardService {
 
-    private volatile static BankCardServiceImpl instance = null;
     private final BankCardValidator validator = new BankCardValidator();
     private final BankCardDAO cardDAO = SqlDAOFactory.getInstance().getBankCardDAO();
+    private static volatile BankCardServiceImpl instance = null;
 
     private BankCardServiceImpl() {}
 
@@ -36,7 +36,7 @@ public class BankCardServiceImpl implements BankCardService {
         try {
             card = cardDAO.findEntityById(id);
         } catch (DAOException e) {
-            throw  new ServiceException("Unable to retrieve bank card from DB.");
+            throw  new ServiceException(e);
         }
         return card;
     }
@@ -48,7 +48,7 @@ public class BankCardServiceImpl implements BankCardService {
         try {
             card = cardDAO.findByNumberAndCvc(number, cvc);
         } catch (DAOException e) {
-            throw  new ServiceException("Unable to retrieve bank card from DB.",e);
+            throw  new ServiceException(e);
         }
         return card;
     }
@@ -59,7 +59,7 @@ public class BankCardServiceImpl implements BankCardService {
         try {
             cards = cardDAO.findByType(typeId);
         } catch (DAOException e) {
-            throw  new ServiceException("Unable to retrieve bank cards from DB.",e);
+            throw  new ServiceException(e);
         }
         return cards;
     }
@@ -70,7 +70,7 @@ public class BankCardServiceImpl implements BankCardService {
         try {
             cards = cardDAO.findByUser(userId);
         } catch (DAOException e) {
-            throw  new ServiceException("Unable to retrieve bank cards from DB.",e);
+            throw  new ServiceException(e);
         }
         return cards;
     }
@@ -81,7 +81,7 @@ public class BankCardServiceImpl implements BankCardService {
         try {
             cards = cardDAO.findByAccount(accountId);
         } catch (DAOException e) {
-            throw  new ServiceException("Unable to retrieve bank cards from DB.",e);
+            throw  new ServiceException(e);
         }
         return cards;
     }
@@ -91,14 +91,14 @@ public class BankCardServiceImpl implements BankCardService {
         Integer result;
         try{
             if(!validator.validate(card)){
-                throw new ValidationException("Invalid input!");
+                throw new ValidationException();
             }
             if(card.getId() == null || cardDAO.findEntityById(card.getId()) == null){
                 throw new ValidationException("No card with such ID");
             }
             result = cardDAO.update(card);
         } catch (DAOException e) {
-            throw  new ServiceException("Unable to update bank card in DB.",e);
+            throw  new ServiceException(e);
         }
         return result;
     }
@@ -108,11 +108,11 @@ public class BankCardServiceImpl implements BankCardService {
         BankingCard result;
         try{
             if(!validator.validate(card)){
-                throw new ValidationException("Invalid input!");
+                throw new ValidationException();
             }
             result = cardDAO.findEntityById(cardDAO.create(card));
         } catch (DAOException e) {
-            throw  new ServiceException("Unable to create bank card in DB.",e);
+            throw  new ServiceException(e);
         }
         return result;
     }
@@ -122,7 +122,7 @@ public class BankCardServiceImpl implements BankCardService {
         try {
             return delete(cardDAO.findEntityById(id));
         } catch (DAOException e) {
-            throw  new ServiceException("Unable to delete bank card from DB.",e);
+            throw  new ServiceException(e);
         }
     }
 
@@ -131,11 +131,11 @@ public class BankCardServiceImpl implements BankCardService {
         Integer res;
         try {
             if(!validator.validate(card)){
-                throw new ValidationException("Wrong input.");
+                throw new ValidationException();
             }
             res = cardDAO.delete(card);
         } catch (DAOException e) {
-            throw  new ServiceException("Unable to delete bank card from DB.",e);
+            throw  new ServiceException(e);
         }
         return res;
     }
@@ -146,7 +146,7 @@ public class BankCardServiceImpl implements BankCardService {
         try {
             cards = cardDAO.findAll();
         } catch (DAOException e) {
-            throw  new ServiceException("Unable to retrieve bank cards from DB.",e);
+            throw  new ServiceException(e);
         }
         return cards;
     }

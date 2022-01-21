@@ -2,15 +2,14 @@ package by.epam.baranovsky.banking.controller.listener;
 
 import by.epam.baranovsky.banking.dao.connectionpool.ConnectionPool;
 import by.epam.baranovsky.banking.dao.connectionpool.ConnectionPoolException;
-import com.mysql.cj.log.Log;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-public class AppCycleListener implements ServletContextListener {
+public class PoolListener implements ServletContextListener {
 
-    Logger logger = Logger.getLogger(AppCycleListener.class);
+    Logger logger = Logger.getLogger(PoolListener.class);
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {

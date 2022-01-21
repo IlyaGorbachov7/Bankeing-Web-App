@@ -5,11 +5,11 @@ import lombok.Data;
 @Data
 public class Query {
 
-    private String query;
+    private String sqlQueryString;
     private Object[] parameters;
 
     public Query(String query, Object... parameters) {
-        this.query = query;
+        this.sqlQueryString = query;
         this.parameters = parameters;
     }
 }

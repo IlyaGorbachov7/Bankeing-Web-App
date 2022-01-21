@@ -126,6 +126,8 @@ public class TransferCommand implements OperationCommand {
             return queries;
         };
 
+        private TransferTypes(){}
+
         private static Query getBasicInsert(Operation operation){
             return new Query(
                     SQL_INSERT_OPERATION,

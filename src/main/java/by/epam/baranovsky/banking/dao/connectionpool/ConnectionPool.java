@@ -13,7 +13,7 @@ import java.util.concurrent.Executor;
 public final class ConnectionPool {
 
     private static final Logger logger = Logger.getLogger(ConnectionPool.class);
-    private volatile static ConnectionPool instance = null;
+    private static volatile ConnectionPool instance = null;
 
     private BlockingQueue<Connection> connectionQueue;
     private BlockingQueue<Connection> givenAwayConnectionsQueue;
@@ -54,12 +54,11 @@ public final class ConnectionPool {
     private void initPoolData() throws ConnectionPoolException {
         Locale.setDefault(Locale.ENGLISH);
 
-        try {
+        try(Connection connection = DriverManager.getConnection(databaseURL, user, password)) {
             Class.forName(driverName);
             givenAwayConnectionsQueue = new ArrayBlockingQueue<>(poolSize);
             connectionQueue = new ArrayBlockingQueue<>(poolSize);
             for (int i = 0; i < poolSize; i++) {
-                Connection connection = DriverManager.getConnection(databaseURL, user, password);
                 PooledConnection pooledConnection = new PooledConnection(connection);
                 connectionQueue.add(pooledConnection);
             }

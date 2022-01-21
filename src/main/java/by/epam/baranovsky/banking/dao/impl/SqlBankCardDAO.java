@@ -3,7 +3,6 @@ package by.epam.baranovsky.banking.dao.impl;
 import by.epam.baranovsky.banking.constant.DBMetadata;
 import by.epam.baranovsky.banking.dao.BankCardDAO;
 import by.epam.baranovsky.banking.dao.exception.DAOException;
-import by.epam.baranovsky.banking.dao.query.Query;
 import by.epam.baranovsky.banking.dao.query.QueryMaster;
 import by.epam.baranovsky.banking.dao.query.impl.SqlQueryMaster;
 import by.epam.baranovsky.banking.dao.rowmapper.RowMapper;

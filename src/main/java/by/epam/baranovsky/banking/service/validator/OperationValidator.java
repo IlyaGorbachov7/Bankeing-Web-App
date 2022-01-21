@@ -10,6 +10,12 @@ public class OperationValidator extends AbstractValidator{
             return false;
         }
 
-        return operation.getValue() == null || operation.getValue() > 0;
+        if(operation.getBillId() != null && operation.getPenaltyId() != null){
+            return false;
+        }
+
+        return operation.getValue() == null
+                || !operation.getValue().isInfinite()
+                || !operation.getValue().isNaN();
     }
 }

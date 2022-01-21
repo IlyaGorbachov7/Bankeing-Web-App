@@ -20,7 +20,6 @@ public class PenaltyRowMapper implements RowMapper<Penalty> {
         penalty.setTypeName(resultSet.getString(DBMetadata.PENALTY_TYPE_NAME));
 
         penalty.setNotice(resultSet.getString(DBMetadata.PENALTIES_NOTICE));
-        penalty.setDueDate(resultSet.getDate(DBMetadata.PENALTIES_DUE_DATE));
         penalty.setUserId(resultSet.getInt(DBMetadata.PENALTIES_USER_ID));
 
         penalty.setStatusId(resultSet.getInt(DBMetadata.PENALTIES_STATUS_ID));

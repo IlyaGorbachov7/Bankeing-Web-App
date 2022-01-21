@@ -17,7 +17,7 @@ public class CardLockCommand implements OperationCommand{
             = new SqlQueryMaster<>(RowMapperFactory.getOperationRowMapper());
 
     private static final String SQL_INSERT_OPERATION = String.format(
-            "INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (DEFAULT, NULL, 4, NUll, NULL, ?, NULL, NULL, NULL)",
+            "INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (DEFAULT, NULL, 4, NUll, NULL, ?, NULL, NULL, ?)",
             DBMetadata.OPERATIONS_TABLE, DBMetadata.OPERATIONS_ID,
             DBMetadata.OPERATIONS_VALUE,DBMetadata.OPERATIONS_TYPE_ID,
             DBMetadata.OPERATIONS_ACC_ID,DBMetadata.OPERATIONS_TARGET_ACC_ID,
@@ -35,7 +35,9 @@ public class CardLockCommand implements OperationCommand{
         OperationCommand.testNonNull(operation.getBankCardId());
         List<Query> queries = new ArrayList<>();
 
-        queries.add(new Query(SQL_INSERT_OPERATION, operation.getBankCardId()));
+        queries.add(new Query(SQL_INSERT_OPERATION,
+                operation.getBankCardId(),
+                operation.getPenaltyId()));
         queries.add(new Query(SQL_UPDATE_CARD, operation.getBankCardId()));
 
         return queryMaster.executeTransaction(queries);

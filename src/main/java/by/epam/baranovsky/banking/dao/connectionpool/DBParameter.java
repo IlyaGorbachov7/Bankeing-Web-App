@@ -8,5 +8,5 @@ public class DBParameter {
     public static final String DB_PASSWORD = "db.password";
     public static final String DB_POOL_SIZE  = "db.poolsize";
 
-    private DBParameter(){};
+    private DBParameter(){}
 }

@@ -1,7 +1,6 @@
 package by.epam.baranovsky.banking.dao.query;
 
 import by.epam.baranovsky.banking.dao.exception.DAOException;
-import by.epam.baranovsky.banking.entity.Entity;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

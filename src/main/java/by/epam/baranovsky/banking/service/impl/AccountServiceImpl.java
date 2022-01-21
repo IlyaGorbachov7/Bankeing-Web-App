@@ -13,9 +13,9 @@ import java.util.List;
 
 public class AccountServiceImpl implements AccountService {
 
-    private volatile static AccountServiceImpl instance = null;
     private final AccountValidator validator = new AccountValidator();
     private final AccountDAO accountDAO = SqlDAOFactory.getInstance().getAccountDAO();
+    private static volatile AccountServiceImpl instance = null;
 
     private AccountServiceImpl() {}
 
@@ -37,7 +37,7 @@ public class AccountServiceImpl implements AccountService {
         try {
             account = accountDAO.findEntityById(id);
         } catch (DAOException e) {
-            throw new ServiceException("Unable to retrieve account from DB",e);
+            throw new ServiceException(e);
         }
 
         return account;
@@ -53,7 +53,7 @@ public class AccountServiceImpl implements AccountService {
             }
             account = accountDAO.findByNumber(number);
         } catch (DAOException e) {
-            throw new ServiceException("Unable to retrieve account from DB",e);
+            throw new ServiceException(e);
         }
 
         return account;
@@ -66,7 +66,7 @@ public class AccountServiceImpl implements AccountService {
         try{
             accounts = accountDAO.findByUserId(id);
         } catch (DAOException e) {
-            throw new ServiceException("Unable to retrieve accounts from DB",e);
+            throw new ServiceException(e);
         }
 
         return accounts;
@@ -79,7 +79,7 @@ public class AccountServiceImpl implements AccountService {
         try{
             accounts = accountDAO.findByStatusId(id);
         } catch (DAOException e) {
-            throw new ServiceException("Unable to retrieve accounts from DB",e);
+            throw new ServiceException(e);
         }
 
         return accounts;
@@ -104,14 +104,14 @@ public class AccountServiceImpl implements AccountService {
 
         try {
             if(!validator.validate(account)){
-                throw new ValidationException("Wrong input.");
+                throw new ValidationException();
             }
             if(account.getId() == null || accountDAO.findEntityById(account.getId())== null){
                 throw new ValidationException("No account with such ID.");
             }
             result = accountDAO.update(account);
         } catch (DAOException e) {
-            throw new ServiceException("Unable to update account in DB",e);
+            throw new ServiceException(e);
         }
 
         return result;
@@ -123,12 +123,12 @@ public class AccountServiceImpl implements AccountService {
 
         try {
             if(!validator.validate(account)){
-            throw new ValidationException("Wrong input.");
+            throw new ValidationException();
         }
             created = accountDAO.findEntityById(accountDAO.create(account));
             created.setUsers(accountDAO.findUsers(created.getId()));
         } catch (DAOException e) {
-            throw new ServiceException("Unable to create account in DB",e);
+            throw new ServiceException(e);
         }
 
         return created;
@@ -139,7 +139,7 @@ public class AccountServiceImpl implements AccountService {
         try {
             return delete(accountDAO.findEntityById(id));
         } catch (DAOException e) {
-            throw new ServiceException("Unable to delete account from DB",e);
+            throw new ServiceException(e);
         }
     }
 
@@ -149,11 +149,11 @@ public class AccountServiceImpl implements AccountService {
 
         try {
             if(!validator.validate(account)){
-                throw new ValidationException("Wrong input.");
+                throw new ValidationException();
             }
             result = accountDAO.delete(account);
         } catch (DAOException e) {
-            throw new ServiceException("Unable to delete account from DB",e);
+            throw new ServiceException(e);
         }
 
         return result;
@@ -166,7 +166,7 @@ public class AccountServiceImpl implements AccountService {
         try{
             accounts = accountDAO.findAll();
         } catch (DAOException e) {
-            throw new ServiceException("Unable to retrieve accounts from DB",e);
+            throw new ServiceException(e);
         }
 
         return accounts;

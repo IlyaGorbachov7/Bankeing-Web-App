@@ -3,7 +3,6 @@ package by.epam.baranovsky.banking.entity;
 import lombok.Data;
 
 import java.io.Serial;
-import java.util.Date;
 
 @Data
 public class Penalty extends Entity {
@@ -19,7 +18,6 @@ public class Penalty extends Entity {
 
     private String notice;
     private Integer userId;
-    private Date dueDate;
 
     private Integer statusId;
     private String statusName;

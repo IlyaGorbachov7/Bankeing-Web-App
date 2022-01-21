@@ -25,6 +25,9 @@ public class LoanRowMapper implements RowMapper<Loan> {
 
         loan.setUserId(resultSet.getInt(DBMetadata.LOANS_USER_ID));
 
+        loan.setStatusId(resultSet.getInt(DBMetadata.LOANS_STATUS_ID));
+        loan.setStatusName(resultSet.getString(DBMetadata.LOAN_STATUS_NAME));
+
         return loan;
     }
 

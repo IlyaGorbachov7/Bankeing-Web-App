@@ -53,31 +53,31 @@ public class SqlAccountDAO implements AccountDAO {
             DBMetadata.ACCOUNTS_ACCOUNT_STATUS_ID, DBMetadata.ACCOUNTS_ID
     );
 
-    private final static String SQL_INSERT_ACCOUNT = String.format(
+    private static final String SQL_INSERT_ACCOUNT = String.format(
             "INSERT INTO %s (%s, %s, %s, %s, %s) VALUES (DEFAULT, ?, ?, ?, ?)",
             DBMetadata.ACCOUNTS_TABLE, DBMetadata.ACCOUNTS_ID,
             DBMetadata.ACCOUNTS_BALANCE, DBMetadata.ACCOUNTS_NUMBER,
             DBMetadata.ACCOUNTS_INTEREST, DBMetadata.ACCOUNTS_ACCOUNT_STATUS_ID
     );
 
-    private final static String SQL_CREATE_ACCOUNT_USERS=String.format(
+    private static final String SQL_CREATE_ACCOUNT_USERS=String.format(
             "INSERT INTO %s (%s,%s) VALUES (?,(SELECT %s FROM %s WHERE %s=? LIMIT 1))",
             DBMetadata.USERS_HAS_ACCOUNTS_TABLE,
             DBMetadata.USERS_HAS_ACCOUNTS_USER_ID, DBMetadata.USERS_HAS_ACCOUNTS_ACCOUNT_ID,
             DBMetadata.ACCOUNTS_ID, DBMetadata.ACCOUNTS_TABLE, DBMetadata.ACCOUNTS_NUMBER);
 
-    private final static String SQL_INSERT_ACCOUNT_USERS = String.format(
+    private static final String SQL_INSERT_ACCOUNT_USERS = String.format(
             "INSERT INTO %s (%s, %s) VALUES (?,?)",
             DBMetadata.USERS_HAS_ACCOUNTS_TABLE,
             DBMetadata.USERS_HAS_ACCOUNTS_USER_ID, DBMetadata.USERS_HAS_ACCOUNTS_ACCOUNT_ID
     );
 
-    private final static String SQL_DELETE_ACCOUNT= String.format(
+    private static final String SQL_DELETE_ACCOUNT= String.format(
             "DELETE FROM %s WHERE %s=? LIMIT 1",
             DBMetadata.ACCOUNTS_TABLE, DBMetadata.ACCOUNTS_ID
     );
 
-    private final static String SQL_DELETE_USER_HAS_ACCOUNT_BY_ACC_AND_USER = String.format(
+    private static final String SQL_DELETE_USER_HAS_ACCOUNT_BY_ACC_AND_USER = String.format(
             "DELETE FROM %s WHERE %s=? AND %s=? LIMIT 1",
             DBMetadata.USERS_HAS_ACCOUNTS_TABLE,
             DBMetadata.USERS_HAS_ACCOUNTS_ACCOUNT_ID,
@@ -89,30 +89,32 @@ public class SqlAccountDAO implements AccountDAO {
     public Integer update(Account entity) throws DAOException {
 
         List<Query> queries = new ArrayList<>();
-        List<Integer> userListDB = findUsers(entity.getId());
         List<Integer> updatedUserList = entity.getUsers();
 
-        List<Integer> commonElems = new ArrayList<>(userListDB);
-        commonElems.retainAll(updatedUserList);
+        if(updatedUserList != null){
+            List<Integer> userListDB = findUsers(entity.getId());
+            List<Integer> commonElems = new ArrayList<>(userListDB);
+            commonElems.retainAll(updatedUserList);
 
-        updatedUserList.removeAll(commonElems);
-        userListDB.removeAll(commonElems);
+            updatedUserList.removeAll(commonElems);
+            userListDB.removeAll(commonElems);
 
-        if(userListDB.size()>0){
-            for(Integer userId : userListDB){
-                queries.add(new Query(
-                        SQL_DELETE_USER_HAS_ACCOUNT_BY_ACC_AND_USER,
-                        entity.getId(),
-                        userId));
+            if(!userListDB.isEmpty()){
+                for(Integer userId : userListDB){
+                    queries.add(new Query(
+                            SQL_DELETE_USER_HAS_ACCOUNT_BY_ACC_AND_USER,
+                            entity.getId(),
+                            userId));
+                }
             }
-        }
 
-        if(updatedUserList.size()>0){
-            for(Integer userId : updatedUserList){
-                queries.add(new Query(
-                        SQL_INSERT_ACCOUNT_USERS,
-                        userId,
-                        entity.getId()));
+            if(!updatedUserList.isEmpty()){
+                for(Integer userId : updatedUserList){
+                    queries.add(new Query(
+                            SQL_INSERT_ACCOUNT_USERS,
+                            userId,
+                            entity.getId()));
+                }
             }
         }
 

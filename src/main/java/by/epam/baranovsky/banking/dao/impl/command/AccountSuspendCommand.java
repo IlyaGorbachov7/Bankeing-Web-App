@@ -17,7 +17,7 @@ public class AccountSuspendCommand implements OperationCommand{
             = new SqlQueryMaster<>(RowMapperFactory.getOperationRowMapper());
 
     private static final String SQL_INSERT_OPERATION = String.format(
-            "INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (DEFAULT, NULL, 2, ?, NULL, NULL, NULL, NULL, NULL)",
+            "INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (DEFAULT, NULL, 2, ?, NULL, NULL, NULL, NULL, ?)",
             DBMetadata.OPERATIONS_TABLE, DBMetadata.OPERATIONS_ID,
             DBMetadata.OPERATIONS_VALUE,DBMetadata.OPERATIONS_TYPE_ID,
             DBMetadata.OPERATIONS_ACC_ID,DBMetadata.OPERATIONS_TARGET_ACC_ID,
@@ -35,7 +35,9 @@ public class AccountSuspendCommand implements OperationCommand{
         OperationCommand.testNonNull(operation.getAccountId());
 
         List<Query> queries = new ArrayList<>();
-        queries.add(new Query(SQL_INSERT_OPERATION, operation.getAccountId()));
+        queries.add(new Query(SQL_INSERT_OPERATION,
+                operation.getAccountId(),
+                operation.getPenaltyId()));
         queries.add(new Query(SQL_SUSP_ACCOUNT, operation.getAccountId()));
 
         return queryMaster.executeTransaction(queries);

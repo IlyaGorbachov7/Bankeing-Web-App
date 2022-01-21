@@ -12,6 +12,8 @@ public class RowMapperFactory {
     private static final PenaltyRowMapper PENALTY_ROW_MAPPER = new PenaltyRowMapper();
     private static final OperationRowMapper OPERATION_ROW_MAPPER = new OperationRowMapper();
 
+    private RowMapperFactory(){}
+
     public static UserRowMapper getUserRowMapper() {
         return USER_ROW_MAPPER;
     }

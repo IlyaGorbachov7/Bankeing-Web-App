@@ -1,18 +1,14 @@
 package by.epam.baranovsky.banking.service.impl;
 
-import by.epam.baranovsky.banking.dao.BankCardDAO;
 import by.epam.baranovsky.banking.dao.BillDAO;
 import by.epam.baranovsky.banking.dao.exception.DAOException;
 import by.epam.baranovsky.banking.dao.factory.impl.SqlDAOFactory;
-import by.epam.baranovsky.banking.entity.BankingCard;
 import by.epam.baranovsky.banking.entity.Bill;
-import by.epam.baranovsky.banking.entity.User;
 import by.epam.baranovsky.banking.entity.criteria.Criteria;
 import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
 import by.epam.baranovsky.banking.service.BillService;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
 import by.epam.baranovsky.banking.service.exception.ValidationException;
-import by.epam.baranovsky.banking.service.validator.BankCardValidator;
 import by.epam.baranovsky.banking.service.validator.BillValidator;
 
 import java.util.ArrayList;
@@ -20,9 +16,9 @@ import java.util.List;
 
 public class BillServiceImpl implements BillService {
 
-    private volatile static BillServiceImpl instance = null;
     private final BillValidator validator = new BillValidator();
     private final BillDAO billDAO = SqlDAOFactory.getInstance().getBillDAO();
+    private static volatile BillServiceImpl instance = null;
 
     private BillServiceImpl() {}
 

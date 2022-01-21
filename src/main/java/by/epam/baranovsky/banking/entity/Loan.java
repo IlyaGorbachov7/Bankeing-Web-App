@@ -18,6 +18,8 @@ public class Loan extends Entity {
     private Date issueDate;
     private Date dueDate;
     private Integer userId;
+    private Integer statusId;
+    private String statusName;
 
 
 }

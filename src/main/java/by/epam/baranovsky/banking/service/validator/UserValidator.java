@@ -6,8 +6,8 @@ import org.apache.commons.validator.routines.EmailValidator;
 
 public class UserValidator extends AbstractValidator {
 
-    private static final String passportNumberPattern="[0-9]{7}";
-    private static final String passportSeriesPattern="[A-Z]{2}";
+    private static final String PASSPORT_NUMBER_PATTERN ="[0-9]{7}";
+    private static final String PASSPORT_SERIES_PATTERN ="[A-Z]{2}";
 
     public boolean validate(User user) {
 
@@ -18,8 +18,8 @@ public class UserValidator extends AbstractValidator {
         }
 
         return EmailValidator.getInstance().isValid(user.getEmail())
-                && user.getPassportNumber().matches(passportNumberPattern)
-                && user.getPassportSeries().matches(passportSeriesPattern);
+                && user.getPassportNumber().matches(PASSPORT_NUMBER_PATTERN)
+                && user.getPassportSeries().matches(PASSPORT_SERIES_PATTERN);
     }
 
 

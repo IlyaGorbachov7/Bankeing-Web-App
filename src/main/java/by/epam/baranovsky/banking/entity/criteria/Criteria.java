@@ -9,8 +9,6 @@ public class Criteria<T extends EntityEnum> {
 
     private final List<Parameter> parameters = new ArrayList<>();
 
-    public Criteria() {}
-
     public boolean add(T name, CriteriaValue<?> value){
         Parameter parameterToAdd = new Parameter(name, value);
 
@@ -54,37 +52,6 @@ public class Criteria<T extends EntityEnum> {
         }
 
         return new Query(builder.append("TRUE").toString(), queryParams.toArray());
-    }
-
-    /**
-     * Type is reflected by letters: E - eponymous to current, N - not such
-     * (current elem is in center)
-     * Scheme: | prev | curr | next |
-     * 0 - |E|C|E| or |N|C|N|
-     * 1 - |E|C|N|
-     * 2 - |N|E|E|
-     * @param prev
-     * @param currentPos
-     * @param next
-     * @return
-     */
-    private int checkPosition(int prev, int currentPos, int next){
-
-        Parameter prevParam = parameters.get(prev);
-        Parameter currParam = parameters.get(currentPos);
-        Parameter nextParam = parameters.get(next);
-
-        if((!areEponymous(currParam, nextParam) && !areEponymous(currParam, prevParam))
-                || (areEponymous(currParam,nextParam) && areEponymous(currParam, prevParam))){
-            return 0;
-        } else if(areEponymous(currParam, prevParam)){
-            return 1;
-        } else return 2;
-
-    }
-
-    private boolean areEponymous(Parameter p1, Parameter p2){
-        return p1.name.equals(p2.name);
     }
 
     @Data

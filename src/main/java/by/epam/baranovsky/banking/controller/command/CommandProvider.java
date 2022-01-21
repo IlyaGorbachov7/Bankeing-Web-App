@@ -1,12 +1,11 @@
 package by.epam.baranovsky.banking.controller.command;
 
-import by.epam.baranovsky.banking.constant.CommandName;
+
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 public class CommandProvider {

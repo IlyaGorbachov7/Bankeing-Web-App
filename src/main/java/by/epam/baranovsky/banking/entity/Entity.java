@@ -5,13 +5,13 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public abstract class Entity implements Serializable, Cloneable {
+public abstract class Entity implements Serializable {
 
     protected Integer id = null;
 
-    public Entity() {}
+    protected Entity() {}
 
-    public Entity(Integer id) {
+    protected Entity(Integer id) {
         this.id = id;
     }
 }

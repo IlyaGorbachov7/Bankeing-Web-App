@@ -9,12 +9,11 @@ public class AccountValidator extends AbstractValidator{
     public boolean validate(Account account){
 
         if(!notNull(account.getAccountNumber(), account.getBalance(),
-                account.getStatusId(), account.getYearlyInterestRate(),
-                account.getUsers())){
+                account.getStatusId(), account.getYearlyInterestRate())){
             return false;
         }
 
-        if(account.getUsers().isEmpty()){
+        if(account.getUsers()!= null && account.getUsers().isEmpty()){
             return false;
         }
 

@@ -11,7 +11,6 @@ import by.epam.baranovsky.banking.entity.Penalty;
 import by.epam.baranovsky.banking.entity.criteria.Criteria;
 import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
 
-import java.sql.Date;
 import java.util.List;
 
 public class SqlPenaltyDAO implements by.epam.baranovsky.banking.dao.PenaltyDAO {
@@ -31,20 +30,18 @@ public class SqlPenaltyDAO implements by.epam.baranovsky.banking.dao.PenaltyDAO 
             "%s WHERE %s=?", SQL_SELECT_ALL, DBMetadata.PENALTIES_ID);
 
     private static final String SQL_INSERT = String.format(
-            "INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s) VALUES (DEFAULT,?,?,?,?,?,?,?)",
+            "INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s) VALUES (DEFAULT,?,?,?,?,?,?)",
             DBMetadata.PENALTIES_TABLE, DBMetadata.PENALTIES_ID,
-            DBMetadata.PENALTIES_VALUE, DBMetadata.PENALTIES_NOTICE,
-            DBMetadata.PENALTIES_DUE_DATE, DBMetadata.PENALTIES_PAYMENT_ACC_ID,
+            DBMetadata.PENALTIES_VALUE, DBMetadata.PENALTIES_NOTICE, DBMetadata.PENALTIES_PAYMENT_ACC_ID,
             DBMetadata.PENALTY_TYPE_ID, DBMetadata.PENALTIES_USER_ID,
             DBMetadata.PENALTIES_STATUS_ID);
 
     private static final String SQL_UPDATE = String.format(
-            "UPDATE %s SET %s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=? WHERE %s=?",
+            "UPDATE %s SET %s=?,%s=?,%s=?,%s=?,%s=?,%s=? WHERE %s=?",
             DBMetadata.PENALTIES_TABLE, DBMetadata.PENALTIES_VALUE,
-            DBMetadata.PENALTIES_NOTICE, DBMetadata.PENALTIES_DUE_DATE,
-            DBMetadata.PENALTIES_PAYMENT_ACC_ID, DBMetadata.PENALTIES_TYPE_ID,
-            DBMetadata.PENALTIES_USER_ID, DBMetadata.PENALTIES_STATUS_ID,
-            DBMetadata.PENALTIES_ID);
+            DBMetadata.PENALTIES_NOTICE, DBMetadata.PENALTIES_PAYMENT_ACC_ID,
+            DBMetadata.PENALTIES_TYPE_ID, DBMetadata.PENALTIES_USER_ID,
+            DBMetadata.PENALTIES_STATUS_ID,DBMetadata.PENALTIES_ID);
     private static final String SQL_DELETE = String.format(
             "DELETE FROM %s WHERE %s=?",
             DBMetadata.PENALTIES_TABLE, DBMetadata.PENALTIES_ID);
@@ -55,7 +52,6 @@ public class SqlPenaltyDAO implements by.epam.baranovsky.banking.dao.PenaltyDAO 
                 SQL_UPDATE,
                 entity.getValue(),
                 entity.getNotice(),
-                new Date(entity.getDueDate().getTime()),
                 entity.getPaymentAccountId(),
                 entity.getTypeId(),
                 entity.getUserId(),
@@ -69,7 +65,6 @@ public class SqlPenaltyDAO implements by.epam.baranovsky.banking.dao.PenaltyDAO 
                 SQL_INSERT,
                 entity.getValue(),
                 entity.getNotice(),
-                new Date(entity.getDueDate().getTime()),
                 entity.getPaymentAccountId(),
                 entity.getTypeId(),
                 entity.getUserId(),
@@ -99,6 +94,6 @@ public class SqlPenaltyDAO implements by.epam.baranovsky.banking.dao.PenaltyDAO 
     @Override
     public List<Penalty> findByCriteria(Criteria<? extends EntityParameters.PenaltyParams> criteria) throws DAOException {
         Query query = criteria.generateQuery(SQL_SELECT_ALL);
-        return queryMaster.executeQuery(query.getQuery(), query.getParameters());
+        return queryMaster.executeQuery(query.getSqlQueryString(), query.getParameters());
     }
 }

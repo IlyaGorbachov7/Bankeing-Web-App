@@ -104,6 +104,6 @@ public class SqlBillDAO implements BillDAO {
     @Override
     public List<Bill> findByCriteria(Criteria<? extends EntityParameters.BillParam> criteria) throws DAOException {
         Query query = criteria.generateQuery(SQL_SELECT_ALL);
-        return queryMaster.executeQuery(query.getQuery(), query.getParameters());
+        return queryMaster.executeQuery(query.getSqlQueryString(), query.getParameters());
     }
 }

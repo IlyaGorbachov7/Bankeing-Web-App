@@ -41,12 +41,12 @@
     </filter-mapping>
 
     <listener>
-        <listener-class>by.epam.baranovsky.banking.controller.listener.AppCycleListener</listener-class>
+        <listener-class>by.epam.baranovsky.banking.controller.listener.PoolListener</listener-class>
     </listener>
 
-    <error-page>
-        <error-code>404</error-code>
-        <location>/jsp/404.jsp</location>
-    </error-page>
+    <listener>
+        <listener-class>by.epam.baranovsky.banking.controller.listener.SchedulerListener</listener-class>
+    </listener>
+
 
 </web-app>

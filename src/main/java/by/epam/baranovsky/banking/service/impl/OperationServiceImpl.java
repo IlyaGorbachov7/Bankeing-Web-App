@@ -4,7 +4,6 @@ import by.epam.baranovsky.banking.dao.OperationDAO;
 import by.epam.baranovsky.banking.dao.exception.DAOException;
 import by.epam.baranovsky.banking.dao.factory.impl.SqlDAOFactory;
 import by.epam.baranovsky.banking.entity.Operation;
-import by.epam.baranovsky.banking.entity.Penalty;
 import by.epam.baranovsky.banking.entity.criteria.Criteria;
 import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
 import by.epam.baranovsky.banking.service.OperationService;
@@ -17,7 +16,7 @@ import java.util.List;
 
 public class OperationServiceImpl implements OperationService {
 
-    private volatile static OperationServiceImpl instance = null;
+    private static volatile OperationServiceImpl instance = null;
     private final OperationValidator validator = new OperationValidator();
     private final OperationDAO operationDAO = SqlDAOFactory.getInstance().getOperationDAO();
 

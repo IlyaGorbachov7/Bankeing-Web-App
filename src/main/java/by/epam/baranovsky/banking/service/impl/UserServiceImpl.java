@@ -2,7 +2,6 @@ package by.epam.baranovsky.banking.service.impl;
 
 import by.epam.baranovsky.banking.dao.UserDAO;
 import by.epam.baranovsky.banking.dao.exception.DAOException;
-import by.epam.baranovsky.banking.dao.factory.DAOFactory;
 import by.epam.baranovsky.banking.dao.factory.impl.SqlDAOFactory;
 import by.epam.baranovsky.banking.entity.User;
 import by.epam.baranovsky.banking.entity.criteria.Criteria;
@@ -10,7 +9,6 @@ import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
 import by.epam.baranovsky.banking.service.exception.ValidationException;
 import by.epam.baranovsky.banking.service.validator.UserValidator;
-import org.apache.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.ArrayList;
@@ -20,7 +18,7 @@ import java.util.List;
 public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserService {
 
     private static final Integer DEFAULT_ROLE = 2;
-    private volatile static UserServiceImpl instance = null;
+    private static volatile UserServiceImpl instance = null;
     private final UserValidator validator = new UserValidator();
     private final UserDAO userDAO = SqlDAOFactory.getInstance().getUserDAO();
 
@@ -52,7 +50,7 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
             user = userDAO.findEntityById(user.getId());
             user.setPassword(null);
         } catch (DAOException e) {
-            throw new ServiceException("Unable to retrieve user from DB.",e);
+            throw new ServiceException(e);
         }
         return user;
     }
@@ -84,7 +82,7 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
             user = userDAO.findEntityById(userDAO.create(user));
             user.setPassword(null);
         } catch (DAOException e){
-            throw new ServiceException("Unable to register user", e);
+            throw new ServiceException(e);
         }
 
         return user;
@@ -101,7 +99,7 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
                 user.setPassword(null);
             }
         } catch (DAOException e) {
-            throw new ServiceException("Unable to retrieve users from DB",e);
+            throw new ServiceException(e);
         }
 
         return users;
@@ -116,7 +114,7 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
             user = userDAO.findEntityById(id);
             user.setPassword(null);
         } catch (DAOException e) {
-            throw new ServiceException("Unable to retrieve users from DB",e);
+            throw new ServiceException(e);
         }
 
         return user;
@@ -131,7 +129,7 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
                 user.setPassword(null);
             }
         } catch (DAOException e) {
-            throw new ServiceException("Unable to retrieve users from DB",e);
+            throw new ServiceException(e);
         }
         return users;
     }
@@ -146,16 +144,16 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
                 user.setPassword(userDAO.findEntityById(user.getId()).getPassword());
             }
             if(!validator.validate(user)){
-                throw new ServiceException("Invalid input.");
+                throw new ValidationException();
             }
             if(user.getId() == null || userDAO.findEntityById(user.getId())== null){
-                throw new ServiceException("No user with such ID");
+                throw new ValidationException("No user with such ID");
             }
             result = userDAO.update(user);
             user.setPassword(null);
 
         } catch (DAOException e) {
-            throw new ServiceException("Unable to update user in DB",e);
+            throw new ServiceException(e);
         }
 
         return result;
@@ -169,7 +167,7 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
             result = userDAO.delete(user);
 
         } catch (DAOException e) {
-            throw new ServiceException("Unable to delete user from DB",e);
+            throw new ServiceException(e);
         }
 
         return result;

@@ -4,7 +4,6 @@ import lombok.Data;
 
 import java.io.Serial;
 import java.util.Date;
-import java.util.Objects;
 
 @Data
 public class BankingCard extends Entity{

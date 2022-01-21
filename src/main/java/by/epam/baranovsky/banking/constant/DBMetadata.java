@@ -82,6 +82,11 @@ public class DBMetadata {
     public static final String LOANS_ISSUE_DATE = "date_of_issue";
     public static final String LOANS_DUE_DATE = "due_date";
     public static final String LOANS_USER_ID = "users_id_users";
+    public static final String LOANS_STATUS_ID = "id_status";
+
+    public static final String LOAN_STATUS_TABLE = "loan_status";
+    public static final String LOAN_STATUS_ID = "id_loan_status";
+    public static final String LOAN_STATUS_NAME = "status_desc";
 
     public static final String OPERATIONS_TABLE = "operations";
     public static final String OPERATIONS_ID = "id_operations";
@@ -94,7 +99,7 @@ public class DBMetadata {
     public static final String OPERATIONS_BILL_ID = "id_bill";
     public static final String OPERATIONS_PENALTY_ID = "id_penalty";
 
-    public static final String OPERATION_TYPES_TABLE = "operations";
+    public static final String OPERATION_TYPES_TABLE = "operation_types";
     public static final String OPERATION_TYPES_ID="id_operation";
     public static final String OPERATION_TYPES_NAME="description";
 
@@ -102,7 +107,6 @@ public class DBMetadata {
     public static final String PENALTIES_ID = "id_penalties";
     public static final String PENALTIES_VALUE = "value";
     public static final String PENALTIES_NOTICE="notice";
-    public static final String PENALTIES_DUE_DATE="due_date";
     public static final String PENALTIES_PAYMENT_ACC_ID="id_payment_account";
     public static final String PENALTIES_TYPE_ID="id_penalty_type";
     public static final String PENALTIES_USER_ID="id_user";
@@ -116,4 +120,5 @@ public class DBMetadata {
     public static final String PENALTY_TYPE_ID="id_penalty_type";
     public static final String PENALTY_TYPE_NAME="type";
 
+    private DBMetadata() {}
 }
