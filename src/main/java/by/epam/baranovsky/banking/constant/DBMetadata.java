@@ -98,6 +98,7 @@ public class DBMetadata {
     public static final String OPERATIONS_TARGET_CARD_ID = "id_target_bank_card";
     public static final String OPERATIONS_BILL_ID = "id_bill";
     public static final String OPERATIONS_PENALTY_ID = "id_penalty";
+    public static final String OPERATIONS_DATE = "operation_date";
 
     public static final String OPERATION_TYPES_TABLE = "operation_types";
     public static final String OPERATION_TYPES_ID="id_operation";

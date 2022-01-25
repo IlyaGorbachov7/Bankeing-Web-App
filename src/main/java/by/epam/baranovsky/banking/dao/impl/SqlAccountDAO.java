@@ -34,11 +34,12 @@ public class SqlAccountDAO implements AccountDAO {
             "%s WHERE %s=? LIMIT 1",
             SQL_FIND_ALL, DBMetadata.ACCOUNT_STATUS_ID);
 
-    private static final String SQL_FIND_BY_USER = String.format(
-            "SELECT * FROM %s LEFT JOIN %s ON %s=%s WHERE %s=?",
+    private static final String SQL_FIND_BY_USER= String.format(
+            "SELECT * FROM %s LEFT JOIN (%s LEFT JOIN %s ON %s=%s) ON %s=%s WHERE %s=?",
             DBMetadata.USERS_HAS_ACCOUNTS_TABLE, DBMetadata.ACCOUNTS_TABLE,
-            DBMetadata.USERS_HAS_ACCOUNTS_ACCOUNT_ID, DBMetadata.ACCOUNTS_ID,
-            DBMetadata.USERS_HAS_ACCOUNTS_USER_ID);
+            DBMetadata.ACCOUNT_STATUS_TABLE, DBMetadata.ACCOUNT_STATUS_ID,
+            DBMetadata.ACCOUNTS_ACCOUNT_STATUS_ID, DBMetadata.ACCOUNTS_ID,
+            DBMetadata.USERS_HAS_ACCOUNTS_ACCOUNT_ID, DBMetadata.USERS_HAS_ACCOUNTS_USER_ID);
 
     private static final String SQL_FIND_USERS = String.format(
             "SELECT * FROM %s LEFT JOIN %s ON %s=%s WHERE %s=?",

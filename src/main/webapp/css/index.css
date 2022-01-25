@@ -1,0 +1,80 @@
+*{
+    box-sizing: border-box;
+}
+
+h1,h2{
+    alignment: center;
+}
+
+html, body{
+    height: 100%;
+}
+
+.container{
+    width: 100%;
+    padding: 1.5% 0 0 1.5%;
+    font-family: sans-serif;
+}
+
+.imgColumn{
+    text-align: center;
+    align-content: center;
+    justify-content: center;
+    float: left;
+    background-color: white;
+    width: 70%;
+    padding: 0 2% 0 2%;
+    height: 95%;
+}
+
+.userColumn{
+    float: left;
+    background-color: #ffb500;
+    width: 30%;
+    padding: 0 2% 0 2%;
+    height: 95%;
+    text-align: center;
+}
+
+.blankTable{
+    border: 0;
+    text-align: left;
+    width: 100%;
+}
+
+.blankTable td{
+    width: 25%;
+}
+
+.whitebox{
+    background-color: white;
+    border-radius: 15px;
+    margin: 3% 0 3% 0;
+    padding: 2% 2% 2% 2%;
+    text-align: inherit;
+}
+
+.operationbox{
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: white;
+    margin: 3% 0 3% 0;
+    padding: 2% 2% 2% 2%;
+    text-align: inherit;
+}
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+a{
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}

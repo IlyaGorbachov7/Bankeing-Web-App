@@ -3,7 +3,7 @@ package by.epam.baranovsky.banking.controller.filter;
 import javax.servlet.*;
 import java.io.IOException;
 
-public class LocaleFilter implements Filter {
+public class CharsetFilter implements Filter {
 
     private String encoding;
 

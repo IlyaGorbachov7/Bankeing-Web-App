@@ -77,7 +77,7 @@ public class OperationServiceImpl implements OperationService {
         Operation result;
         try{
             if(!validator.validate(operation)){
-                throw new ValidationException("Invalid input!");
+                throw new ValidationException();
             }
             result = operationDAO.findEntityById(operationDAO.create(operation));
         } catch (DAOException e) {

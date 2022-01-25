@@ -27,8 +27,9 @@ public class SqlOperationDAO implements by.epam.baranovsky.banking.dao.Operation
             "%s WHERE %s=?", SQL_SELECT_ALL, DBMetadata.OPERATIONS_ID);
 
     private static final String SQL_UPDATE = String.format(
-            "UPDATE %s SET %s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=? WHERE %s=?",
+            "UPDATE %s SET %s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=? WHERE %s=?",
             DBMetadata.OPERATIONS_TABLE, DBMetadata.OPERATIONS_VALUE,
+            DBMetadata.OPERATIONS_DATE,
             DBMetadata.OPERATIONS_TYPE_ID, DBMetadata.OPERATIONS_ACC_ID,
             DBMetadata.OPERATIONS_TARGET_ACC_ID, DBMetadata.OPERATIONS_CARD_ID,
             DBMetadata.OPERATIONS_TARGET_CARD_ID, DBMetadata.OPERATIONS_BILL_ID,

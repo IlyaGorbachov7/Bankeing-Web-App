@@ -1,7 +1,10 @@
 package by.epam.baranovsky.banking.controller.constant;
 
 public class RequestParamName {
+    public static final String CONTROLLER="controller";
     public static final String COMMAND_NAME="command";
+    public static final String LOCALE="locale";
+
     public static final String PARAM_NAME_EMAIL = "email";
     public static final String PARAM_NAME_PASSWORD = "password";
     public static final String PARAM_NAME_PASSWORD_CONFIRMATION = "conf_password";
@@ -17,7 +20,7 @@ public class RequestParamName {
     public static final String PARAM_NAME_ACCOUNT_ID = "account_id";
     public static final String PARAM_NAME_ID = "id";
     public static final String PARAM_NAME_ROLE="role";
-    public static final String PARAM_NAME_DEFAULT_PAGE="default_page";
+    public static final String PARAM_NAME_COUNT="default_page";
 
     private RequestParamName() {}
 }

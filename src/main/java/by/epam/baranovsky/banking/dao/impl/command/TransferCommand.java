@@ -33,12 +33,13 @@ public class TransferCommand implements OperationCommand {
     static class TransferTypes {
 
         private static final String SQL_INSERT_OPERATION = String.format(
-                "INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, NOW())",
                 DBMetadata.OPERATIONS_TABLE, DBMetadata.OPERATIONS_ID,
                 DBMetadata.OPERATIONS_VALUE,DBMetadata.OPERATIONS_TYPE_ID,
                 DBMetadata.OPERATIONS_ACC_ID,DBMetadata.OPERATIONS_TARGET_ACC_ID,
                 DBMetadata.OPERATIONS_CARD_ID,DBMetadata.OPERATIONS_TARGET_CARD_ID,
-                DBMetadata.OPERATIONS_BILL_ID, DBMetadata.OPERATIONS_PENALTY_ID);
+                DBMetadata.OPERATIONS_BILL_ID, DBMetadata.OPERATIONS_PENALTY_ID,
+                DBMetadata.OPERATIONS_DATE);
 
         private static final String SQL_UPDATE_ACC = String.format(
                 "UPDATE %s SET %s=%s+? WHERE %s=?",

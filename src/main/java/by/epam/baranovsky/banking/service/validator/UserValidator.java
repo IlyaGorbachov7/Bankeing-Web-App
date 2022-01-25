@@ -17,6 +17,7 @@ public class UserValidator extends AbstractValidator {
             return false;
         }
 
+
         return EmailValidator.getInstance().isValid(user.getEmail())
                 && user.getPassportNumber().matches(PASSPORT_NUMBER_PATTERN)
                 && user.getPassportSeries().matches(PASSPORT_SERIES_PATTERN);

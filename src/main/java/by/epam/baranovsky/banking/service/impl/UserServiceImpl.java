@@ -1,5 +1,6 @@
 package by.epam.baranovsky.banking.service.impl;
 
+import by.epam.baranovsky.banking.constant.Message;
 import by.epam.baranovsky.banking.dao.UserDAO;
 import by.epam.baranovsky.banking.dao.exception.DAOException;
 import by.epam.baranovsky.banking.dao.factory.impl.SqlDAOFactory;
@@ -35,7 +36,6 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
         return instance;
     }
 
-
     @Override
     public User loginUser(String email, String password) throws ServiceException {
         User user;
@@ -43,11 +43,10 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
         try {
             user = userDAO.findByEmail(email);
             if (user == null || !BCrypt.checkpw(password, user.getPassword())) {
-                throw new ValidationException("Wrong email or password.");
+                throw new ValidationException(Message.WRONG_EMAIL_OR_PASS);
             }
             user.setLastLogin(new Date());
             updateUser(user);
-            user = userDAO.findEntityById(user.getId());
             user.setPassword(null);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -73,10 +72,10 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
 
         try{
             if (!validator.validate(user)) {
-                throw new ValidationException("Invalid input!");
+                throw new ValidationException();
             }
             if(userDAO.findByEmail(user.getEmail()) != null){
-                throw new ValidationException("User already exists!");
+                throw new ValidationException(Message.USER_EXISTS);
             }
             user.setPassword(BCrypt.hashpw(userPassword, BCrypt.gensalt()));
             user = userDAO.findEntityById(userDAO.create(user));
@@ -147,7 +146,7 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
                 throw new ValidationException();
             }
             if(user.getId() == null || userDAO.findEntityById(user.getId())== null){
-                throw new ValidationException("No user with such ID");
+                throw new ValidationException(Message.NO_USER_WITH_THIS_ID);
             }
             result = userDAO.update(user);
             user.setPassword(null);

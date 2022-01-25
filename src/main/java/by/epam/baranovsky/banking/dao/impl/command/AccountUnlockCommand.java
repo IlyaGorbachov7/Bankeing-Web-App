@@ -17,12 +17,13 @@ public class AccountUnlockCommand implements OperationCommand{
             = new SqlQueryMaster<>(RowMapperFactory.getOperationRowMapper());
 
     private static final String SQL_INSERT_OPERATION = String.format(
-            "INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (DEFAULT, NULL, 3, ?, NULL, NULL, NULL, NULL, NULL)",
+            "INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (DEFAULT, NULL, 3, ?, NULL, NULL, NULL, NULL, NULL, NOW())",
             DBMetadata.OPERATIONS_TABLE, DBMetadata.OPERATIONS_ID,
             DBMetadata.OPERATIONS_VALUE,DBMetadata.OPERATIONS_TYPE_ID,
             DBMetadata.OPERATIONS_ACC_ID,DBMetadata.OPERATIONS_TARGET_ACC_ID,
             DBMetadata.OPERATIONS_CARD_ID,DBMetadata.OPERATIONS_TARGET_CARD_ID,
-            DBMetadata.OPERATIONS_BILL_ID, DBMetadata.OPERATIONS_PENALTY_ID);
+            DBMetadata.OPERATIONS_BILL_ID, DBMetadata.OPERATIONS_PENALTY_ID,
+            DBMetadata.OPERATIONS_DATE);
 
     private static final String SQL_UNLOCK_ACCOUNT = String.format(
             "UPDATE %s SET %s=3 WHERE %s=?",

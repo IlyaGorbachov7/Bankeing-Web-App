@@ -7,7 +7,21 @@ import java.util.*;
 
 public class Criteria<T extends EntityEnum> {
 
+    public static final String SQL_AND = "AND";
+    public static final String SQL_OR = "OR";
     private final List<Parameter> parameters = new ArrayList<>();
+    private final String particle;
+
+    public Criteria(){
+        this(SQL_AND);
+    }
+
+    public Criteria(String sqlParticle){
+        if(sqlParticle.equals(SQL_AND) || sqlParticle.equals(SQL_OR)){
+            this.particle=sqlParticle;
+        }
+        else this.particle=SQL_AND;
+    }
 
     public boolean add(T name, CriteriaValue<?> value){
         Parameter parameterToAdd = new Parameter(name, value);
@@ -27,7 +41,7 @@ public class Criteria<T extends EntityEnum> {
         builder.append(" WHERE ");
 
         if(parameters.isEmpty()){
-            return new Query(builder.append("TRUE").toString());
+            return new Query(builder.append("FALSE").toString());
         }
 
         Map<T, List<Parameter>> eponymousGroups = new HashMap<>();
@@ -48,10 +62,14 @@ public class Criteria<T extends EntityEnum> {
                 queryParams.addAll(group.get(i).getValue().getAllValues());
             }
 
-            builder.append(" ) AND ");
+            builder.append(" ) ").append(particle).append(" ");
         }
 
+        if (SQL_OR.equals(particle)) {
+            return new Query(builder.append("FALSE").toString(), queryParams.toArray());
+        }
         return new Query(builder.append("TRUE").toString(), queryParams.toArray());
+
     }
 
     @Data

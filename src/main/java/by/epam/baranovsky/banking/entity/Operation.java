@@ -3,6 +3,7 @@ package by.epam.baranovsky.banking.entity;
 import lombok.Data;
 
 import java.io.Serial;
+import java.util.Date;
 
 
 @Data
@@ -20,5 +21,6 @@ public class Operation extends Entity {
     private Integer targetBankCardId;
     private Integer billId;
     private Integer penaltyId;
+    private Date operationDate;
 
 }
