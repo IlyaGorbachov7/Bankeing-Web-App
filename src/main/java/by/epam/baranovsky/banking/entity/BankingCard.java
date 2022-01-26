@@ -12,8 +12,8 @@ public class BankingCard extends Entity{
     private static final long serialVersionUID = 1L;
 
     private String number;
-    private Integer cvc;
-    private Integer pin;
+    private String cvc;
+    private String pin;
 
     private Date expirationDate;
     private Date registrationDate;

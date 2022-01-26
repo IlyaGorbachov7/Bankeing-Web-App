@@ -92,6 +92,12 @@ public class Criteria<T extends EntityEnum> {
                 builder.append(name.getColumn())
                         .append("<=?");
             } else if (value instanceof SingularValue){
+
+                if(((SingularValue<?>) value).getValue() instanceof Date){
+                    Date valueDate = (java.util.Date) ((SingularValue<?>) value).getValue();
+                    ((SingularValue<Date>) value).setValue(new java.sql.Date(valueDate.getTime()));
+                }
+
                 builder.append(name.getColumn())
                         .append("=?");
             }

@@ -42,8 +42,11 @@
                     <c:when test="${ERROR_MSG eq Message.WRONG_INPUT}">
                         <fmt:message key="logination.wronginput"/>
                     </c:when>
+                    <c:when test="${ERROR_MSG eq Message.USER_BANNED}">
+                        <fmt:message key="logination.banned"/>
+                    </c:when>
                     <c:otherwise>
-                        ${ERROR_MSG}
+                        <fmt:message key="error.unknown"/>
                     </c:otherwise>
                 </c:choose>
             </i>

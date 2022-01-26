@@ -1,22 +1,23 @@
 package by.epam.baranovsky.banking.dao.impl.command;
 
+import by.epam.baranovsky.banking.constant.DBMetadata;
 import by.epam.baranovsky.banking.dao.exception.DAOException;
 import by.epam.baranovsky.banking.entity.Operation;
 
 import java.util.Objects;
 
 public enum OperationCommandEnum {
-    ACC_LOCK(1,new AccountLockCommand()),
-    ACC_SUSP(2,new AccountSuspendCommand()),
-    ACC_UNLOCK(3,new AccountUnlockCommand()),
-    CARD_LOCK(4, new CardLockCommand()),
-    CARD_UNLOCK(5, new CardUnlockCommand()),
-    TRANSFER_ACC_TO_ACC(6,new TransferCommand(TransferCommand.TransferTypes.ACC_TO_ACC)),
-    TRANSFER_ACC_TO_CARD(7,new TransferCommand(TransferCommand.TransferTypes.ACC_TO_CARD)),
-    TRANSFER_CARD_TO_ACC(8,new TransferCommand(TransferCommand.TransferTypes.CARD_TO_ACC)),
-    TRANSFER_CARD_TO_CARD(9,new TransferCommand(TransferCommand.TransferTypes.CARD_TO_CARD)),
-    CARD_EXPIRE(11, new CardExpirationCommand()),
-    ACCRUAL(13, new TransferCommand(TransferCommand.TransferTypes.ACCRUAL));
+    ACC_LOCK(DBMetadata.OPERATION_TYPE_ACC_LOCK,new AccountLockCommand()),
+    ACC_SUSP(DBMetadata.OPERATION_TYPE_ACC_SUSP,new AccountSuspendCommand()),
+    ACC_UNLOCK(DBMetadata.OPERATION_TYPE_ACC_UNLOCK,new AccountUnlockCommand()),
+    CARD_LOCK(DBMetadata.OPERATION_TYPE_CARD_LOCK, new CardLockCommand()),
+    CARD_UNLOCK(DBMetadata.OPERATION_TYPE_CARD_UNLOCK, new CardUnlockCommand()),
+    TRANSFER_ACC_TO_ACC(DBMetadata.OPERATION_TYPE_TRANSFER_A_A,new TransferCommand(TransferCommand.TransferTypes.ACC_TO_ACC)),
+    TRANSFER_ACC_TO_CARD(DBMetadata.OPERATION_TYPE_TRANSFER_A_C,new TransferCommand(TransferCommand.TransferTypes.ACC_TO_CARD)),
+    TRANSFER_CARD_TO_ACC(DBMetadata.OPERATION_TYPE_TRANSFER_C_A,new TransferCommand(TransferCommand.TransferTypes.CARD_TO_ACC)),
+    TRANSFER_CARD_TO_CARD(DBMetadata.OPERATION_TYPE_TRANSFER_C_C,new TransferCommand(TransferCommand.TransferTypes.CARD_TO_CARD)),
+    CARD_EXPIRE(DBMetadata.OPERATION_TYPE_CARD_EXPIRE, new CardExpirationCommand()),
+    ACCRUAL(DBMetadata.OPERATION_TYPE_ACCRUAL, new TransferCommand(TransferCommand.TransferTypes.ACCRUAL));
 
 
     OperationCommandEnum(Integer id, OperationCommand command) {

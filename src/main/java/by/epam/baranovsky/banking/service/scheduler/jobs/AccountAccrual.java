@@ -1,5 +1,6 @@
 package by.epam.baranovsky.banking.service.scheduler.jobs;
 
+import by.epam.baranovsky.banking.constant.DBMetadata;
 import by.epam.baranovsky.banking.entity.Account;
 import by.epam.baranovsky.banking.entity.Operation;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
@@ -30,6 +31,9 @@ public class AccountAccrual extends AbstractJob {
             List<Account> accountList = accountService.findAll();
 
             for(Account account : accountList){
+                if(account.getStatusId().equals(DBMetadata.ACCOUNT_STATUS_BLOCKED) || account.getStatusId().equals(ACC_STATUS_PENDING)){
+                    continue;
+                }
 
                 double percentage = Math.pow(1d + (account.getYearlyInterestRate()/100d), 1d/12d);
 

@@ -27,7 +27,7 @@ public class AccountSuspendCommand implements OperationCommand{
 
     private static final String SQL_SUSP_ACCOUNT = String.format(
             "UPDATE %s SET %s=2 WHERE %s=?",
-            DBMetadata.ACCOUNTS_TABLE, DBMetadata.ACCOUNT_STATUS_ID,
+            DBMetadata.ACCOUNTS_TABLE, DBMetadata.ACCOUNTS_ACCOUNT_STATUS_ID,
             DBMetadata.ACCOUNTS_ID);
 
 

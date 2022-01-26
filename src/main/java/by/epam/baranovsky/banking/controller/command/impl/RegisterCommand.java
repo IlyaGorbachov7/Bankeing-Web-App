@@ -64,24 +64,24 @@ public class RegisterCommand extends AbstractCommand {
     }
 
     private boolean validatePassword(HttpServletRequest request){
-        String pass = request.getParameter(RequestParamName.PARAM_NAME_PASSWORD);
-        String passConfirm = request.getParameter(RequestParamName.PARAM_NAME_PASSWORD_CONFIRMATION);
+        String pass = request.getParameter(RequestParamName.PASSWORD);
+        String passConfirm = request.getParameter(RequestParamName.CONF_PASSWORD);
 
         return !pass.isBlank() && pass.equals(passConfirm);
     }
 
     private User registerUser(HttpServletRequest request) throws ServiceException {
-        String email = request.getParameter(RequestParamName.PARAM_NAME_EMAIL);
-        String password = request.getParameter(RequestParamName.PARAM_NAME_PASSWORD);
+        String email = request.getParameter(RequestParamName.EMAIL);
+        String password = request.getParameter(RequestParamName.PASSWORD);
 
-        String firstName = request.getParameter(RequestParamName.PARAM_FIRST_NAME);
-        String lastName = request.getParameter(RequestParamName.PARAM_LAST_NAME);
-        String patronymic = request.getParameter(RequestParamName.PARAM_NAME_PATRONYMIC);
+        String firstName = request.getParameter(RequestParamName.NAME);
+        String lastName = request.getParameter(RequestParamName.SURNAME);
+        String patronymic = request.getParameter(RequestParamName.PATRONYMIC);
 
-        String passportSeries = request.getParameter(RequestParamName.PARAM_NAME_PASSPORT_SERIES);
-        String passportNumber = request.getParameter(RequestParamName.PARAM_NAME_PASSPORT_NUMBER);
+        String passportSeries = request.getParameter(RequestParamName.PASSPORT_SERIES);
+        String passportNumber = request.getParameter(RequestParamName.PASSPORT_NUMBER);
 
-        String birthdateStr = request.getParameter(RequestParamName.PARAM_NAME_BIRTHDATE);
+        String birthdateStr = request.getParameter(RequestParamName.BIRTHDATE);
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
         Date birthdate = null;

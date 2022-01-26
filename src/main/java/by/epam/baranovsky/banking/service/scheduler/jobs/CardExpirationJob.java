@@ -1,6 +1,8 @@
 package by.epam.baranovsky.banking.service.scheduler.jobs;
 
+import by.epam.baranovsky.banking.constant.DBMetadata;
 import by.epam.baranovsky.banking.entity.BankingCard;
+import by.epam.baranovsky.banking.entity.Operation;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
 import org.quartz.*;
 
@@ -30,8 +32,10 @@ public class CardExpirationJob extends AbstractJob{
             for(BankingCard card : cards){
                 Date today = new Date();
                 if(card.getExpirationDate().compareTo(today) < 0){
-                    card.setStatusId(CARD_STATUS_EXPIRED);
-                    bankCardService.update(card);
+                    Operation operation = new Operation();
+                    operation.setTypeId(DBMetadata.OPERATION_TYPE_CARD_EXPIRE);
+                    operation.setBankCardId(card.getId());
+                    operationService.create(operation);
                 }
             }
 

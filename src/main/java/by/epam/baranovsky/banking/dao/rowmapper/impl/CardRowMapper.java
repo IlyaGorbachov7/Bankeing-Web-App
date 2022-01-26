@@ -15,9 +15,9 @@ public class CardRowMapper implements RowMapper<BankingCard> {
         card.setId(resultSet.getInt(DBMetadata.BANK_CARDS_ID));
         card.setBalance(resultSet.getDouble(DBMetadata.BANK_CARDS_BALANCE));
 
-        card.setCvc(resultSet.getInt(DBMetadata.BANK_CARDS_CVC));
+        card.setCvc(resultSet.getString(DBMetadata.BANK_CARDS_CVC));
         card.setNumber(resultSet.getString(DBMetadata.BANK_CARDS_NUMBER));
-        card.setPin(resultSet.getInt(DBMetadata.BANK_CARDS_PIN));
+        card.setPin(resultSet.getString(DBMetadata.BANK_CARDS_PIN));
 
         card.setRegistrationDate(resultSet.getDate(DBMetadata.BANK_CARDS_REGISTRATION_DATE));
         card.setExpirationDate(resultSet.getDate(DBMetadata.BANK_CARDS_EXPIRATION_DATE));

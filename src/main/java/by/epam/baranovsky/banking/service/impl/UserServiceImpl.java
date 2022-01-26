@@ -1,5 +1,6 @@
 package by.epam.baranovsky.banking.service.impl;
 
+import by.epam.baranovsky.banking.constant.DBMetadata;
 import by.epam.baranovsky.banking.constant.Message;
 import by.epam.baranovsky.banking.dao.UserDAO;
 import by.epam.baranovsky.banking.dao.exception.DAOException;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserService {
 
-    private static final Integer DEFAULT_ROLE = 2;
+    private static final Integer DEFAULT_ROLE = DBMetadata.USERS_ROLE_REGULAR;
     private static volatile UserServiceImpl instance = null;
     private final UserValidator validator = new UserValidator();
     private final UserDAO userDAO = SqlDAOFactory.getInstance().getUserDAO();
@@ -44,6 +45,9 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
             user = userDAO.findByEmail(email);
             if (user == null || !BCrypt.checkpw(password, user.getPassword())) {
                 throw new ValidationException(Message.WRONG_EMAIL_OR_PASS);
+            }
+            if(user.getRoleId().equals(DBMetadata.USERS_ROLE_BANNED)){
+                throw new ValidationException(Message.USER_BANNED);
             }
             user.setLastLogin(new Date());
             updateUser(user);
@@ -146,7 +150,7 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
                 throw new ValidationException();
             }
             if(user.getId() == null || userDAO.findEntityById(user.getId())== null){
-                throw new ValidationException(Message.NO_USER_WITH_THIS_ID);
+                throw new ValidationException(Message.NO_SUCH_USER);
             }
             result = userDAO.update(user);
             user.setPassword(null);

@@ -9,7 +9,7 @@ public interface BankCardService {
 
     BankingCard findById(Integer id) throws ServiceException;
 
-    BankingCard findByNumberAndCvc(String number, Integer cvc) throws ServiceException;
+    BankingCard findByNumberAndCvc(String number, String cvc) throws ServiceException;
 
     List<BankingCard> findByType(Integer typeId) throws ServiceException;
 

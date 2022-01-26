@@ -132,7 +132,7 @@ public class SqlBankCardDAO  implements BankCardDAO {
     }
 
     @Override
-    public BankingCard findByNumberAndCvc(String number, Integer cvc) throws DAOException {
+    public BankingCard findByNumberAndCvc(String number, String cvc) throws DAOException {
         return queryMaster.executeSingleEntityQuery(
                 SQL_SELECT_BY_NUM_CVC,
                 number,

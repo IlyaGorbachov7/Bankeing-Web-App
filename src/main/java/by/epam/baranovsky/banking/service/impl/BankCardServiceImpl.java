@@ -42,7 +42,7 @@ public class BankCardServiceImpl implements BankCardService {
     }
 
     @Override
-    public BankingCard findByNumberAndCvc(String number, Integer cvc) throws ServiceException {
+    public BankingCard findByNumberAndCvc(String number, String cvc) throws ServiceException {
 
         BankingCard card;
         try {

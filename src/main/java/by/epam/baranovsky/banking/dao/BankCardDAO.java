@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface BankCardDAO extends AbstractDAO<BankingCard> {
 
-    BankingCard findByNumberAndCvc(String number, Integer cvc) throws DAOException;
+    BankingCard findByNumberAndCvc(String number, String cvc) throws DAOException;
 
     List<BankingCard> findByType(Integer typeId) throws DAOException;
 

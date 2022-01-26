@@ -76,7 +76,7 @@
                         <fmt:message key="registration.incorrectinput"/>
                     </c:when>
                     <c:otherwise>
-                        ${ERROR_MSG}
+                        <fmt:message key="error.unknown"/>
                     </c:otherwise>
                 </c:choose>
             </i>

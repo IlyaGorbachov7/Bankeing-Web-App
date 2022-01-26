@@ -16,6 +16,11 @@ public class DBMetadata {
     public static final String USERS_DATE_CREATED ="created";
     public static final String USERS_ROLE_ID ="id_role";
 
+    public static final Integer USERS_ROLE_ADMIN= 1;
+    public static final Integer USERS_ROLE_REGULAR= 2;
+    public static final Integer USERS_ROLE_EMPLOYEE= 3;
+    public static final Integer USERS_ROLE_BANNED = 4;
+
     public static final String USER_ROLES_TABLE = "user_roles";
     public static final String USER_ROLES_ID ="id_roles";
     public static final String USER_ROLES_DESC="description";
@@ -34,6 +39,10 @@ public class DBMetadata {
     public static final String ACCOUNT_STATUS_TABLE = "account_status";
     public static final String ACCOUNT_STATUS_ID = "id_status";
     public static final String ACCOUNT_STATUS_DESC = "description";
+    public static final Integer ACCOUNT_STATUS_BLOCKED = 1;
+    public static final Integer ACCOUNT_STATUS_SUSPENDED = 2;
+    public static final Integer ACCOUNT_STATUS_UNLOCKED= 3;
+    public static final Integer ACCOUNT_STATUS_PENDING= 4;
 
     public static final String BANK_CARDS_TABLE = "bank_cards";
     public static final String BANK_CARDS_ID = "id_bank_cards";
@@ -54,9 +63,18 @@ public class DBMetadata {
     public static final String CARD_TYPE_ID = "id_card_type";
     public static final String CARD_TYPE_NAME = "type";
 
+    public static final Integer CARD_TYPE_DEBIT = 1;
+    public static final Integer CARD_TYPE_CREDIT = 2;
+    public static final Integer CARD_TYPE_OVERDRAFT = 3;
+
     public static final String CARD_STATUS_TABLE = "card_status";
     public static final String CARD_STATUS_ID = "id_status";
     public static final String CARD_STATUS_NAME="status";
+
+    public static final Integer CARD_STATUS_UNLOCKED = 1;
+    public static final Integer CARD_STATUS_LOCKED = 2;
+    public static final Integer CARD_STATUS_EXPIRED= 3;
+    public static final Integer CARD_STATUS_PENDING= 4;
 
     public static final String BILLS_TABLE = "bills";
     public static final String BILLS_ID = "id_bills";
@@ -99,6 +117,18 @@ public class DBMetadata {
     public static final String OPERATIONS_BILL_ID = "id_bill";
     public static final String OPERATIONS_PENALTY_ID = "id_penalty";
     public static final String OPERATIONS_DATE = "operation_date";
+
+    public static final Integer OPERATION_TYPE_ACC_LOCK =1;
+    public static final Integer OPERATION_TYPE_ACC_SUSP =2;
+    public static final Integer OPERATION_TYPE_ACC_UNLOCK =3;
+    public static final Integer OPERATION_TYPE_CARD_LOCK =4;
+    public static final Integer OPERATION_TYPE_CARD_UNLOCK =5;
+    public static final Integer OPERATION_TYPE_TRANSFER_A_A =6;
+    public static final Integer OPERATION_TYPE_TRANSFER_A_C =7;
+    public static final Integer OPERATION_TYPE_TRANSFER_C_A =8;
+    public static final Integer OPERATION_TYPE_TRANSFER_C_C =9;
+    public static final Integer OPERATION_TYPE_CARD_EXPIRE =11;
+    public static final Integer OPERATION_TYPE_ACCRUAL =13;
 
     public static final String OPERATION_TYPES_TABLE = "operation_types";
     public static final String OPERATION_TYPES_ID="id_operation";

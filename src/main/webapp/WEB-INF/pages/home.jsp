@@ -14,7 +14,7 @@
 <div class="container">
     <div class="imgColumn">
         <h1><fmt:message key="home.header"/></h1>
-        <c:forEach var="entry" items="${operations_data}">
+        <c:forEach var="entry" items="${OPERATIONS_DATA}">
             <div class="operationbox">
                 <table class="blankTable">
                     <tr>
@@ -89,11 +89,18 @@
                     <a href="controller?command=go_to_user_edit"><fmt:message key="edit.user.title"/> </a>
                 </b>
                 </div>
+            <div class="whitebox">
+                <a href="controller?command=go_to_accounts_page"><fmt:message key="accounts.title"/></a>
+            </div>
+            <div class="whitebox">
+                <a href="controller?command=go_to_cards_page"><fmt:message key="cards.title"/></a>
+            </div>
+            <br>
             <a href="controller?command=logout"><fmt:message key="home.logout.button"/></a>
         </c:if>
         <c:if test="${USER_DATA == null}">
-            <div class="user">
-                <br>
+            <br>
+            <div class="whitebox">
                 <a href="controller?command=go_to_register_page"><fmt:message key="home.register.button"/></a>
                 <br>
                 <a href="controller?command=go_to_login_page"><fmt:message key="home.login.button"/></a>

@@ -3,10 +3,13 @@ package by.epam.baranovsky.banking.controller.command;
 
 import by.epam.baranovsky.banking.constant.CommandName;
 import by.epam.baranovsky.banking.controller.command.impl.*;
-import by.epam.baranovsky.banking.controller.command.impl.gotocommand.GoToHomePageCommand;
-import by.epam.baranovsky.banking.controller.command.impl.gotocommand.GoToLoginPageCommand;
-import by.epam.baranovsky.banking.controller.command.impl.gotocommand.GoToRegisterPageCommand;
-import by.epam.baranovsky.banking.controller.command.impl.gotocommand.GoToUserEditCommand;
+import by.epam.baranovsky.banking.controller.command.impl.account.AddUserToAccCommand;
+import by.epam.baranovsky.banking.controller.command.impl.account.LockOrSuspendAccountCommand;
+import by.epam.baranovsky.banking.controller.command.impl.account.NewAccCommand;
+import by.epam.baranovsky.banking.controller.command.impl.account.RemoveSelfFromAccCommand;
+import by.epam.baranovsky.banking.controller.command.impl.card.LockCardCommand;
+import by.epam.baranovsky.banking.controller.command.impl.card.NewCardCommand;
+import by.epam.baranovsky.banking.controller.command.impl.gotocommand.*;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +31,21 @@ public class CommandProvider {
         commandMap.put(CommandName.LOCALE_CHANGE_COMMAND, new LocaleChangeCommand());
         commandMap.put(CommandName.GOTO_USER_EDIT, new GoToUserEditCommand());
         commandMap.put(CommandName.EDIT_USER, new EditUserCommand());
+        commandMap.put(CommandName.GOTO_BILLS, new GoToBillsPageCommand());
+        commandMap.put(CommandName.GOTO_LOANS, new GoToLoansPageCommand());
+        commandMap.put(CommandName.GOTO_CARDS, new GoToCardsPageCommand());
+        commandMap.put(CommandName.GOTO_PENALTIES, new GoToPenaltiesPageCommand());
+
+        commandMap.put(CommandName.GOTO_ACCOUNTS, new GoToAccountsPageCommand());
+        commandMap.put(CommandName.GOTO_ACC_INFO_COMMAND, new GoToAccountInfoCommand());
+        commandMap.put(CommandName.NEW_ACC_COMMAND, new NewAccCommand());
+        commandMap.put(CommandName.LOCK_OR_SUSP_ACC_COMMAND, new LockOrSuspendAccountCommand());
+        commandMap.put(CommandName.REMOVE_SELF_FROM_ACC_COMMAND, new RemoveSelfFromAccCommand());
+        commandMap.put(CommandName.ADD_USER_TO_ACC_COMMAND, new AddUserToAccCommand());
+
+        commandMap.put(CommandName.GOTO_CARD_INFO_COMMAND, new GoToCardInfoCommand());
+        commandMap.put(CommandName.NEW_CARD_COMMAND, new NewCardCommand());
+        commandMap.put(CommandName.LOCK_CARD_COMMAND, new LockCardCommand());
     }
 
     public static CommandProvider getInstance(){

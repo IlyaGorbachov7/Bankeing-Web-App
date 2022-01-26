@@ -22,6 +22,7 @@
             <img src="${pageContext.request.contextPath}/img/errorArt.png"/>
             <br>
             <a href="controller?command=go_to_main_page"><fmt:message key="error.back"/></a>
+
         </div>
     </div>
 </body>

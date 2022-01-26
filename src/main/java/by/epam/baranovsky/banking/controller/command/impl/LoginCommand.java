@@ -32,8 +32,8 @@ public class LoginCommand extends AbstractCommand {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String email = request.getParameter(RequestParamName.PARAM_NAME_EMAIL);
-        String password = request.getParameter(RequestParamName.PARAM_NAME_PASSWORD);
+        String email = request.getParameter(RequestParamName.EMAIL);
+        String password = request.getParameter(RequestParamName.PASSWORD);
 
         User user;
 

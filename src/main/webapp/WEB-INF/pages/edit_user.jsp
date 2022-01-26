@@ -71,11 +71,11 @@
                     <c:when test="${ERROR_MSG eq Message.WRONG_INPUT}">
                         <fmt:message key="registration.incorrectinput"/>
                     </c:when>
-                    <c:when test="${ERROR_MSG eq Message.NO_USER_WITH_THIS_ID}">
+                    <c:when test="${ERROR_MSG eq Message.NO_SUCH_USER}">
                         <fmt:message key="edit.user.nouser"/>
                     </c:when>
                     <c:otherwise>
-                        ${ERROR_MSG}
+                        <fmt:message key="error.unknown"/>
                     </c:otherwise>
                 </c:choose>
             </i>

@@ -27,7 +27,7 @@ public class AccountUnlockCommand implements OperationCommand{
 
     private static final String SQL_UNLOCK_ACCOUNT = String.format(
             "UPDATE %s SET %s=3 WHERE %s=?",
-            DBMetadata.ACCOUNTS_TABLE, DBMetadata.ACCOUNT_STATUS_ID,
+            DBMetadata.ACCOUNTS_TABLE, DBMetadata.ACCOUNTS_ACCOUNT_STATUS_ID,
             DBMetadata.ACCOUNTS_ID);
 
     @Override
