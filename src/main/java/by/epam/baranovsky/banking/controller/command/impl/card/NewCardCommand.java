@@ -4,7 +4,6 @@ import by.epam.baranovsky.banking.constant.CommandName;
 import by.epam.baranovsky.banking.constant.DBMetadata;
 import by.epam.baranovsky.banking.constant.Message;
 import by.epam.baranovsky.banking.controller.command.AbstractCommand;
-import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
 import by.epam.baranovsky.banking.controller.constant.SessionParamName;
@@ -22,7 +21,6 @@ import by.epam.baranovsky.banking.service.impl.AccountServiceImpl;
 import by.epam.baranovsky.banking.service.impl.BankCardServiceImpl;
 import by.epam.baranovsky.banking.service.impl.UserServiceImpl;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +30,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class NewCardCommand extends AbstractCommand {
@@ -41,10 +40,6 @@ public class NewCardCommand extends AbstractCommand {
             RequestParamName.CONTROLLER,
             RequestParamName.COMMAND_NAME,
             CommandName.GOTO_CARDS);
-
-    public static final BankCardService cardService = BankCardServiceImpl.getInstance();
-    public static final AccountService accountService = AccountServiceImpl.getInstance();
-    private static final UserService userService = UserServiceImpl.getInstance();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -59,24 +54,24 @@ public class NewCardCommand extends AbstractCommand {
             } else{
                 newUserId = findUserIdByParamData(request,response);
             }
-
             if(newUserId==0){
-                RequestDispatcher dispatcher = request.getRequestDispatcher(PageUrls.CARDS_PAGE);
-                dispatcher.forward(request, response);
+                request.getRequestDispatcher(getPreviousRequestAddress(request)).forward(request,response);
                 return;
             }
 
             newCard = buildDebitCard(request, newUserId);
             if(newCard == null){
                 request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.NOT_YOUR_ACCOUNT);
-                request.getRequestDispatcher(PageUrls.CARDS_PAGE).forward(request,response);
+                request.getRequestDispatcher(getPreviousRequestAddress(request)).forward(request,response);
             } else{
                 cardService.create(newCard);
-                response.sendRedirect(REDIRECT_TO_CARDS);
+                response.sendRedirect(getPreviousRequestAddress(request));
             }
         } catch (ServiceException e) {
             logger.error(e);
-            request.getRequestDispatcher(PageUrls.ERROR_PAGE).forward(request,response);
+            e.printStackTrace();
+            request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.CARD_CREATE_EXCEPTION);
+            request.getRequestDispatcher(getPreviousRequestAddress(request)).forward(request,response);
         }
     }
 
@@ -125,6 +120,9 @@ public class NewCardCommand extends AbstractCommand {
         newCard.setUserId(newUser);
 
         String accountNumber = request.getParameter(RequestParamName.ACCOUNT_NUMBER);
+        if(accountNumber == null){
+            return null;
+        }
         Account account = accountService.findByNumber(accountNumber);
 
         if(!accountService.findUsers(account.getId()).contains(userId)){
@@ -158,7 +156,7 @@ public class NewCardCommand extends AbstractCommand {
             return false;
         }
 
-        if(list.get(0).getRoleId().equals(DBMetadata.USERS_ROLE_BANNED)){
+        if(list.get(0).getRoleId().equals(DBMetadata.USER_ROLE_BANNED)){
             request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.USER_BANNED);
             return false;
         }

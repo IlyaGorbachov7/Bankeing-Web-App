@@ -7,17 +7,13 @@ import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
+import by.epam.baranovsky.banking.controller.constant.SessionParamName;
 import by.epam.baranovsky.banking.entity.Account;
 import by.epam.baranovsky.banking.entity.User;
 import by.epam.baranovsky.banking.entity.criteria.Criteria;
 import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
 import by.epam.baranovsky.banking.entity.criteria.SingularValue;
-import by.epam.baranovsky.banking.service.AccountService;
-import by.epam.baranovsky.banking.service.UserService;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
-import by.epam.baranovsky.banking.service.impl.AccountServiceImpl;
-import by.epam.baranovsky.banking.service.impl.UserServiceImpl;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -30,27 +26,39 @@ import java.util.List;
 
 public class AddUserToAccCommand extends AbstractCommand {
 
-    private static final String REDIRECT_TO_ACCS=String.format(
+    private static final String REDIRECT_TO_ACC_INFO=String.format(
             "%s?%s=%s",
             RequestParamName.CONTROLLER,
             RequestParamName.COMMAND_NAME,
-            CommandName.GOTO_ACCOUNTS);
-    private static final AccountService accountService = AccountServiceImpl.getInstance();
-    private static final UserService userService = UserServiceImpl.getInstance();
+            CommandName.GOTO_ACC_INFO_COMMAND);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user;
         try{
-            List<User> list = userService.getByCriteria(createUserCriteria(request));
-            if(!handleQueryErrors(list, request, response)){
-                return;
-            }
             Account account = accountService.findById(Integer.valueOf(request.getParameter(RequestParamName.ACCOUNT_ID)));
             account.setUsers(accountService.findUsers(account.getId()));
+            Integer currentUser = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
+            if(account.getStatusId().equals(DBMetadata.ACCOUNT_STATUS_BLOCKED)){
+                request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.ACCOUNT_LOCKED);
+                request.getRequestDispatcher(PageUrls.ACCOUNT_INFO_PAGE).forward(request,response);
+                return;
+            }
+
+            if(!account.getUsers().contains(currentUser)){
+                RequestDispatcher dispatcher = request.getRequestDispatcher(PageUrls.ERROR_PAGE);
+                dispatcher.forward(request, response);
+                return;
+            }
+
+            List<User> list = userService.getByCriteria(createUserCriteria(request));
+            if(!handleQueryErrors(list, request, response)){
+                request.getRequestDispatcher(PageUrls.ACCOUNT_INFO_PAGE).forward(request,response);
+                return;
+            }
             account.addUser(list.get(0).getId());
             accountService.update(account);
-            response.sendRedirect(REDIRECT_TO_ACCS);
+            response.sendRedirect(REDIRECT_TO_ACC_INFO+"&"+RequestParamName.ACCOUNT_ID+"="+account.getId());
         }catch (ServiceException e){
             logger.error(e);
             RequestDispatcher dispatcher = request.getRequestDispatcher(PageUrls.ERROR_PAGE);
@@ -63,22 +71,16 @@ public class AddUserToAccCommand extends AbstractCommand {
 
         if(list.isEmpty()){
             request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.NO_SUCH_USER);
-            RequestDispatcher dispatcher = request.getRequestDispatcher(PageUrls.ACCOUNTS_PAGE);
-            dispatcher.forward(request, response);
             return false;
         }
 
         if(list.size()>1){
             request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.AMBIGUOUS_USER_DATA);
-            RequestDispatcher dispatcher = request.getRequestDispatcher(PageUrls.ACCOUNTS_PAGE);
-            dispatcher.forward(request, response);
             return false;
         }
 
-        if(list.get(0).getRoleId().equals(DBMetadata.USERS_ROLE_BANNED)){
+        if(list.get(0).getRoleId().equals(DBMetadata.USER_ROLE_BANNED)){
             request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.USER_BANNED);
-            RequestDispatcher dispatcher = request.getRequestDispatcher(PageUrls.ACCOUNTS_PAGE);
-            dispatcher.forward(request, response);
             return false;
         }
         return true;

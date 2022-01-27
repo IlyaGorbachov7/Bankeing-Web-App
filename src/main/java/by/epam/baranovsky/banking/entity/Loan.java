@@ -20,6 +20,7 @@ public class Loan extends Entity {
     private Integer userId;
     private Integer statusId;
     private String statusName;
+    private Integer cardId;
 
 
 }

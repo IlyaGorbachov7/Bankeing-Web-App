@@ -10,6 +10,7 @@ import by.epam.baranovsky.banking.controller.command.impl.account.RemoveSelfFrom
 import by.epam.baranovsky.banking.controller.command.impl.card.LockCardCommand;
 import by.epam.baranovsky.banking.controller.command.impl.card.NewCardCommand;
 import by.epam.baranovsky.banking.controller.command.impl.gotocommand.*;
+import by.epam.baranovsky.banking.controller.command.impl.transfer.TransferCommand;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,6 +47,11 @@ public class CommandProvider {
         commandMap.put(CommandName.GOTO_CARD_INFO_COMMAND, new GoToCardInfoCommand());
         commandMap.put(CommandName.NEW_CARD_COMMAND, new NewCardCommand());
         commandMap.put(CommandName.LOCK_CARD_COMMAND, new LockCardCommand());
+
+        commandMap.put(CommandName.TRANSFER_COMMAND, new TransferCommand());
+        commandMap.put(CommandName.GOTO_TRANSFER_COMMAND, new GoToTransferPageCommand());
+        commandMap.put(CommandName.GOTO_TRANSFER_CONFIRM_COMMAND, new GoToConfirmTransferCommand());
+        commandMap.put(CommandName.GOTO_TRANSFER_SUCCESS_COMMAND, new GoToTransferSuccessCommand());
     }
 
     public static CommandProvider getInstance(){

@@ -1,5 +1,7 @@
 package by.epam.baranovsky.banking.service.scheduler.jobs;
 
+import by.epam.baranovsky.banking.constant.ConfigManager;
+import by.epam.baranovsky.banking.constant.ConfigParams;
 import by.epam.baranovsky.banking.entity.Bill;
 import by.epam.baranovsky.banking.entity.Loan;
 import by.epam.baranovsky.banking.entity.Penalty;
@@ -69,12 +71,13 @@ public class LoanBillsAssignment extends AbstractJob{
 
         double overdueValue = loan.getTotalPaymentValue()*(percentage-1d);
 
+        Double penaltyPercentage = Double.valueOf(ConfigManager.getInstance().getValue(ConfigParams.LOAN_PENALTY));
         Penalty penalty = new Penalty();
         penalty.setStatusId(PENALTY_STATUS_UNASSIGNED);
         penalty.setUserId(loan.getUserId());
-        penalty.setNotice("5% of loan starting sum for every month of overdue after the first");
+        penalty.setNotice(penaltyPercentage*100 + "% of loan starting sum for every month of overdue after the first");
         penalty.setTypeId(PENALTY_TYPE_FEE);
-        penalty.setValue(loan.getStartingValue()*0.05);
+        penalty.setValue(loan.getStartingValue()*penaltyPercentage);
         penalty.setPaymentAccountId(BANK_ACCOUNT_ID);
 
         penalty = penaltyService.create(penalty);

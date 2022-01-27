@@ -19,7 +19,7 @@ import java.util.List;
 
 public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserService {
 
-    private static final Integer DEFAULT_ROLE = DBMetadata.USERS_ROLE_REGULAR;
+    private static final Integer DEFAULT_ROLE = DBMetadata.USER_ROLE_REGULAR;
     private static volatile UserServiceImpl instance = null;
     private final UserValidator validator = new UserValidator();
     private final UserDAO userDAO = SqlDAOFactory.getInstance().getUserDAO();
@@ -46,7 +46,7 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
             if (user == null || !BCrypt.checkpw(password, user.getPassword())) {
                 throw new ValidationException(Message.WRONG_EMAIL_OR_PASS);
             }
-            if(user.getRoleId().equals(DBMetadata.USERS_ROLE_BANNED)){
+            if(user.getRoleId().equals(DBMetadata.USER_ROLE_BANNED)){
                 throw new ValidationException(Message.USER_BANNED);
             }
             user.setLastLogin(new Date());

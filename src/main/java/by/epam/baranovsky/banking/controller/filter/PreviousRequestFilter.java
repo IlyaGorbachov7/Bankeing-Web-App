@@ -21,6 +21,9 @@ public class PreviousRequestFilter implements Filter {
         ignoredCommands.add(CommandName.LOCALE_CHANGE_COMMAND);
         ignoredCommands.add(CommandName.REGISTER_COMMAND);
         ignoredCommands.add(CommandName.LOGIN_COMMAND);
+        ignoredCommands.add(CommandName.NEW_CARD_COMMAND);
+        ignoredCommands.add(CommandName.REMOVE_SELF_FROM_ACC_COMMAND);
+        ignoredCommands.add(CommandName.GOTO_CARD_INFO_COMMAND);
     }
 
     @Override

@@ -9,6 +9,7 @@ import by.epam.baranovsky.banking.dao.rowmapper.RowMapper;
 import by.epam.baranovsky.banking.dao.rowmapper.RowMapperFactory;
 import by.epam.baranovsky.banking.entity.BankingCard;
 
+import java.util.Date;
 import java.util.List;
 
 public class SqlBankCardDAO  implements BankCardDAO {
@@ -30,6 +31,10 @@ public class SqlBankCardDAO  implements BankCardDAO {
     private static final String SQL_SELECT_BY_NUM_CVC = String.format(
             "%s WHERE %s=? AND %s=?",
             SQL_SELECT_ALL, DBMetadata.BANK_CARDS_NUMBER, DBMetadata.BANK_CARDS_CVC);
+
+    private static final String SQL_SELECT_BY_NUM = String.format(
+            "%s WHERE %s=? ",
+            SQL_SELECT_ALL, DBMetadata.BANK_CARDS_NUMBER);
 
     private static final String SQL_SELECT_BY_USER = String.format(
             "%s WHERE %s=?", SQL_SELECT_ALL, DBMetadata.BANK_CARDS_USER_ID);
@@ -129,6 +134,11 @@ public class SqlBankCardDAO  implements BankCardDAO {
     @Override
     public List<BankingCard> findAll() throws DAOException {
         return queryMaster.executeQuery(SQL_SELECT_ALL);
+    }
+
+    @Override
+    public List<BankingCard> findByNumber(String number) throws DAOException {
+        return queryMaster.executeQuery(SQL_SELECT_BY_NUM, number);
     }
 
     @Override

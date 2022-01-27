@@ -167,7 +167,7 @@
                             <fmt:message key="accounts.error.many.requests"/>
                         </c:when>
                         <c:when test="${ERROR_MSG eq Message.WRONG_NEW_STATUS}">
-                            <fmt:message key="accounts.error.many.requests"/>
+                            <fmt:message key="accounts.error.wrong.new.status"/>
                         </c:when>
                         <c:otherwise>
                             <fmt:message key="error.unknown"/>

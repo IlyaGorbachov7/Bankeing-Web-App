@@ -58,7 +58,8 @@ public class EntityParameters {
         ISSUE_DATE(DBMetadata.LOANS_ISSUE_DATE),
         DUE_DATE(DBMetadata.LOANS_DUE_DATE),
         USER(DBMetadata.LOANS_USER_ID),
-        STATUS(DBMetadata.LOANS_STATUS_ID);
+        STATUS(DBMetadata.LOANS_STATUS_ID),
+        CARD_ID(DBMetadata.LOANS_CARD_ID);
 
         private final String column;
 

@@ -21,4 +21,16 @@ public class RequestAttributeNames {
     public static final String CARD_DATA="CARD_DATA";
     public static final String CARD_USER="CARD_USER";
     public static final String CARD_ACCOUNT="CARD_ACCOUNT";
+    public static final String CARD_OVERDRAFTED="CARD_OVERDRAFTED";
+    public static final String PREVIOUS_PAGE="PREV_PAGE";
+
+    public static final String BILL_ID="BILL_ID";
+    public static final String PENALTY_ID="PENALTY_ID";
+
+    public static final String TARGET_ACC="TARGET_ACC";
+    public static final String TARGET_CARD="TARGET_CARD";
+    public static final String OWN_CARD="OWN_CARD";
+    public static final String OWN_ACC="OWN_ACC";
+    public static final String TRANSFER_VALUE="transfer_value";
+    public static final String TRANSFER_VALUE_COMMISSIONED="transfer_value_with_commission";
 }

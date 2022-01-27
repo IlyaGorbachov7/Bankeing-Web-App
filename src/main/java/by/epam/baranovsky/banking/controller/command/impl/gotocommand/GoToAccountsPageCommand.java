@@ -21,16 +21,13 @@ import java.util.List;
 
 public class GoToAccountsPageCommand extends AbstractCommand {
 
-
-    private static final AccountService service = AccountServiceImpl.getInstance();
-
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         Integer userId = (Integer) session.getAttribute(SessionParamName.USER_ID);
         if (userId != null && userId != 0){
             try{
-                List<Account> allUserAccounts = service.findByUserId(userId);
+                List<Account> allUserAccounts = accountService.findByUserId(userId);
                 parseIntoCategoriesAndPutIntoRequest(allUserAccounts, request, response);
             }catch (ServiceException e){
                 logger.error(e);

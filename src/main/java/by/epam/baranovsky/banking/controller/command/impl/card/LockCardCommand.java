@@ -7,6 +7,7 @@ import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
+import by.epam.baranovsky.banking.controller.constant.SessionParamName;
 import by.epam.baranovsky.banking.entity.Account;
 import by.epam.baranovsky.banking.entity.BankingCard;
 import by.epam.baranovsky.banking.service.BankCardService;
@@ -27,23 +28,22 @@ public class LockCardCommand extends AbstractCommand {
             RequestParamName.COMMAND_NAME,
             CommandName.GOTO_CARDS);
 
-    public static final BankCardService cardService = BankCardServiceImpl.getInstance();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try{
             BankingCard card = cardService.findById(Integer.valueOf(request.getParameter(RequestParamName.CARD_ID)));
-            Integer newStatus = Integer.valueOf(request.getParameter(RequestParamName.CARD_NEW_STATUS));
 
-            if(isNewStatusValid(newStatus)){
-                card.setStatusId(newStatus);
-                cardService.update(card);
-                response.sendRedirect(REDIRECT_TO_CARDS);
-            } else{
-                request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.WRONG_NEW_STATUS);
-                request.getRequestDispatcher(PageUrls.ACCOUNTS_PAGE).forward(request,response);
+            if(!isUserValid(request, card)){
+                request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.CARD_NOT_YOURS);
+                RequestDispatcher dispatcher = request.getRequestDispatcher(REDIRECT_TO_CARDS);
+                dispatcher.forward(request, response);
+                return;
             }
 
+            card.setStatusId(DBMetadata.CARD_STATUS_LOCKED);
+            cardService.update(card);
+            response.sendRedirect(REDIRECT_TO_CARDS);
         } catch (ServiceException e) {
             logger.error(e);
             RequestDispatcher dispatcher = request.getRequestDispatcher(PageUrls.ERROR_PAGE);
@@ -51,7 +51,9 @@ public class LockCardCommand extends AbstractCommand {
         }
     }
 
-    private boolean isNewStatusValid(Integer newStatus){
-        return DBMetadata.CARD_STATUS_LOCKED.equals(newStatus);
+
+    private boolean isUserValid(HttpServletRequest request, BankingCard card){
+        Integer userId = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
+        return card.getUserId().equals(userId);
     }
 }

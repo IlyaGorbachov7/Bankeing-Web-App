@@ -28,10 +28,6 @@ import java.util.*;
 
 public class GoToHomePageCommand extends AbstractCommand {
 
-    private static final OperationService operationService = OperationServiceImpl.getInstance();
-    private static final AccountService accountService = AccountServiceImpl.getInstance();
-    private static final BankCardService bankCardService = BankCardServiceImpl.getInstance();
-
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
@@ -107,7 +103,7 @@ public class GoToHomePageCommand extends AbstractCommand {
     }
 
     private List<Integer> getUserCardsIds(Integer id) throws ServiceException {
-        List<BankingCard> userCards =  bankCardService.findByUser(id);
+        List<BankingCard> userCards =  cardService.findByUser(id);
 
         List<Integer> userCardIds = new ArrayList<>();
         for(BankingCard card : userCards){
@@ -130,7 +126,7 @@ public class GoToHomePageCommand extends AbstractCommand {
 
         if(operation.getBankCardId()!=0){
             builder.append("Card №")
-                    .append(maskNumber(bankCardService
+                    .append(maskNumber(cardService
                             .findById(operation.getBankCardId()).getNumber()))
                     .append(" ");
         }
@@ -143,18 +139,11 @@ public class GoToHomePageCommand extends AbstractCommand {
 
         if(operation.getTargetBankCardId()!=0){
             builder.append(" to Card №")
-                    .append(maskNumber(bankCardService
+                    .append(maskNumber(cardService
                             .findById(operation.getTargetBankCardId()).getNumber()))
                     .append(" ");
         }
 
         return builder.toString();
-    }
-
-    private String maskNumber(String number){
-        StringBuffer buffer = new StringBuffer(number);
-
-        buffer.replace(2, 12, "**********");
-        return buffer.toString();
     }
 }

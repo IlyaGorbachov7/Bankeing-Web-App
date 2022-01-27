@@ -16,10 +16,10 @@ public class DBMetadata {
     public static final String USERS_DATE_CREATED ="created";
     public static final String USERS_ROLE_ID ="id_role";
 
-    public static final Integer USERS_ROLE_ADMIN= 1;
-    public static final Integer USERS_ROLE_REGULAR= 2;
-    public static final Integer USERS_ROLE_EMPLOYEE= 3;
-    public static final Integer USERS_ROLE_BANNED = 4;
+    public static final Integer USER_ROLE_ADMIN= 1;
+    public static final Integer USER_ROLE_REGULAR = 2;
+    public static final Integer USER_ROLE_EMPLOYEE= 3;
+    public static final Integer USER_ROLE_BANNED = 4;
 
     public static final String USER_ROLES_TABLE = "user_roles";
     public static final String USER_ROLES_ID ="id_roles";
@@ -101,10 +101,15 @@ public class DBMetadata {
     public static final String LOANS_DUE_DATE = "due_date";
     public static final String LOANS_USER_ID = "users_id_users";
     public static final String LOANS_STATUS_ID = "id_status";
+    public static final String LOANS_CARD_ID = "id_card";
 
     public static final String LOAN_STATUS_TABLE = "loan_status";
     public static final String LOAN_STATUS_ID = "id_loan_status";
     public static final String LOAN_STATUS_NAME = "status_desc";
+
+    public static final Integer LOAN_STATUS_CLOSED = 1;
+    public static final Integer LOAN_STATUS_PENDING = 2;
+    public static final Integer LOAN_STATUS_OVERDUE = 3;
 
     public static final String OPERATIONS_TABLE = "operations";
     public static final String OPERATIONS_ID = "id_operations";
@@ -150,6 +155,12 @@ public class DBMetadata {
     public static final String PENALTY_TYPE_TABLE = "penalty_tyfpe";
     public static final String PENALTY_TYPE_ID="id_penalty_type";
     public static final String PENALTY_TYPE_NAME="type";
+
+    public static final Integer PENALTY_TYPE_ACCS_SUSP = 1;
+    public static final Integer PENALTY_TYPE_ACCS_LOCK= 2;
+    public static final Integer PENALTY_TYPE_CARDS_LOCK= 3;
+    public static final Integer PENALTY_TYPE_FEE = 4;
+    public static final Integer PENALTY_TYPE_LAWSUIT = 5;
 
     private DBMetadata() {}
 }

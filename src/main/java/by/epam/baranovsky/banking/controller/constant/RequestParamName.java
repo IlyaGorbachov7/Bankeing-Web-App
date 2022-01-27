@@ -19,11 +19,23 @@ public class RequestParamName {
     public static final String ACCOUNT_COUNTRY = "country";
     public static final String ACCOUNT_ID = "account_id";
     public static final String ACCOUNT_NEW_STATUS = "account_new_status";
-    public static final String ACCOUNT_NUMBER = "account_numbers";
+    public static final String ACCOUNT_NUMBER = "account_number";
 
     public static final String CARD_ID = "card_id";
-    public static final String CARD_NEW_STATUS = "card_new_status";
     public static final String CARD_NEW_USER_ID= "new_user_id";
+    public static final String CARD_NUMBER= "card_number";
+
+
+    public static final String TRANSFER_TARGET_ACC="target_account_id";
+    public static final String TRANSFER_TARGET_ACC_NUMBER="target_account_number";
+    public static final String TRANSFER_TARGET_CARD="target_card_id";
+    public static final String TRANSFER_TARGET_CARD_NUMBER="target_card_number";
+    public static final String TRANSFER_TARGET_CARD_EXPIRATION="target_card_expiration";
+    public static final String TRANSFER_VALUE="transfer_value";
+
+
+    public static final String BILL_ID="bill_id";
+    public static final String PENALTY_ID="penalty_id";
 
     private RequestParamName() {}
 }

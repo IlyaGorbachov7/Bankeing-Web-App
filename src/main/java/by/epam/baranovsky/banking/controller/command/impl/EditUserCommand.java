@@ -31,7 +31,6 @@ public class EditUserCommand extends AbstractCommand {
             RequestParamName.CONTROLLER,
             RequestParamName.COMMAND_NAME,
             CommandName.GOTO_MAIN);
-    private final UserService service = UserServiceImpl.getInstance();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -39,7 +38,7 @@ public class EditUserCommand extends AbstractCommand {
 
         if(validatePassword(request)){
             try{
-                service.updateUser(getUpdatedUser(request));
+                userService.updateUser(getUpdatedUser(request));
                 response.sendRedirect(REDIRECT_TO_HOME);
             } catch (ValidationException e){
                 request.setAttribute(RequestAttributeNames.ERROR_MSG, e.getMessage());
@@ -75,7 +74,7 @@ public class EditUserCommand extends AbstractCommand {
 
     private User getUpdatedUser(HttpServletRequest request) throws ServiceException {
 
-        User user = service.getById((Integer) request.getSession().getAttribute(SessionParamName.USER_ID));
+        User user = userService.getById((Integer) request.getSession().getAttribute(SessionParamName.USER_ID));
 
         String email = request.getParameter(RequestParamName.EMAIL);
         String password = request.getParameter(RequestParamName.PASSWORD);

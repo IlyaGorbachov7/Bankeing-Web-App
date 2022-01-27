@@ -13,6 +13,10 @@ public class CommandName {
     public static final String GOTO_USER_EDIT= "go_to_user_edit";
     public static final String GOTO_ACC_INFO_COMMAND= "go_to_account_info";
     public static final String GOTO_CARD_INFO_COMMAND= "go_to_card_info";
+    public static final String GOTO_TRANSFER_COMMAND= "go_to_transfer_page";
+    public static final String GOTO_TRANSFER_CONFIRM_COMMAND= "go_to_transfer_confirm_page";
+    public static final String GOTO_TRANSFER_SUCCESS_COMMAND= "go_to_transfer_success_page";
+
 
     public static final String LOGIN_COMMAND= "login";
     public static final String REGISTER_COMMAND= "register";

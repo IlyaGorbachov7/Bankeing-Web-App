@@ -1,6 +1,7 @@
 package by.epam.baranovsky.banking.controller.command.impl.account;
 
 import by.epam.baranovsky.banking.constant.CommandName;
+import by.epam.baranovsky.banking.constant.DBMetadata;
 import by.epam.baranovsky.banking.constant.Message;
 import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class RemoveSelfFromAccCommand extends AbstractCommand {
 
@@ -26,16 +28,23 @@ public class RemoveSelfFromAccCommand extends AbstractCommand {
             RequestParamName.CONTROLLER,
             RequestParamName.COMMAND_NAME,
             CommandName.GOTO_ACCOUNTS);
-    private static final AccountService accountService = AccountServiceImpl.getInstance();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Integer userId = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
 
+        Integer accountId = Integer.valueOf(request.getParameter(RequestParamName.ACCOUNT_ID));
         try{
-            if(isOnlyUser(userId, Integer.valueOf(request.getParameter(RequestParamName.ACCOUNT_ID)))){
+            if(accountService.findById(accountId).getStatusId().equals(DBMetadata.ACCOUNT_STATUS_BLOCKED)){
+                request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.ACCOUNT_LOCKED);
+                RequestDispatcher dispatcher = request.getRequestDispatcher(getPreviousRequestAddress(request));
+                dispatcher.forward(request, response);
+                return;
+            }
+
+            if(isOnlyUser(userId, accountId)){
                 request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.ONLY_USER);
-                RequestDispatcher dispatcher = request.getRequestDispatcher(PageUrls.ERROR_PAGE);
+                RequestDispatcher dispatcher = request.getRequestDispatcher(getPreviousRequestAddress(request));
                 dispatcher.forward(request, response);
                 return;
             }

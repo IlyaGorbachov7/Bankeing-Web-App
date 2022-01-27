@@ -14,5 +14,8 @@ public class PageUrls {
     public static final String LOANS_PAGE="/WEB-INF/pages/loans.jsp";
     public static final String EDIT_USER_PAGE="/WEB-INF/pages/edit_user.jsp";
     public static final String PENALTIES_PAGE="/WEB-INF/pages/penalties.jsp";
+    public static final String TRANSFER_PAGE="/WEB-INF/pages/transfer.jsp";
+    public static final String TRANSFER_CONFIRM_PAGE="/WEB-INF/pages/transfer_confirm.jsp";
+    public static final String TRANSFER_SUCCESS_PAGE="/WEB-INF/pages/transfer_success.jsp";
     private PageUrls(){}
 }

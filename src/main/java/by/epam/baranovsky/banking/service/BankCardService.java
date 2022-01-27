@@ -11,6 +11,8 @@ public interface BankCardService {
 
     BankingCard findByNumberAndCvc(String number, String cvc) throws ServiceException;
 
+    List<BankingCard> findByNumber(String number) throws ServiceException;
+
     List<BankingCard> findByType(Integer typeId) throws ServiceException;
 
     List<BankingCard> findByUser(Integer userId) throws ServiceException;

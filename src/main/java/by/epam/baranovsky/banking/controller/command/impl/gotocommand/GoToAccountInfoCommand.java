@@ -33,9 +33,6 @@ public class GoToAccountInfoCommand extends AbstractCommand {
             RequestParamName.COMMAND_NAME,
             CommandName.GOTO_ACCOUNTS);
 
-    private static final AccountService accountService = AccountServiceImpl.getInstance();
-    private static final UserService userService = UserServiceImpl.getInstance();
-    public static final BankCardService cardService = BankCardServiceImpl.getInstance();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -53,14 +50,13 @@ public class GoToAccountInfoCommand extends AbstractCommand {
                 }
                 request.setAttribute(RequestAttributeNames.ACCOUNT_DATA, account);
                 request.setAttribute(RequestAttributeNames.ACCOUNT_USERS_INFO, getUsersInfo(userIdList));
-                request.setAttribute(RequestAttributeNames.ACCOUNT_CARDS_INFO, getCardsForThisAccount(currentUserId));
+                request.setAttribute(RequestAttributeNames.ACCOUNT_CARDS_INFO, getCardsForThisAccount(accountId));
                 request.getRequestDispatcher(PageUrls.ACCOUNT_INFO_PAGE).forward(request, response);
             } catch (ServiceException e) {
                 logger.error(e);
                 request.getRequestDispatcher(PageUrls.ERROR_PAGE).forward(request, response);
             }
         } else{
-            request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.ACCOUNT_INFO_ERROR);
             request.getRequestDispatcher(PageUrls.ERROR_PAGE).forward(request, response);
 
         }
@@ -86,7 +82,12 @@ public class GoToAccountInfoCommand extends AbstractCommand {
     }
 
     private List<BankingCard> getCardsForThisAccount(Integer accountId) throws ServiceException{
-        return cardService.findByUser(accountId);
-    }
+        List<BankingCard> cards = cardService.findByAccount(accountId);
 
+        for(BankingCard card : cards){
+            card.setNumber(maskNumber(card.getNumber()));
+        }
+
+        return cards;
+    }
 }

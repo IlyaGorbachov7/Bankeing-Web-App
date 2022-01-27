@@ -15,28 +15,11 @@ public class LocaleChangeCommand extends AbstractCommand {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-
         request.getSession().setAttribute(
                 RequestParamName.LOCALE,
                 request.getParameter(RequestParamName.LOCALE));
 
-        Map<String, String[]> prevRequestParams =
-                (Map<String, String[]>) session.getAttribute(SessionParamName.LAST_REQUEST);
-
-        StringBuilder requestBuilder = new StringBuilder();
-        requestBuilder.append(RequestParamName.CONTROLLER).append('?');
-        for (Map.Entry<String, String[]> parameter : prevRequestParams.entrySet()){
-            requestBuilder.append(parameter.getKey()).append('=');
-            for (String parameterValue : parameter.getValue()){
-                requestBuilder.append(parameterValue).append(',');
-            }
-            requestBuilder.deleteCharAt(requestBuilder.lastIndexOf(","));
-            requestBuilder.append('&');
-        }
-        requestBuilder.deleteCharAt(requestBuilder.lastIndexOf("&"));
-
-        response.sendRedirect(requestBuilder.toString());
+        response.sendRedirect(getPreviousRequestAddress(request));
     }
 
 }

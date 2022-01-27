@@ -9,6 +9,7 @@ import by.epam.baranovsky.banking.service.exception.ServiceException;
 import by.epam.baranovsky.banking.service.exception.ValidationException;
 import by.epam.baranovsky.banking.service.validator.BankCardValidator;
 
+import java.util.Date;
 import java.util.List;
 
 public class BankCardServiceImpl implements BankCardService {
@@ -51,6 +52,17 @@ public class BankCardServiceImpl implements BankCardService {
             throw  new ServiceException(e);
         }
         return card;
+    }
+
+    @Override
+    public List<BankingCard>  findByNumber(String number) throws ServiceException{
+        List<BankingCard> cards;
+        try {
+            cards = cardDAO.findByNumber(number);
+        } catch (DAOException e) {
+            throw  new ServiceException(e);
+        }
+        return cards;
     }
 
     @Override

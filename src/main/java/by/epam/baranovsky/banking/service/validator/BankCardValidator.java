@@ -1,5 +1,6 @@
 package by.epam.baranovsky.banking.service.validator;
 
+import by.epam.baranovsky.banking.constant.DBMetadata;
 import by.epam.baranovsky.banking.entity.BankingCard;
 
 public class BankCardValidator extends AbstractValidator{
@@ -13,7 +14,15 @@ public class BankCardValidator extends AbstractValidator{
         if(!notNull(card.getCardTypeId(), card.getStatusId(),
                 card.getCvc(), card.getNumber(),
                 card.getExpirationDate(), card.getRegistrationDate(),
-                card.getPin(), card.getUserId())){
+                card.getPin())){
+            return false;
+        }
+
+        if(card.getCardTypeId().equals(DBMetadata.CARD_TYPE_DEBIT) && card.getAccountId() == null){
+            return false;
+        }
+
+        if(card.getCardTypeId().equals(DBMetadata.CARD_TYPE_OVERDRAFT) && card.getAccountId() == null){
             return false;
         }
 

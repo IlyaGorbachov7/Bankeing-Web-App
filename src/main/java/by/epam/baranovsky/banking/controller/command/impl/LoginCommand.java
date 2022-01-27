@@ -27,7 +27,6 @@ public class LoginCommand extends AbstractCommand {
             RequestParamName.CONTROLLER,
             RequestParamName.COMMAND_NAME,
             CommandName.GOTO_MAIN);
-    private final UserService service = UserServiceImpl.getInstance();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -38,7 +37,7 @@ public class LoginCommand extends AbstractCommand {
         User user;
 
         try{
-            user = service.loginUser(email, password);
+            user = userService.loginUser(email, password);
             HttpSession session = request.getSession();
             session.setAttribute(SessionParamName.USER_ID, user.getId());
             session.setAttribute(SessionParamName.USER_ROLE_ID, user.getRoleId());

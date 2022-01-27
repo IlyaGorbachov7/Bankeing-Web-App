@@ -29,9 +29,6 @@ public class LockOrSuspendAccountCommand extends AbstractCommand {
             RequestParamName.CONTROLLER,
             RequestParamName.COMMAND_NAME,
             CommandName.GOTO_ACCOUNTS);
-    private static final AccountService accountService = AccountServiceImpl.getInstance();
-    public static final OperationService operationService = OperationServiceImpl.getInstance();
-
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -39,6 +36,7 @@ public class LockOrSuspendAccountCommand extends AbstractCommand {
             Account account = accountService.findById(Integer.valueOf(request.getParameter(RequestParamName.ACCOUNT_ID)));
             Integer newStatus = Integer.valueOf(request.getParameter(RequestParamName.ACCOUNT_NEW_STATUS));
             Integer userId = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
+
             if(isNewStatusValid(newStatus) && isUserValid(userId, account)){
                 operationService.create(buildOperation(newStatus, account.getId()));
                 response.sendRedirect(REDIRECT_TO_ACCS);

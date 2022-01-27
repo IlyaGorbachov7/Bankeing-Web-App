@@ -31,7 +31,6 @@ public class RegisterCommand extends AbstractCommand {
             RequestParamName.CONTROLLER,
             RequestParamName.COMMAND_NAME,
             CommandName.GOTO_MAIN);
-    private final UserService service = UserServiceImpl.getInstance();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -91,7 +90,7 @@ public class RegisterCommand extends AbstractCommand {
             logger.error("Error parsing birth date ",e);
         }
 
-        return service.registerUser(email, password, lastName,
+        return userService.registerUser(email, password, lastName,
                 firstName, patronymic, passportSeries, passportNumber, birthdate);
     }
 }

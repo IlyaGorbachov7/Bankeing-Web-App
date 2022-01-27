@@ -32,7 +32,6 @@ public class NewAccCommand extends AbstractCommand {
             RequestParamName.CONTROLLER,
             RequestParamName.COMMAND_NAME,
             CommandName.GOTO_ACCOUNTS);
-    private static final AccountService service = AccountServiceImpl.getInstance();
 
 
     @Override
@@ -51,7 +50,7 @@ public class NewAccCommand extends AbstractCommand {
             String number;
             do{
                 number = generateNumber(countryCode);
-            } while (service.findByNumber(number) != null);
+            } while (accountService.findByNumber(number) != null);
 
             account.setAccountNumber(number);
             account.addUser((Integer) request.getSession().getAttribute(SessionParamName.USER_ID));
@@ -59,7 +58,7 @@ public class NewAccCommand extends AbstractCommand {
             account.setStatusId(DBMetadata.ACCOUNT_STATUS_PENDING);
             account.setYearlyInterestRate(DEFAULT_RATE);
 
-            service.create(account);
+            accountService.create(account);
             response.sendRedirect(REDIRECT_TO_ACCS);
         } catch (ServiceException e) {
             logger.error(e);
@@ -89,7 +88,7 @@ public class NewAccCommand extends AbstractCommand {
     private boolean tooManyRequests(HttpServletRequest request) throws ServiceException {
         Integer userId = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
 
-        List<Account> pendingAccounts = service.findByUserId(userId);
+        List<Account> pendingAccounts = accountService.findByUserId(userId);
         pendingAccounts.removeIf(account -> !account.getStatusId().equals(DBMetadata.ACCOUNT_STATUS_PENDING));
 
         return pendingAccounts.size() >= MAX_ACC_REQUESTS;
