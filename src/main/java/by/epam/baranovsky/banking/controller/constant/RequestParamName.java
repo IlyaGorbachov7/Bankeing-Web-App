@@ -15,7 +15,6 @@ public class RequestParamName {
     public static final String PASSPORT_NUMBER = "passport_number";
     public static final String BIRTHDATE = "birthdate";
 
-    public static final String ACCOUNT_INTEREST_RATE = "account_interest_rate";
     public static final String ACCOUNT_COUNTRY = "country";
     public static final String ACCOUNT_ID = "account_id";
     public static final String ACCOUNT_NEW_STATUS = "account_new_status";
@@ -23,7 +22,6 @@ public class RequestParamName {
 
     public static final String CARD_ID = "card_id";
     public static final String CARD_NEW_USER_ID= "new_user_id";
-    public static final String CARD_NUMBER= "card_number";
 
 
     public static final String TRANSFER_TARGET_ACC="target_account_id";
@@ -36,6 +34,9 @@ public class RequestParamName {
 
     public static final String BILL_ID="bill_id";
     public static final String PENALTY_ID="penalty_id";
+
+    public static final String ID_CHECKED_USER="checked_user_id";
+    public static final String USER_NEW_ROLE="checked_user_id";
 
     private RequestParamName() {}
 }

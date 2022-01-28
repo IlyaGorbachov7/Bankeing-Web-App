@@ -1,5 +1,6 @@
 package by.epam.baranovsky.banking.entity.criteria;
 
+import by.epam.baranovsky.banking.constant.DBMetadata;
 import by.epam.baranovsky.banking.dao.query.Query;
 import lombok.Data;
 
@@ -66,9 +67,11 @@ public class Criteria<T extends EntityEnum> {
         }
 
         if (SQL_OR.equals(particle)) {
-            return new Query(builder.append("FALSE").toString(), queryParams.toArray());
+            builder.append("FALSE");
+        } else {
+            builder.append("TRUE");
         }
-        return new Query(builder.append("TRUE").toString(), queryParams.toArray());
+        return new Query(builder.toString(), queryParams.toArray());
 
     }
 

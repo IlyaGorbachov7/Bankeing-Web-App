@@ -10,6 +10,6 @@ import java.io.IOException;
 public class GoToBillsPageCommand extends AbstractCommand {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        //todo
     }
 }

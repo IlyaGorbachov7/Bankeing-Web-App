@@ -37,7 +37,22 @@
                     <td>${ACCOUNT_DATA.accountNumber}</td>
                     <td>${ACCOUNT_DATA.balance}$</td>
                     <td>${ACCOUNT_DATA.yearlyInterestRate}%</td>
-                    <td>${ACCOUNT_DATA.statusName}</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${ACCOUNT_DATA.statusId == DBMetadata.ACCOUNT_STATUS_BLOCKED}">
+                                <fmt:message key="accounts.locked"/>
+                            </c:when>
+                            <c:when test="${ACCOUNT_DATA.statusId == DBMetadata.ACCOUNT_STATUS_SUSPENDED}">
+                                <fmt:message key="accounts.suspended"/>
+                            </c:when>
+                            <c:when test="${ACCOUNT_DATA.statusId == DBMetadata.ACCOUNT_STATUS_UNLOCKED}">
+                                <fmt:message key="accounts.unlocked"/>
+                            </c:when>
+                            <c:otherwise>
+                                <fmt:message key="error.unknown"/>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
                 </tr>
                 <tr>
                     <td>
@@ -108,11 +123,11 @@
                                     </tr>
                                     <tr class="formRow">
                                         <td><fmt:message key="user.pass.series"/>:</td>
-                                        <td><input type="text" id="passport_series" name="passport_series" maxlength="2" required></td>
+                                        <td><input type="text" id="passport_series" name="passport_series" pattern="[A-Z]{2}" maxlength="2" minlength="2" required></td>
                                     </tr>
                                     <tr class="formRow">
                                         <td><fmt:message key="user.pass.num"/>:</td>
-                                        <td><input type="number" id="passport_number" name="passport_number" maxlength="7" required></td>
+                                        <td><input type="text" id="passport_number" pattern="[0-9]{7}" name="passport_number" minlength="7" maxlength="7" required></td>
                                     </tr>
                                     <tr class="formRow">
                                         <td><fmt:message key="user.birthdate"/>:</td>

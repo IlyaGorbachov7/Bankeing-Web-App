@@ -22,8 +22,18 @@ public class PreviousRequestFilter implements Filter {
         ignoredCommands.add(CommandName.REGISTER_COMMAND);
         ignoredCommands.add(CommandName.LOGIN_COMMAND);
         ignoredCommands.add(CommandName.NEW_CARD_COMMAND);
+        ignoredCommands.add(CommandName.LOCK_CARD_COMMAND);
+        ignoredCommands.add(CommandName.LOCK_OR_SUSP_ACC_COMMAND);
+        ignoredCommands.add(CommandName.TRANSFER_COMMAND);
         ignoredCommands.add(CommandName.REMOVE_SELF_FROM_ACC_COMMAND);
+        ignoredCommands.add(CommandName.ADD_USER_TO_ACC_COMMAND);
+        ignoredCommands.add(CommandName.NEW_ACC_COMMAND);
         ignoredCommands.add(CommandName.GOTO_CARD_INFO_COMMAND);
+        ignoredCommands.add(CommandName.GOTO_TRANSFER_COMMAND);
+        ignoredCommands.add(CommandName.GOTO_TRANSFER_CONFIRM_COMMAND);
+        ignoredCommands.add(CommandName.CHANGE_ACCOUNT_STATUS);
+        ignoredCommands.add(CommandName.CHANGE_USER_ROLE);
+        ignoredCommands.add(CommandName.EDIT_USER);
     }
 
     @Override

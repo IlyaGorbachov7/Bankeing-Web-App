@@ -31,6 +31,12 @@ public class RequestAttributeNames {
     public static final String TARGET_CARD="TARGET_CARD";
     public static final String OWN_CARD="OWN_CARD";
     public static final String OWN_ACC="OWN_ACC";
-    public static final String TRANSFER_VALUE="transfer_value";
-    public static final String TRANSFER_VALUE_COMMISSIONED="transfer_value_with_commission";
+    public static final String TRANSFER_VALUE="TRANSFER_VALUE";
+
+    public static final String USER_LOANS="USER_LOANS";
+    public static final String USER_BILLS="USER_BILLS";
+    public static final String USER_PENALTIES="USER_BILLS";
+    public static final String PENDING_ACCS="PENDING_ACCS";
+    public static final String ALL_USERS="ALL_USERS";
+
 }

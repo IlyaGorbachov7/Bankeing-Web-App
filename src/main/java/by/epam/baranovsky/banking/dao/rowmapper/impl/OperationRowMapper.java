@@ -25,7 +25,7 @@ public class OperationRowMapper implements RowMapper<Operation> {
         operation.setTargetBankCardId(resultSet.getInt(DBMetadata.OPERATIONS_TARGET_CARD_ID));
         operation.setBillId(resultSet.getInt(DBMetadata.OPERATIONS_BILL_ID));
         operation.setPenaltyId(resultSet.getInt(DBMetadata.OPERATIONS_PENALTY_ID));
-        operation.setOperationDate(resultSet.getDate(DBMetadata.OPERATIONS_DATE));
+        operation.setOperationDate(resultSet.getTimestamp(DBMetadata.OPERATIONS_DATE));
 
         return operation;
     }

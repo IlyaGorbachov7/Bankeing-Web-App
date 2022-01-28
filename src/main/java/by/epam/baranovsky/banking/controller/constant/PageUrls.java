@@ -17,5 +17,9 @@ public class PageUrls {
     public static final String TRANSFER_PAGE="/WEB-INF/pages/transfer.jsp";
     public static final String TRANSFER_CONFIRM_PAGE="/WEB-INF/pages/transfer_confirm.jsp";
     public static final String TRANSFER_SUCCESS_PAGE="/WEB-INF/pages/transfer_success.jsp";
+    public static final String TRANSFER_FAILURE_PAGE="/WEB-INF/pages/transfer_failure.jsp";
+    public static final String ALL_USERS_PAGE="/WEB-INF/pages/all_users.jsp";
+    public static final String PENDING_ACCS_PAGE="/WEB-INF/pages/pending_accounts.jsp";
+    public static final String USER_INFO_PAGE="/WEB-INF/pages/user_info.jsp";
     private PageUrls(){}
 }

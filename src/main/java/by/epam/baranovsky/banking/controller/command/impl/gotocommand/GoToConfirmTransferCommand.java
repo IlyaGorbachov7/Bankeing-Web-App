@@ -1,7 +1,6 @@
 package by.epam.baranovsky.banking.controller.command.impl.gotocommand;
 
-import by.epam.baranovsky.banking.constant.ConfigManager;
-import by.epam.baranovsky.banking.constant.ConfigParams;
+import by.epam.baranovsky.banking.constant.CommandName;
 import by.epam.baranovsky.banking.constant.Message;
 import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
@@ -25,8 +24,9 @@ import java.util.List;
 
 public class GoToConfirmTransferCommand extends AbstractCommand {
 
-    private Double commissionPercentage = Double.valueOf(
-            ConfigManager.getInstance().getValue(ConfigParams.TRANSFER_COMISSION));
+    private static final String BACK = String.format("%s?%s=%s",
+            RequestParamName.CONTROLLER, RequestParamName.COMMAND_NAME,
+            CommandName.GOTO_TRANSFER_COMMAND);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -37,23 +37,31 @@ public class GoToConfirmTransferCommand extends AbstractCommand {
         String ownAccountId=request.getParameter(RequestParamName.ACCOUNT_ID);
         String ownCardId=request.getParameter(RequestParamName.CARD_ID);
         String valueStr = request.getParameter(RequestParamName.TRANSFER_VALUE);
+        String billId = request.getParameter(RequestParamName.BILL_ID);
+        String penaltyId = request.getParameter(RequestParamName.PENALTY_ID);
+
+        String back = BACK
+                + ((billId != null && !billId.isEmpty())
+                ? "&"+RequestParamName.BILL_ID+"="+billId : "")
+                + ((penaltyId != null && !penaltyId.isEmpty())
+                ? "&"+RequestParamName.PENALTY_ID+"="+penaltyId : "");
 
         String errorMsgForParams = checkParams(valueStr, targetAccountNumber, targetCardNumber, ownAccountId, ownCardId);
         if(errorMsgForParams!=null){
             request.setAttribute(RequestAttributeNames.ERROR_MSG, errorMsgForParams);
-            request.getRequestDispatcher(PageUrls.TRANSFER_PAGE).forward(request,response);
+            request.getRequestDispatcher(BACK).forward(request,response);
             return;
         }
 
-        double value = Double.parseDouble(valueStr);
+        Double value = Double.parseDouble(valueStr);
 
         try{
             Account ownAccount = null;
-            if(ownAccountId != null){
+            if(!(ownAccountId == null || ownAccountId.isEmpty())){
                 ownAccount = getOwnAccount(Integer.parseInt(ownAccountId), currentUser);
             }
             BankingCard ownCard = null;
-            if (ownCardId != null) {
+            if (!(ownCardId == null || ownCardId.isEmpty())) {
                 ownCard = getOwnCard(Integer.parseInt(ownCardId), currentUser);
             }
             Account targetAccount = getTargetAccount(targetAccountNumber);
@@ -67,7 +75,7 @@ public class GoToConfirmTransferCommand extends AbstractCommand {
 
             if(targetAccount == null && targetCard == null){
                 request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.NO_SUCH_RECEIVER);
-                request.getRequestDispatcher(PageUrls.TRANSFER_PAGE).forward(request,response);
+                request.getRequestDispatcher(BACK).forward(request,response);
                 return;
             }
 
@@ -79,10 +87,13 @@ public class GoToConfirmTransferCommand extends AbstractCommand {
 
             request.setAttribute(
                     RequestAttributeNames.BILL_ID,
-                    request.getParameter(RequestParamName.BILL_ID));
+                    billId);
             request.setAttribute(
                     RequestAttributeNames.PENALTY_ID,
-                    request.getParameter(RequestParamName.PENALTY_ID));
+                    penaltyId);
+
+
+            request.setAttribute(RequestAttributeNames.PREVIOUS_PAGE, back);
             request.getRequestDispatcher(PageUrls.TRANSFER_CONFIRM_PAGE).forward(request, response);
         } catch (ServiceException e) {
             logger.error(e);
@@ -97,7 +108,7 @@ public class GoToConfirmTransferCommand extends AbstractCommand {
                                String targetCardNumber, String ownAccountId,
                                String ownCardId){
 
-        if(valueStr == null){
+        if(valueStr== null || valueStr.isEmpty()){
             return Message.OPERATION_INVALID_VALUE;
         }
         double value = Double.parseDouble(valueStr);
@@ -105,11 +116,13 @@ public class GoToConfirmTransferCommand extends AbstractCommand {
             return  Message.OPERATION_INVALID_VALUE;
         }
 
-        if(targetAccountNumber == null && targetCardNumber == null){
+        if((targetAccountNumber == null || targetAccountNumber.isEmpty())
+                && (targetCardNumber == null || targetCardNumber.isEmpty())){
             return Message.OPERATION_NOT_ENOUGH_DATA;
         }
 
-        if(ownAccountId == null && ownCardId == null){
+        if((ownAccountId == null || ownAccountId.isEmpty())
+                && (ownCardId == null || ownCardId.isEmpty())){
             return Message.OPERATION_NOT_ENOUGH_DATA;
         }
 
@@ -118,7 +131,8 @@ public class GoToConfirmTransferCommand extends AbstractCommand {
 
 
     private BankingCard getTargetCard(String number, String expireDateString) throws ServiceException {
-        if(number == null || expireDateString == null){
+        if(number == null || number.isEmpty()
+                || expireDateString== null || expireDateString.isEmpty()){
             return null;
         }
 
@@ -129,7 +143,7 @@ public class GoToConfirmTransferCommand extends AbstractCommand {
 
         LocalDate expDate = null;
         try {
-            Date tempDate = new SimpleDateFormat("yyyy-MM-dd").parse(expireDateString);
+            Date tempDate = new SimpleDateFormat("yyyy-MM").parse(expireDateString);
             expDate = new java.sql.Date(tempDate.getTime()).toLocalDate();
         } catch (ParseException e) {
             logger.error("Error parsing expiration date ",e);
@@ -150,7 +164,7 @@ public class GoToConfirmTransferCommand extends AbstractCommand {
     }
 
     private Account getTargetAccount(String number) throws ServiceException {
-        if(number == null){
+        if(number == null || number.isEmpty()){
             return null;
         }
         return accountService.findByNumber(number);

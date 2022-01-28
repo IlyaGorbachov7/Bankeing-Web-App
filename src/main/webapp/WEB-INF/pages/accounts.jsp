@@ -142,14 +142,18 @@
                 <fmt:message key="accounts.create"/>
             </a>
         </div>
-        <div class="whitebox">
-            <a href="controller?command=go_to_main_page">
-                <fmt:message key="edit.user.goto.main"/>
-            </a>
-        </div>
+
         <div class="whitebox">
             <a href="controller?command=go_to_cards_page">
                 <fmt:message key="cards.title"/>
+            </a>
+        </div>
+        <div class="whitebox">
+            <a href="controller?command=go_to_transfer_page"><fmt:message key="transfer.title"/></a>
+        </div>
+        <div class="whitebox">
+            <a href="controller?command=go_to_main_page">
+                <fmt:message key="edit.user.goto.main"/>
             </a>
         </div>
         <c:if test="${not empty ERROR_MSG}">

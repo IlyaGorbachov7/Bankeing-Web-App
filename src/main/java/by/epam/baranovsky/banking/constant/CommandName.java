@@ -25,19 +25,21 @@ public class CommandName {
 
     public static final String NEW_ACC_COMMAND= "new_account";
     public static final String LOCK_OR_SUSP_ACC_COMMAND= "lock_or_suspend_account";
-    public static final String UNLOCK_ACCOUNT_COMMAND= "unlock_account";
     public static final String ADD_USER_TO_ACC_COMMAND= "add_account_user";
     public static final String REMOVE_SELF_FROM_ACC_COMMAND= "remove_account_user_self";
 
     public static final String NEW_CARD_COMMAND= "new_card";
     public static final String LOCK_CARD_COMMAND= "lock_card";
 
-
-    public static final String NEW_LOAN_COMMAND= "new_loan";
     public static final String TRANSFER_COMMAND= "transfer";
-    public static final String NEW_BILL_COMMAND= "new_bill";
 
     public static final String EDIT_USER = "edit_user";
+
+    public static final String GOTO_USER_INFO ="go_to_user_info";
+    public static final String CHANGE_USER_ROLE="change_user_role";
+    public static final String CHANGE_ACCOUNT_STATUS="change_account_status";
+    public static final String GOTO_ALL_USERS="go_to_all_users";
+    public static final String GOTO_PENDING_ACCOUNTS="go_to_pending_accounts";
 
     private CommandName(){}
 }

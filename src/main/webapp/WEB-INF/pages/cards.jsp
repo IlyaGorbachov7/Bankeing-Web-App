@@ -97,6 +97,9 @@
             </a>
         </div>
         <div class="whitebox">
+            <a href="controller?command=go_to_transfer_page"><fmt:message key="transfer.title"/></a>
+        </div>
+        <div class="whitebox">
             <a href="controller?command=go_to_main_page">
                 <fmt:message key="edit.user.goto.main"/>
             </a>

@@ -3,20 +3,14 @@ package by.epam.baranovsky.banking.controller.command.impl.gotocommand;
 import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
-import by.epam.baranovsky.banking.controller.constant.RequestParamName;
 import by.epam.baranovsky.banking.controller.constant.SessionParamName;
 import by.epam.baranovsky.banking.entity.*;
 import by.epam.baranovsky.banking.entity.criteria.Criteria;
 import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
 import by.epam.baranovsky.banking.entity.criteria.SingularValue;
-import by.epam.baranovsky.banking.service.AccountService;
-import by.epam.baranovsky.banking.service.BankCardService;
-import by.epam.baranovsky.banking.service.OperationService;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
-import by.epam.baranovsky.banking.service.impl.AccountServiceImpl;
-import by.epam.baranovsky.banking.service.impl.BankCardServiceImpl;
-import by.epam.baranovsky.banking.service.impl.OperationServiceImpl;
 import by.epam.baranovsky.banking.service.impl.UserServiceImpl;
+import lombok.Data;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -39,7 +33,7 @@ public class GoToHomePageCommand extends AbstractCommand {
                 request.setAttribute(RequestAttributeNames.USER_DATA, user);
                 request.setAttribute(
                         RequestAttributeNames.OPERATIONS_DATA,
-                        getUserOperationsMapWithOutput(userId));
+                        getUserOperationDTOs(userId));
 
             } catch (ServiceException e) {
                 logger.error(e);
@@ -52,17 +46,44 @@ public class GoToHomePageCommand extends AbstractCommand {
         dispatcher.forward(request, response);
     }
 
-    private Map<Operation, String> getUserOperationsMapWithOutput(Integer id) throws ServiceException{
+    private List<OperationTransferObject> getUserOperationDTOs(Integer id) throws ServiceException{
 
-        List<Operation> operations = getOperations(getUserAccountIds(id), getUserCardsIds(id));
+        List<Integer> userAccs = getUserAccountIds(id);
+        List<Integer> userCards = getUserCardsIds(id);
+        List<Operation> operations = getOperations(userAccs, userCards);
 
-        Map<Operation, String> finalMap = new TreeMap<>(Comparator.comparing(Operation::getOperationDate).reversed());
+        List<OperationTransferObject> operationPackages = new ArrayList<>();
 
         for(Operation operation : operations){
-            finalMap.put(operation, getOutputParams(operation));
+            OperationTransferObject oto = new OperationTransferObject();
+
+            oto.setIsAccrual(!userCards.contains(operation.getBankCardId()) && !userAccs.contains(operation.getAccountId()));
+            oto.setTypeId(operation.getTypeId());
+            oto.setValue(operation.getValue());
+            if(operation.getAccountId() != null && operation.getAccountId() != 0){
+                oto.setAccountNumber(accountService.findById(
+                        operation.getAccountId()).getAccountNumber());
+            }
+            if(operation.getTargetAccountId() != null && operation.getTargetAccountId() != 0){
+                oto.setTargetAccountNumber(accountService.findById(
+                        operation.getTargetAccountId()).getAccountNumber());
+            }
+            if(operation.getBankCardId() != null && operation.getBankCardId() != 0){
+                oto.setCardNumber(maskNumber(cardService.findById(
+                        operation.getBankCardId()).getNumber()));
+            }
+            if(operation.getTargetBankCardId() != null && operation.getTargetBankCardId() != 0){
+                oto.setTargetCardNumber(maskNumber(cardService.findById(
+                        operation.getTargetBankCardId()).getNumber()));
+            }
+            oto.setBill(operation.getBillId());
+            oto.setPenalty(operation.getPenaltyId());
+            oto.setDate(operation.getOperationDate());
+            operationPackages.add(oto);
         }
-        
-       return finalMap;
+        operationPackages.sort((o1, o2) -> o2.getDate().compareTo(o1.getDate()));
+
+        return operationPackages;
     }
 
     private List<Operation> getOperations(List<Integer> accountIds,
@@ -113,37 +134,5 @@ public class GoToHomePageCommand extends AbstractCommand {
         return userCardIds;
     }
 
-    private String getOutputParams(Operation operation) throws ServiceException {
-        StringBuilder builder = new StringBuilder();
 
-        builder.append(operation.getTypeName()).append(": ");
-
-        if(operation.getAccountId()!=0){
-            builder.append("Account №")
-                    .append(accountService.findById(operation.getAccountId()).getAccountNumber())
-                    .append(" ");
-        }
-
-        if(operation.getBankCardId()!=0){
-            builder.append("Card №")
-                    .append(maskNumber(cardService
-                            .findById(operation.getBankCardId()).getNumber()))
-                    .append(" ");
-        }
-
-        if(operation.getTargetAccountId()!=0){
-            builder.append(" to Account №")
-                    .append(accountService.findById(operation.getTargetAccountId()).getAccountNumber())
-                    .append(" ");
-        }
-
-        if(operation.getTargetBankCardId()!=0){
-            builder.append(" to Card №")
-                    .append(maskNumber(cardService
-                            .findById(operation.getTargetBankCardId()).getNumber()))
-                    .append(" ");
-        }
-
-        return builder.toString();
-    }
 }

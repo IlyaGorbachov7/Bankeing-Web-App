@@ -43,15 +43,15 @@
                 </tr>
                 <tr class="formRow">
                     <td><fmt:message key="user.pass.series"/>:</td>
-                    <td><input type="text" id="passport_series" name="passport_series" maxlength="2" required></td>
+                    <td><input type="text" id="passport_series" name="passport_series" minlength="2" maxlength="2" pattern="[A-Z]{2}" required></td>
                 </tr>
                 <tr class="formRow">
                     <td><fmt:message key="user.pass.num"/>:</td>
-                    <td><input type="number" id="passport_number" name="passport_number" maxlength="7"  required></td>
+                    <td><input type="text" id="passport_number" name="passport_number" maxlength="7" minlength="7" pattern="[0-9]{7}"  required></td>
                 </tr>
                 <tr class="formRow">
                     <td><fmt:message key="user.birthdate"/>:</td>
-                    <td> <input type="date" id="birthdate" name="birthdate" min="1900-01-01" required></td>
+                    <td> <input type="date" id="birthdate" name="birthdate" min="1900-01-01" max="2020-01-01" required></td>
                 </tr>
             </table>
             <input type="submit" value="<fmt:message key="logination.submit"/>" class="submitButton">

@@ -40,7 +40,10 @@ public class GoToTransferPageCommand extends AbstractCommand {
             request.setAttribute(
                     RequestAttributeNames.USER_ACCOUNTS,
                     getUserAccountUpForTransferWithBalance(currentUserId));
+            request.setAttribute(RequestAttributeNames.PREVIOUS_PAGE,
+                    getPreviousRequestAddress(request));
             request.getRequestDispatcher(PageUrls.TRANSFER_PAGE).forward(request,response);
+
         } catch (ServiceException e) {
             logger.error(e);
             RequestDispatcher dispatcher = request.getRequestDispatcher(PageUrls.ERROR_PAGE);
@@ -100,7 +103,7 @@ public class GoToTransferPageCommand extends AbstractCommand {
         String billId = request.getParameter(RequestParamName.BILL_ID);
         String penaltyId = request.getParameter(RequestParamName.PENALTY_ID);
 
-        if(billId != null && penaltyId != null){
+        if(billId != null && !billId.isEmpty() && penaltyId != null && !penaltyId.isEmpty()){
             request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.PENALTY_BILL_INTERSECTION);
             return;
         }
@@ -117,6 +120,8 @@ public class GoToTransferPageCommand extends AbstractCommand {
             }
         }
         request.setAttribute(RequestAttributeNames.ACCOUNT_DATA, account);
+        request.setAttribute(RequestAttributeNames.BILL_ID, billId);
+        request.setAttribute(RequestAttributeNames.PENALTY_ID, penaltyId);
 
     }
 
