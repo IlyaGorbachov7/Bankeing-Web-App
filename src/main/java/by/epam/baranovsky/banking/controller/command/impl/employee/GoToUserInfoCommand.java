@@ -1,10 +1,11 @@
 package by.epam.baranovsky.banking.controller.command.impl.employee;
 
+import by.epam.baranovsky.banking.constant.DBMetadata;
 import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
-import by.epam.baranovsky.banking.dao.rowmapper.impl.CardRowMapper;
+import by.epam.baranovsky.banking.controller.constant.SessionParamName;
 import by.epam.baranovsky.banking.entity.*;
 import by.epam.baranovsky.banking.entity.criteria.Criteria;
 import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
@@ -15,27 +16,33 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GoToUserInfoCommand extends AbstractCommand {
+
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Integer userId = Integer.valueOf(request.getParameter(RequestParamName.ID_CHECKED_USER));
+        Integer currentRole = (Integer) request.getSession().getAttribute(SessionParamName.USER_ROLE_ID);
+        Integer currentUser = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
 
         try{
             User user = userService.getById(userId);
 
+            if(!user.getId().equals(currentUser) && !checkAccessRights(user, currentRole)){
+                request.getRequestDispatcher(PageUrls.ERROR_PAGE).forward(request, response);
+                return;
+            }
+
+            request.setAttribute(RequestAttributeNames.PREVIOUS_PAGE, getPreviousRequestAddress(request));
             List<Account> userAccounts = getUserAccounts(userId);
             Map<BankingCard, String> cards = getUserCards(userId);
             request.setAttribute(RequestAttributeNames.USER_DATA, user);
             request.setAttribute(RequestAttributeNames.USER_ACCOUNTS, userAccounts);
-            request.setAttribute(RequestAttributeNames.USER_CARDS, cards);
+            request.setAttribute(RequestAttributeNames.USER_CARDS, new ArrayList<>(cards.entrySet()));
             request.setAttribute(RequestAttributeNames.OPERATIONS_DATA,
-                    getUserOperationDTOs(userId, userAccounts, cards));
+                    getUserOperationDTOs(userAccounts, cards));
             request.setAttribute(RequestAttributeNames.USER_LOANS, getUserLoans(userId));
             request.setAttribute(RequestAttributeNames.USER_BILLS, getUserBills(userId));
             request.setAttribute(RequestAttributeNames.USER_PENALTIES, getUserPenalties(userId));
@@ -44,33 +51,57 @@ public class GoToUserInfoCommand extends AbstractCommand {
         } catch (ServiceException e) {
             logger.error(e);
             request.getRequestDispatcher(PageUrls.ERROR_PAGE).forward(request, response);
-
         }
 
     }
 
+    private boolean checkAccessRights(User user, Integer currentRole){
+
+
+        return !(DBMetadata.USER_ROLE_EMPLOYEE.equals(currentRole) &
+                (user.getRoleId().equals(DBMetadata.USER_ROLE_ADMIN)
+                        || user.getRoleId().equals(DBMetadata.USER_ROLE_EMPLOYEE)));
+    }
+
     private List<Account> getUserAccounts(Integer userId) throws ServiceException {
-        return accountService.findByUserId(userId);
+        List<Account> result = accountService.findByUserId(userId);
+        result.removeIf(account -> account.getStatusId().equals(DBMetadata.ACCOUNT_STATUS_PENDING));
+        return result;
     }
 
     private List<Penalty> getUserPenalties(Integer userId) throws ServiceException{
         Criteria<EntityParameters.PenaltyParams> criteria = new Criteria<>();
         criteria.add(EntityParameters.PenaltyParams.USER, new SingularValue<>(userId));
-        return penaltyService.findByCriteria(criteria);
+        List<Penalty> result = penaltyService.findByCriteria(criteria);
+        result.removeIf(penalty -> penalty.getStatusId().equals(DBMetadata.PENALTY_STATUS_UNASSIGNED));
+        result.sort((o1, o2) -> o2.getStatusId().compareTo(o1.getStatusId()));
+        return result;
     }
 
     private List<Loan> getUserLoans(Integer userId) throws ServiceException {
         Criteria<EntityParameters.LoanParams> criteria = new Criteria<>();
         criteria.add(EntityParameters.LoanParams.USER, new SingularValue<>(userId));
-        return loanService.findByCriteria(criteria);
+        List<Loan> loans = loanService.findByCriteria(criteria);
+        loans.sort((o1, o2) -> o2.getStatusId().compareTo(o1.getStatusId()));
+        return loans;
     }
 
     private List<Bill> getUserBills(Integer userId) throws ServiceException {
         Criteria<EntityParameters.BillParam> criteria = new Criteria<>();
         criteria.add(EntityParameters.BillParam.USER, new SingularValue<>(userId));
-        return billService.findByCriteria(criteria);
+        List<Bill> bills= billService.findByCriteria(criteria);
+        bills.sort((o1, o2) -> {
+            if(o1.getStatusId().equals(DBMetadata.BILL_STATUS_OVERDUE)){
+                return 1;
+            }
+            if(o1.getStatusId().equals(DBMetadata.BILL_STATUS_CLOSED)){
+                return 1;
+            }
+            return o1.getDueDate().compareTo(o2.getDueDate());
+        });
+        Collections.reverse(bills);
+        return bills;
     }
-
 
     private Map<BankingCard, String> getUserCards(Integer userId) throws ServiceException{
         List<BankingCard> cards = cardService.findByUser(userId);
@@ -87,7 +118,7 @@ public class GoToUserInfoCommand extends AbstractCommand {
         return finalMap;
     }
 
-    private List<OperationTransferObject> getUserOperationDTOs(Integer id, List<Account> accounts, Map<BankingCard, String> cards) throws ServiceException{
+    private List<OperationTransferObject> getUserOperationDTOs( List<Account> accounts, Map<BankingCard, String> cards) throws ServiceException{
 
         List<Integer> userAccs = getUserAccountIds(accounts);
         List<Integer> userCards = getUserCardsIds(cards);

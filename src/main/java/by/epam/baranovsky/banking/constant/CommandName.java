@@ -37,9 +37,10 @@ public class CommandName {
 
     public static final String GOTO_USER_INFO ="go_to_user_info";
     public static final String CHANGE_USER_ROLE="change_user_role";
-    public static final String CHANGE_ACCOUNT_STATUS="change_account_status";
+    public static final String UPDATE_ACCOUNT ="update_account";
     public static final String GOTO_ALL_USERS="go_to_all_users";
     public static final String GOTO_PENDING_ACCOUNTS="go_to_pending_accounts";
+    public static final String DELETE_PENDING_ACC="delete_pending_account";
 
     private CommandName(){}
 }

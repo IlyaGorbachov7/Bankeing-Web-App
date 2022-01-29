@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 
 
@@ -24,6 +25,7 @@ public abstract class AbstractCommand implements Command{
     protected static final Logger logger = Logger.getLogger(AbstractCommand.class);
 
     protected String getPreviousRequestAddress(HttpServletRequest request) throws IOException {
+
         Map<String, String[]> prevRequestParams =
                 (Map<String, String[]>) request.getSession().getAttribute(SessionParamName.LAST_REQUEST);
 
@@ -38,7 +40,6 @@ public abstract class AbstractCommand implements Command{
             requestBuilder.append('&');
         }
         requestBuilder.deleteCharAt(requestBuilder.lastIndexOf("&"));
-
         return requestBuilder.toString();
     }
 

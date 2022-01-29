@@ -18,14 +18,6 @@
         <url-pattern>/controller</url-pattern>
     </servlet-mapping>
 
-    <filter>
-        <filter-name>AccessFilter</filter-name>
-        <filter-class>by.epam.baranovsky.banking.controller.filter.AccessFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>AccessFilter</filter-name>
-        <servlet-name>controller</servlet-name>
-    </filter-mapping>
 
     <filter>
         <filter-name>PreviousRequestFilter</filter-name>
@@ -33,6 +25,15 @@
     </filter>
     <filter-mapping>
         <filter-name>PreviousRequestFilter</filter-name>
+        <servlet-name>controller</servlet-name>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>AccessFilter</filter-name>
+        <filter-class>by.epam.baranovsky.banking.controller.filter.AccessFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AccessFilter</filter-name>
         <servlet-name>controller</servlet-name>
     </filter-mapping>
 
@@ -57,10 +58,10 @@
     <listener>
         <listener-class>by.epam.baranovsky.banking.controller.listener.SchedulerListener</listener-class>
     </listener>
-<!--
+
     <error-page>
         <location>/WEB-INF/pages/error.jsp</location>
     </error-page>
-    -->
+
 
 </web-app>

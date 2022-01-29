@@ -36,7 +36,8 @@ public class RequestParamName {
     public static final String PENALTY_ID="penalty_id";
 
     public static final String ID_CHECKED_USER="checked_user_id";
-    public static final String USER_NEW_ROLE="checked_user_id";
+    public static final String ACC_NEW_INTEREST="new_interest_rate";
+    public static final String USER_NEW_ROLE="new_role_id";
 
     private RequestParamName() {}
 }

@@ -35,7 +35,7 @@ public class RequestAttributeNames {
 
     public static final String USER_LOANS="USER_LOANS";
     public static final String USER_BILLS="USER_BILLS";
-    public static final String USER_PENALTIES="USER_BILLS";
+    public static final String USER_PENALTIES="USER_PENALTIES";
     public static final String PENDING_ACCS="PENDING_ACCS";
     public static final String ALL_USERS="ALL_USERS";
 

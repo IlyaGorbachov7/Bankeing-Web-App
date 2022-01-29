@@ -31,7 +31,7 @@ public class SqlAccountDAO implements AccountDAO {
             SQL_FIND_ALL, DBMetadata.ACCOUNTS_NUMBER);
 
     private static final String SQL_FIND_BY_STATUS = String.format(
-            "%s WHERE %s=? LIMIT 1",
+            "%s WHERE %s=?",
             SQL_FIND_ALL, DBMetadata.ACCOUNT_STATUS_ID);
 
     private static final String SQL_FIND_BY_USER= String.format(

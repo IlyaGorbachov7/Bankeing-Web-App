@@ -19,6 +19,7 @@ public class PreviousRequestFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         ignoredCommands.add(CommandName.LOCALE_CHANGE_COMMAND);
+        ignoredCommands.add(CommandName.GOTO_USER_INFO);
         ignoredCommands.add(CommandName.REGISTER_COMMAND);
         ignoredCommands.add(CommandName.LOGIN_COMMAND);
         ignoredCommands.add(CommandName.NEW_CARD_COMMAND);
@@ -31,9 +32,10 @@ public class PreviousRequestFilter implements Filter {
         ignoredCommands.add(CommandName.GOTO_CARD_INFO_COMMAND);
         ignoredCommands.add(CommandName.GOTO_TRANSFER_COMMAND);
         ignoredCommands.add(CommandName.GOTO_TRANSFER_CONFIRM_COMMAND);
-        ignoredCommands.add(CommandName.CHANGE_ACCOUNT_STATUS);
+        ignoredCommands.add(CommandName.UPDATE_ACCOUNT);
         ignoredCommands.add(CommandName.CHANGE_USER_ROLE);
         ignoredCommands.add(CommandName.EDIT_USER);
+        ignoredCommands.add(CommandName.DELETE_PENDING_ACC);
     }
 
     @Override

@@ -91,6 +91,10 @@ public class DBMetadata {
     public static final String BILL_STATUS_ID="id_bill_status";
     public static final String BILL_STATUS_NAME="status";
 
+    public static final Integer BILL_STATUS_PENDING = 1;
+    public static final Integer BILL_STATUS_CLOSED = 2;
+    public static final Integer BILL_STATUS_OVERDUE = 3;
+
     public static final String LOANS_TABLE = "loans";
     public static final String LOANS_ID = "single_payment_value";
     public static final String LOANS_SINGLE_PAYMENT_VALUE = "single_payment_value";
@@ -152,7 +156,12 @@ public class DBMetadata {
     public static final String PENALTY_STATUS_ID="id_penalty_status";
     public static final String PENALTY_STATUS_NAME="status";
 
-    public static final String PENALTY_TYPE_TABLE = "penalty_tyfpe";
+    public static final Integer PENALTY_STATUS_PENDING = 1;
+    public static final Integer PENALTY_STATUS_UNASSIGNED = 2;
+    public static final Integer PENALTY_STATUS_CLOSED = 3;
+    public static final Integer PENALTY_STATUS_INFLICTED = 4;
+
+    public static final String PENALTY_TYPE_TABLE = "penalty_type";
     public static final String PENALTY_TYPE_ID="id_penalty_type";
     public static final String PENALTY_TYPE_NAME="type";
 
@@ -161,6 +170,5 @@ public class DBMetadata {
     public static final Integer PENALTY_TYPE_CARDS_LOCK= 3;
     public static final Integer PENALTY_TYPE_FEE = 4;
     public static final Integer PENALTY_TYPE_LAWSUIT = 5;
-
     private DBMetadata() {}
 }

@@ -10,6 +10,7 @@ import by.epam.baranovsky.banking.controller.constant.RequestParamName;
 import by.epam.baranovsky.banking.controller.constant.SessionParamName;
 import by.epam.baranovsky.banking.entity.Account;
 import by.epam.baranovsky.banking.entity.BankingCard;
+import by.epam.baranovsky.banking.entity.Operation;
 import by.epam.baranovsky.banking.service.BankCardService;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
 import by.epam.baranovsky.banking.service.impl.BankCardServiceImpl;
@@ -41,8 +42,11 @@ public class LockCardCommand extends AbstractCommand {
                 return;
             }
 
-            card.setStatusId(DBMetadata.CARD_STATUS_LOCKED);
-            cardService.update(card);
+            Operation operation = new Operation();
+            operation.setBankCardId(card.getId());
+            operation.setTypeId(DBMetadata.OPERATION_TYPE_CARD_LOCK);
+
+            operationService.create(operation);
             response.sendRedirect(REDIRECT_TO_CARDS);
         } catch (ServiceException e) {
             logger.error(e);

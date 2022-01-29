@@ -10,10 +10,7 @@ import by.epam.baranovsky.banking.controller.command.impl.account.RemoveSelfFrom
 import by.epam.baranovsky.banking.controller.command.impl.admin.ChangeUserRoleCommand;
 import by.epam.baranovsky.banking.controller.command.impl.card.LockCardCommand;
 import by.epam.baranovsky.banking.controller.command.impl.card.NewCardCommand;
-import by.epam.baranovsky.banking.controller.command.impl.employee.ChangeAccountStatusCommand;
-import by.epam.baranovsky.banking.controller.command.impl.employee.GoToAllUsersCommand;
-import by.epam.baranovsky.banking.controller.command.impl.employee.GoToPendingAccountsCommand;
-import by.epam.baranovsky.banking.controller.command.impl.employee.GoToUserInfoCommand;
+import by.epam.baranovsky.banking.controller.command.impl.employee.*;
 import by.epam.baranovsky.banking.controller.command.impl.gotocommand.*;
 import by.epam.baranovsky.banking.controller.command.impl.transfer.TransferCommand;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
@@ -59,10 +56,11 @@ public class CommandProvider {
         commandMap.put(CommandName.GOTO_TRANSFER_SUCCESS_COMMAND, new GoToTransferSuccessCommand());
 
         commandMap.put(CommandName.GOTO_USER_INFO, new GoToUserInfoCommand());
-        commandMap.put(CommandName.CHANGE_ACCOUNT_STATUS, new ChangeAccountStatusCommand());
+        commandMap.put(CommandName.UPDATE_ACCOUNT, new UpdateAccount());
         commandMap.put(CommandName.CHANGE_USER_ROLE, new ChangeUserRoleCommand());
         commandMap.put(CommandName.GOTO_ALL_USERS, new GoToAllUsersCommand());
         commandMap.put(CommandName.GOTO_PENDING_ACCOUNTS, new GoToPendingAccountsCommand());
+        commandMap.put(CommandName.DELETE_PENDING_ACC, new DeletePendingAccountCommand());
 
     }
 

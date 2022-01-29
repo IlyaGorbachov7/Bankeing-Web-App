@@ -42,4 +42,8 @@ public class Message {
     public static final String ACC_LOCKED="this_account_is_locked";
     public static final String CARD_LOCKED="this_card_is_locked";
 
+
+    public static final String ACCOUNT_NOT_PENDING="this_account_is_not_pending";
+    public static final String NOT_ENOUGH_RIGHTS="you_have_no_power_here";
+
 }

@@ -2,9 +2,21 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="by.epam.baranovsky.banking.constant.DBMetadata" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="locale.locale"/>
+
+<c:set var="operations" scope="page" value="${OPERATIONS_DATA}"/>
+<c:set var="totalCount" scope="page" value="${fn.length(OPERATIONS_DATA)}"/>
+<c:set var="perPage" scope="page"  value="${5}"/>
+<c:set var="pageStart" value="${param.start}"/>
+<c:if test="${empty pageStart or pageStart < 0}">
+    <c:set var="pageStart" value="0"/>
+</c:if>
+<c:if test="${totalCount < pageStart}">
+    <c:set var="pageStart" value="${pageStart - perPage}"/>
+</c:if>
 
 <html>
 <head>
@@ -14,13 +26,18 @@
 <body>
 <div class="container">
     <div class="imgColumn">
-        <h1><fmt:message key="home.header"/></h1>
         <c:if test="${USER_DATA == null}">
+            <h1><fmt:message key="home.header"/></h1>
             <div class="operationbox">
                 <fmt:message key="home.placeholder"/>
             </div>
         </c:if>
-        <c:forEach var="entry" items="${OPERATIONS_DATA}">
+        <c:if test="${USER_DATA != null}">
+            <h1><fmt:message key="user.info.operation.history"/></h1>
+            <a href="controller?command=go_to_main_page&start=${pageStart - perPage}"><fmt:message key="home.operations.prev.page"/></a>${pageStart + 1} - ${pageStart + perPage}
+            <a href="controller?command=go_to_main_page&start=${pageStart + perPage}"><fmt:message key="home.operations.next.page"/></a>
+        </c:if>
+        <c:forEach var="entry" items="${OPERATIONS_DATA}" begin="${pageStart}" end="${pageStart + perPage - 1}">
             <div class="operationbox">
                 <table class="blankTable">
                     <c:choose>
@@ -327,6 +344,7 @@
                 </table>
             </div>
         </c:forEach>
+
     </div>
     <div class="userColumn">
         <c:if test="${USER_DATA != null}">
@@ -378,8 +396,15 @@
             <div class="whitebox">
                 <a href="controller?command=go_to_transfer_page"><fmt:message key="transfer.title"/></a>
             </div>
-            <br>
+            <c:if test="${USER_ROLE_ID eq DBMetadata.USER_ROLE_ADMIN or USER_ROLE_ID eq DBMetadata.USER_ROLE_EMPLOYEE}">
+                <div class="whitebox">
+                    <a href="controller?command=go_to_all_users">
+                        <fmt:message key="employee.start"/>
+                    </a>
+                </div>
+            </c:if>
             <a href="controller?command=logout"><fmt:message key="home.logout.button"/></a>
+            <br>
         </c:if>
         <c:if test="${USER_DATA == null}">
             <br>

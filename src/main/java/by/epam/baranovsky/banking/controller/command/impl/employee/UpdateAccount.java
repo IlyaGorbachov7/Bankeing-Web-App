@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class ChangeAccountStatusCommand extends AbstractCommand {
+public class UpdateAccount extends AbstractCommand {
 
 
     @Override
@@ -25,12 +25,25 @@ public class ChangeAccountStatusCommand extends AbstractCommand {
         Integer newStatusId = Integer.valueOf(request.getParameter(RequestParamName.ACCOUNT_NEW_STATUS));
         Integer currentUserRole = (Integer) request.getSession().getAttribute(SessionParamName.USER_ROLE_ID);
 
+        String newPercentageStr = request.getParameter(RequestParamName.ACC_NEW_INTEREST);
+        double newPercentage = 0d;
+        if(newPercentageStr != null && !newPercentageStr.isEmpty()){
+            newPercentage = Double.parseDouble(newPercentageStr);
+        }
+
+
         try{
             Account account = accountService.findById(accountId);
             if(checkStatusChangeValidity(currentUserRole, newStatusId, account)){
-                account.setStatusId(newStatusId);
-                Operation operation = buildOperation(newStatusId, accountId);
-                operationService.create(operation);
+
+                if(checkIfItsPendingAccountApproval(newStatusId, account)){
+                    account.setStatusId(newStatusId);
+                    account.setYearlyInterestRate(newPercentage);
+                    accountService.update(account);
+                } else{
+                    Operation operation = buildOperation(newStatusId, accountId);
+                    operationService.create(operation);
+                }
                 response.sendRedirect(getPreviousRequestAddress(request));
             } else{
                 request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.WRONG_NEW_STATUS);
@@ -40,6 +53,12 @@ public class ChangeAccountStatusCommand extends AbstractCommand {
             logger.error(e);
             request.getRequestDispatcher(PageUrls.ERROR_PAGE).forward(request, response);
         }
+    }
+
+    private boolean checkIfItsPendingAccountApproval(Integer newStatus, Account account){
+
+        return newStatus.equals(DBMetadata.ACCOUNT_STATUS_UNLOCKED)
+                && account.getStatusId().equals(DBMetadata.ACCOUNT_STATUS_PENDING);
     }
 
     private boolean checkStatusChangeValidity(Integer role, Integer newStatus, Account oldAcc){

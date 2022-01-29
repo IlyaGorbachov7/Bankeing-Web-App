@@ -4,6 +4,7 @@ import by.epam.baranovsky.banking.constant.DBMetadata;
 import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
+import by.epam.baranovsky.banking.controller.constant.RequestParamName;
 import by.epam.baranovsky.banking.controller.constant.SessionParamName;
 import by.epam.baranovsky.banking.entity.User;
 import by.epam.baranovsky.banking.entity.criteria.Criteria;
@@ -22,8 +23,17 @@ public class GoToAllUsersCommand extends AbstractCommand {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try{
+            String searchEmail = request.getParameter(RequestParamName.EMAIL);
+
             Integer currentRole = (Integer) request.getSession().getAttribute(SessionParamName.USER_ROLE_ID);
-            request.setAttribute(RequestAttributeNames.ALL_USERS, getAllUsersAvailableToBrowse(currentRole));
+            Integer currentId = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
+
+            List<User> users = getAllUsersAvailableToBrowse(currentRole);
+            users.removeIf(user -> user.getId().equals(currentId));
+            if(searchEmail != null && !searchEmail.isBlank()){
+                users.removeIf(user -> !user.getEmail().contains(searchEmail));
+            }
+            request.setAttribute(RequestAttributeNames.ALL_USERS, users);
             request.getRequestDispatcher(PageUrls.ALL_USERS_PAGE).forward(request,response);
         }catch (ServiceException e) {
             logger.error(e);

@@ -10,14 +10,14 @@ import org.quartz.*;
 public abstract class AbstractJob implements Job {
 
     protected static final String GROUP_NAME = "scheduledJobs";
-    protected static final Integer BILL_STATUS_PENDING = 1;
-    protected static final Integer BILL_STATUS_CLOSED = 2;
-    protected static final Integer BILL_STATUS_OVERDUE = 3;
+    protected static final Integer BILL_STATUS_PENDING = DBMetadata.BILL_STATUS_PENDING;
+    protected static final Integer BILL_STATUS_CLOSED = DBMetadata.BILL_STATUS_CLOSED;
+    protected static final Integer BILL_STATUS_OVERDUE = DBMetadata.BILL_STATUS_OVERDUE;
 
-    protected static final Integer PENALTY_STATUS_PENDING = 1;
-    protected static final Integer PENALTY_STATUS_UNASSIGNED = 2;
-    protected static final Integer PENALTY_STATUS_CLOSED = 3;
-    protected static final Integer PENALTY_STATUS_INFLICTED = 4;
+    protected static final Integer PENALTY_STATUS_PENDING = DBMetadata.PENALTY_STATUS_PENDING;
+    protected static final Integer PENALTY_STATUS_UNASSIGNED = DBMetadata.PENALTY_STATUS_UNASSIGNED;
+    protected static final Integer PENALTY_STATUS_CLOSED = DBMetadata.PENALTY_STATUS_CLOSED;
+    protected static final Integer PENALTY_STATUS_INFLICTED = DBMetadata.PENALTY_STATUS_INFLICTED;
 
     protected static final Integer PENALTY_TYPE_ACCS_SUSP = DBMetadata.PENALTY_TYPE_ACCS_SUSP;
     protected static final Integer PENALTY_TYPE_ACCS_LOCK= DBMetadata.PENALTY_TYPE_ACCS_LOCK;
