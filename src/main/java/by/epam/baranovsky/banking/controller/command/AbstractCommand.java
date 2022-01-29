@@ -14,6 +14,9 @@ import java.util.Map;
 
 public abstract class AbstractCommand implements Command{
 
+    private static final String PREV_REQUEST_PATTERN=
+            "controller%3F([a-zA-Z0-9._~-]+%3D[a-zA-Z0-9._~-]+)(%26[a-zA-Z0-9._~-]+%3D[a-zA-Z0-9._~-]+)*";
+
     protected static final UserService userService = UserServiceImpl.getInstance();
     protected static final BillService billService = BillServiceImpl.getInstance();
     protected static final LoanService loanService = LoanServiceImpl.getInstance();
@@ -23,6 +26,7 @@ public abstract class AbstractCommand implements Command{
     protected static final BankCardService cardService = BankCardServiceImpl.getInstance();
 
     protected static final Logger logger = Logger.getLogger(AbstractCommand.class);
+
 
     protected String getPreviousRequestAddress(HttpServletRequest request) throws IOException {
 

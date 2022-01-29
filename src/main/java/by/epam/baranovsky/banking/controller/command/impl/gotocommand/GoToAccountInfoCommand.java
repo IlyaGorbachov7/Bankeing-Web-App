@@ -1,6 +1,7 @@
 package by.epam.baranovsky.banking.controller.command.impl.gotocommand;
 
 import by.epam.baranovsky.banking.constant.CommandName;
+import by.epam.baranovsky.banking.constant.DBMetadata;
 import by.epam.baranovsky.banking.constant.Message;
 import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
@@ -42,12 +43,12 @@ public class GoToAccountInfoCommand extends AbstractCommand {
             try{
                 Account account = accountService.findById(accountId);
                 List<Integer> userIdList = accountService.findUsers(accountId);
-                Integer currentUserId = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
-                if(!userIdList.contains(currentUserId)){
-                    request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.NOT_YOUR_ACCOUNT);
+
+                if(!checkIfCanView(request, userIdList)){
                     request.getRequestDispatcher(REDIRECT_TO_ACCS).forward(request, response);
                     return;
                 }
+
                 request.setAttribute(RequestAttributeNames.ACCOUNT_DATA, account);
                 request.setAttribute(RequestAttributeNames.ACCOUNT_USERS_INFO, getUsersInfo(userIdList));
                 request.setAttribute(RequestAttributeNames.ACCOUNT_CARDS_INFO, getCardsForThisAccount(accountId));
@@ -61,6 +62,21 @@ public class GoToAccountInfoCommand extends AbstractCommand {
 
         }
 
+    }
+
+    private boolean checkIfCanView(HttpServletRequest request, List<Integer> userList){
+        Integer currentUserId = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
+        Integer currentUserRole = (Integer) request.getSession().getAttribute(SessionParamName.USER_ROLE_ID);
+
+        if(!userList.contains(currentUserId)){
+            if(!currentUserRole.equals(DBMetadata.USER_ROLE_REGULAR)){
+                request.setAttribute(RequestAttributeNames.VIEW_ONLY, true);
+            } else{
+                request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.NOT_YOUR_ACCOUNT);
+                return false;
+            }
+        }
+        return true;
     }
 
     private List<String> getUsersInfo(List<Integer> userIds) throws ServiceException {

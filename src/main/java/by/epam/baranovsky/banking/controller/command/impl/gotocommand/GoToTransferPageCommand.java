@@ -12,9 +12,7 @@ import by.epam.baranovsky.banking.entity.criteria.Criteria;
 import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
 import by.epam.baranovsky.banking.entity.criteria.Range;
 import by.epam.baranovsky.banking.entity.criteria.SingularValue;
-import by.epam.baranovsky.banking.service.*;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
-import by.epam.baranovsky.banking.service.impl.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -40,7 +38,7 @@ public class GoToTransferPageCommand extends AbstractCommand {
             request.setAttribute(
                     RequestAttributeNames.USER_ACCOUNTS,
                     getUserAccountUpForTransferWithBalance(currentUserId));
-            request.setAttribute(RequestAttributeNames.PREVIOUS_PAGE,
+            request.setAttribute(RequestAttributeNames.PREV_PAGE,
                     getPreviousRequestAddress(request));
             request.getRequestDispatcher(PageUrls.TRANSFER_PAGE).forward(request,response);
 

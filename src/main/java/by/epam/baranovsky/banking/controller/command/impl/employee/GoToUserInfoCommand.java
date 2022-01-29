@@ -30,12 +30,7 @@ public class GoToUserInfoCommand extends AbstractCommand {
         try{
             User user = userService.getById(userId);
 
-            if(!user.getId().equals(currentUser) && !checkAccessRights(user, currentRole)){
-                request.getRequestDispatcher(PageUrls.ERROR_PAGE).forward(request, response);
-                return;
-            }
-
-            request.setAttribute(RequestAttributeNames.PREVIOUS_PAGE, getPreviousRequestAddress(request));
+            request.setAttribute(RequestAttributeNames.PREV_PAGE, getPreviousRequestAddress(request));
             List<Account> userAccounts = getUserAccounts(userId);
             Map<BankingCard, String> cards = getUserCards(userId);
             request.setAttribute(RequestAttributeNames.USER_DATA, user);
@@ -53,14 +48,6 @@ public class GoToUserInfoCommand extends AbstractCommand {
             request.getRequestDispatcher(PageUrls.ERROR_PAGE).forward(request, response);
         }
 
-    }
-
-    private boolean checkAccessRights(User user, Integer currentRole){
-
-
-        return !(DBMetadata.USER_ROLE_EMPLOYEE.equals(currentRole) &
-                (user.getRoleId().equals(DBMetadata.USER_ROLE_ADMIN)
-                        || user.getRoleId().equals(DBMetadata.USER_ROLE_EMPLOYEE)));
     }
 
     private List<Account> getUserAccounts(Integer userId) throws ServiceException {

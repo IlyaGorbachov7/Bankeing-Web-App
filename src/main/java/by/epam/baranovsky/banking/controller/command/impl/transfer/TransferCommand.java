@@ -236,7 +236,8 @@ public class TransferCommand extends AbstractCommand {
             if(card.getAccountId() == null || card.getAccountId() == 0){
                 return Message.CREDIT_CARD;
             }
-            if(card.getStatusId().equals(DBMetadata.CARD_STATUS_LOCKED)){
+            if(card.getStatusId().equals(DBMetadata.CARD_STATUS_LOCKED)
+                    || card.getStatusId().equals(DBMetadata.CARD_STATUS_EXPIRED)){
                 return Message.CARD_LOCKED;
             }
             targetAcc = card.getAccountId();

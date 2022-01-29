@@ -61,6 +61,7 @@ public class CommandProvider {
         commandMap.put(CommandName.GOTO_ALL_USERS, new GoToAllUsersCommand());
         commandMap.put(CommandName.GOTO_PENDING_ACCOUNTS, new GoToPendingAccountsCommand());
         commandMap.put(CommandName.DELETE_PENDING_ACC, new DeletePendingAccountCommand());
+        commandMap.put(CommandName.LOCK_OR_UNLOCK_CARD_ADMIN, new LockOrUnlockCardCommand());
 
     }
 

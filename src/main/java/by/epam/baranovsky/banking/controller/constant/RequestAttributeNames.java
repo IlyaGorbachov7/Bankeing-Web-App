@@ -22,7 +22,7 @@ public class RequestAttributeNames {
     public static final String CARD_USER="CARD_USER";
     public static final String CARD_ACCOUNT="CARD_ACCOUNT";
     public static final String CARD_OVERDRAFTED="CARD_OVERDRAFTED";
-    public static final String PREVIOUS_PAGE="PREV_PAGE";
+    public static final String PREV_PAGE ="PREV_PAGE";
 
     public static final String BILL_ID="BILL_ID";
     public static final String PENALTY_ID="PENALTY_ID";
@@ -38,5 +38,6 @@ public class RequestAttributeNames {
     public static final String USER_PENALTIES="USER_PENALTIES";
     public static final String PENDING_ACCS="PENDING_ACCS";
     public static final String ALL_USERS="ALL_USERS";
+    public static final String VIEW_ONLY="VIEW_ONLY";
 
 }

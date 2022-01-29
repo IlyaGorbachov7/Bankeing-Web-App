@@ -93,7 +93,7 @@ public class GoToConfirmTransferCommand extends AbstractCommand {
                     penaltyId);
 
 
-            request.setAttribute(RequestAttributeNames.PREVIOUS_PAGE, back);
+            request.setAttribute(RequestAttributeNames.PREV_PAGE, back);
             request.getRequestDispatcher(PageUrls.TRANSFER_CONFIRM_PAGE).forward(request, response);
         } catch (ServiceException e) {
             logger.error(e);

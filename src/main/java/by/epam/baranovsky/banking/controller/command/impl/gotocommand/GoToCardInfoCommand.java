@@ -32,8 +32,9 @@ public class GoToCardInfoCommand extends AbstractCommand {
             try{
                 BankingCard card = cardService.findById(cardId);
                 Integer currentUserId = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
+                Integer currentUserRole = (Integer) request.getSession().getAttribute(SessionParamName.USER_ROLE_ID);
 
-                if(!canAccessInfo(currentUserId, card)){
+                if(!canAccessInfo(currentUserId, currentUserRole, card)){
                     request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.CANT_ACCESS_CARD_INFO);
                     request.getRequestDispatcher(PageUrls.CARDS_PAGE).forward(request, response);
                     return;
@@ -51,7 +52,7 @@ public class GoToCardInfoCommand extends AbstractCommand {
                 request.setAttribute(RequestAttributeNames.CARD_DATA, card);
                 request.setAttribute(RequestAttributeNames.CARD_USER, userService.getById(card.getUserId()));
                 request.setAttribute(RequestAttributeNames.CARD_ACCOUNT, accountService.findById(card.getAccountId()));
-                request.setAttribute(RequestAttributeNames.PREVIOUS_PAGE, getPreviousRequestAddress(request));
+                request.setAttribute(RequestAttributeNames.PREV_PAGE, getPreviousRequestAddress(request));
                 request.getRequestDispatcher(PageUrls.CARD_INFO_PAGE).forward(request, response);
             } catch (ServiceException e) {
                 logger.error(e);
@@ -63,8 +64,12 @@ public class GoToCardInfoCommand extends AbstractCommand {
 
     }
 
-    private boolean canAccessInfo(Integer currentUser, BankingCard card) throws ServiceException {
+    private boolean canAccessInfo(Integer currentUser, Integer role, BankingCard card) throws ServiceException {
         Account cardAccount = accountService.findById(card.getAccountId());
+
+        if(DBMetadata.USER_ROLE_ADMIN.equals(role) || DBMetadata.USER_ROLE_EMPLOYEE.equals(role)){
+            return true;
+        }
 
         return card.getUserId().equals(currentUser)
                 || accountService.findUsers(cardAccount.getId()).contains(currentUser);

@@ -32,6 +32,7 @@ public class AccessFilter implements Filter {
         employeeCommands.add(CommandName.GOTO_USER_INFO);
         employeeCommands.add(CommandName.UPDATE_ACCOUNT);
         employeeCommands.add(CommandName.DELETE_PENDING_ACC);
+        employeeCommands.add(CommandName.LOCK_OR_UNLOCK_CARD_ADMIN);
 
         regularUserCommands.add(CommandName.LOGOUT_COMMAND);
         regularUserCommands.add(CommandName.GOTO_ACC_INFO_COMMAND);

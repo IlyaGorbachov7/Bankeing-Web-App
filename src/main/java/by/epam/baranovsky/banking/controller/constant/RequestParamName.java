@@ -4,6 +4,7 @@ public class RequestParamName {
     public static final String CONTROLLER="controller";
     public static final String COMMAND_NAME="command";
     public static final String LOCALE="locale";
+    public static final String PREVIUOS_REQUEST="previous_request";
 
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
@@ -22,6 +23,7 @@ public class RequestParamName {
 
     public static final String CARD_ID = "card_id";
     public static final String CARD_NEW_USER_ID= "new_user_id";
+    public static final String CARD_NEW_STATUS= "card_new_status";
 
 
     public static final String TRANSFER_TARGET_ACC="target_account_id";

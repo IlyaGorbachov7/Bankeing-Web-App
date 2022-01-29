@@ -41,6 +41,7 @@ public class CommandName {
     public static final String GOTO_ALL_USERS="go_to_all_users";
     public static final String GOTO_PENDING_ACCOUNTS="go_to_pending_accounts";
     public static final String DELETE_PENDING_ACC="delete_pending_account";
+    public static final String LOCK_OR_UNLOCK_CARD_ADMIN ="lock_or_unlock_card";
 
     private CommandName(){}
 }

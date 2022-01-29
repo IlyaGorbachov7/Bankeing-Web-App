@@ -70,7 +70,7 @@
 
 <c:set var="perPage" scope="page"  value="${3}"/>
 <c:set var="userId" scope="page" value="${param.checked_user_id}"/>
-
+<c:remove var="USER_INFO_ID"/>
 
 <html>
 <head>
@@ -187,6 +187,14 @@
                                                     <fmt:message key="error.unknown"/>
                                                 </c:otherwise>
                                             </c:choose>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-top: 2em"></td>
+                                        <td>
+                                            <a href="controller?command=go_to_account_info&account_id=${account.id}&user_info_id=${USER_DATA.id}">
+                                                <fmt:message key="card.see.info"/>
+                                            </a>
                                         </td>
                                     </tr>
                                 </table>
@@ -690,7 +698,6 @@
                         <a href="controller?command=go_to_user_info&checked_user_id=${userId}&cards_start=${cardsStart + perPage}"><fmt:message key="home.operations.next.page"/></a>
                     </td>
                 </tr>
-
                 <tr>
                     <td colspan="4">
                         <c:forEach var="card" items="${cards}" begin="${cardsStart}" end="${cardsStart+perPage-1}">
@@ -736,6 +743,30 @@
                                             <td><fmt:message key="card.type.overdraft"/></td>
                                         </tr>
                                     </c:if>
+                                    <tr>
+                                        <td><b><fmt:message key="accounts.status"/>:</b></td>
+                                        <td colspan="3">
+                                            <c:choose>
+                                                <c:when test="${card.getKey().statusId eq DBMetadata.CARD_STATUS_EXPIRED}">
+                                                    <fmt:message key="cars.status.expired"/>
+                                                </c:when>
+                                                <c:when test="${card.getKey().statusId eq DBMetadata.CARD_STATUS_UNLOCKED}">
+                                                    <fmt:message key="accounts.unlocked"/>
+                                                </c:when>
+                                                <c:when test="${card.getKey().statusId eq DBMetadata.CARD_STATUS_LOCKED}">
+                                                    <fmt:message key="accounts.locked"/>
+                                                </c:when>
+                                            </c:choose>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            <a href="controller?command=go_to_card_info&user_info_id=${USER_DATA.id}&card_id=${card.getKey().id}">
+                                                <fmt:message key="card.see.info"/>
+                                            </a>
+                                        </td>
+                                    </tr>
                                 </table>
                             </div>
                         </c:forEach>
@@ -744,9 +775,19 @@
             </table>
         </div>
         <br>
-        <a href="${PREV_PAGE}">
-            <fmt:message key="card.info.back"/>
-        </a>
+        <c:choose>
+            <c:when test="${fn.contains(PREV_PAGE, 'go_to_account_info')}">
+                <a href="${PREV_PAGE}">
+                    <fmt:message key="card.info.back"/>
+                </a>
+            </c:when>
+            <c:otherwise>
+                <a href="controller?command=go_to_all_users">
+                    <fmt:message key="card.info.back"/>
+                </a>
+            </c:otherwise>
+        </c:choose>
+
     </div>
 </div>
 

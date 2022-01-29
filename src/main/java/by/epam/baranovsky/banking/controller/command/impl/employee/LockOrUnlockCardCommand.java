@@ -1,5 +1,6 @@
-package by.epam.baranovsky.banking.controller.command.impl.card;
+package by.epam.baranovsky.banking.controller.command.impl.employee;
 
+import by.epam.baranovsky.banking.constant.CommandName;
 import by.epam.baranovsky.banking.constant.DBMetadata;
 import by.epam.baranovsky.banking.constant.Message;
 import by.epam.baranovsky.banking.controller.command.AbstractCommand;
@@ -17,32 +18,31 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class LockCardCommand extends AbstractCommand {
+public class LockOrUnlockCardCommand extends AbstractCommand {
+
+    private static final String BACK_TO_INFO = String.format("%s?%s=%s&%s=",
+            RequestParamName.CONTROLLER, RequestParamName.COMMAND_NAME,
+            CommandName.GOTO_CARD_INFO_COMMAND, RequestParamName.CARD_ID);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try{
+            Integer newStatus = Integer.valueOf(request.getParameter(RequestParamName.CARD_NEW_STATUS));
             BankingCard card = cardService.findById(Integer.valueOf(request.getParameter(RequestParamName.CARD_ID)));
+            Integer userRole = (Integer) request.getSession().getAttribute(SessionParamName.USER_ROLE_ID);
 
-            if(card.getStatusId().equals(DBMetadata.CARD_STATUS_EXPIRED)){
-                request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.CANT_ALTER_EXPIRED_CARD);
+            if(userRole.equals(DBMetadata.USER_ROLE_EMPLOYEE) && newStatus.equals(DBMetadata.CARD_STATUS_UNLOCKED)){
+                request.getRequestDispatcher(PageUrls.ERROR_PAGE).forward(request,response);
+                return;
+            }
+            if(card.getStatusId().equals(DBMetadata.CARD_STATUS_EXPIRED) || newStatus.equals(DBMetadata.CARD_STATUS_EXPIRED)){
                 request.getRequestDispatcher(PageUrls.ERROR_PAGE).forward(request,response);
                 return;
             }
 
-            if(!isUserValid(request, card)){
-                request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.CARD_NOT_YOURS);
-                RequestDispatcher dispatcher = request.getRequestDispatcher(getPreviousRequestAddress(request));
-                dispatcher.forward(request, response);
-                return;
-            }
-
-            Operation operation = new Operation();
-            operation.setBankCardId(card.getId());
-            operation.setTypeId(DBMetadata.OPERATION_TYPE_CARD_LOCK);
-
+            Operation operation = buildOperation(card.getId(), newStatus);
             operationService.create(operation);
-            response.sendRedirect(getPreviousRequestAddress(request));
+            response.sendRedirect(BACK_TO_INFO+card.getId());
         } catch (ServiceException e) {
             logger.error(e);
             RequestDispatcher dispatcher = request.getRequestDispatcher(PageUrls.ERROR_PAGE);
@@ -50,15 +50,18 @@ public class LockCardCommand extends AbstractCommand {
         }
     }
 
+    private Operation buildOperation(Integer cardId, Integer newStatus){
+        Operation operation = new Operation();
+        operation.setBankCardId(cardId);
 
-    private boolean isUserValid(HttpServletRequest request, BankingCard card){
-        Integer userId = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
-        Integer roleId = (Integer) request.getSession().getAttribute(SessionParamName.USER_ROLE_ID);
-
-        if(DBMetadata.USER_ROLE_ADMIN.equals(roleId) || DBMetadata.USER_ROLE_EMPLOYEE.equals(roleId)){
-            return true;
+        if(newStatus.equals(DBMetadata.CARD_STATUS_LOCKED)){
+            operation.setTypeId(DBMetadata.OPERATION_TYPE_CARD_LOCK);
+        }
+        if(newStatus.equals(DBMetadata.CARD_STATUS_UNLOCKED)){
+            operation.setTypeId(DBMetadata.OPERATION_TYPE_CARD_UNLOCK);
         }
 
-        return card.getUserId().equals(userId);
+        return operation;
     }
+
 }

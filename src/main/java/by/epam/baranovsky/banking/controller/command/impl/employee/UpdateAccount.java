@@ -31,7 +31,6 @@ public class UpdateAccount extends AbstractCommand {
             newPercentage = Double.parseDouble(newPercentageStr);
         }
 
-
         try{
             Account account = accountService.findById(accountId);
             if(checkStatusChangeValidity(currentUserRole, newStatusId, account)){
@@ -68,7 +67,7 @@ public class UpdateAccount extends AbstractCommand {
                 return true;
             }
             return newStatus.equals(DBMetadata.ACCOUNT_STATUS_SUSPENDED)
-                    && oldAcc.getStatusId().equals(DBMetadata.ACCOUNT_STATUS_UNLOCKED);
+                    && !oldAcc.getStatusId().equals(DBMetadata.ACCOUNT_STATUS_BLOCKED);
         }
 
         return role.equals(DBMetadata.USER_ROLE_ADMIN) && !newStatus.equals(DBMetadata.ACCOUNT_STATUS_PENDING);

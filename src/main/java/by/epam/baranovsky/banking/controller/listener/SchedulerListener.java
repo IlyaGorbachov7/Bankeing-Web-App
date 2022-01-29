@@ -27,6 +27,7 @@ public class SchedulerListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
+
         try {
             thread.end();
         } catch (SchedulerException e) {

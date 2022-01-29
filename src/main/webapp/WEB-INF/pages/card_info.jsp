@@ -6,6 +6,7 @@
 
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="locale.locale"/>
+<c:set var="USER_INFO_ID" scope="session" value="${param.user_info_id}"/>
 
 <html>
 <head>
@@ -123,6 +124,44 @@
                     </td>
                 </tr>
                 <tr>
+                    <td><b><fmt:message key="accounts.status"/>:</b></td>
+                    <td colspan="3">
+                        <c:choose>
+                            <c:when test="${CARD_DATA.statusId eq DBMetadata.CARD_STATUS_EXPIRED}">
+                                <fmt:message key="cars.status.expired"/>
+                            </c:when>
+                            <c:when test="${CARD_DATA.statusId eq DBMetadata.CARD_STATUS_UNLOCKED}">
+                                <fmt:message key="accounts.unlocked"/>
+                            </c:when>
+                            <c:when test="${CARD_DATA.statusId eq DBMetadata.CARD_STATUS_LOCKED}">
+                                <fmt:message key="accounts.locked"/>
+                            </c:when>
+                        </c:choose>
+                    </td>
+                </tr>
+                <c:if test="${USER_ROLE_ID eq DBMetadata.USER_ROLE_ADMIN or USER_ROLE_ID eq DBMetadata.USER_ROLE_EMPLOYEE}">
+                    <tr>
+                        <c:if test="${USER_ROLE_ID eq DBMetadata.USER_ROLE_ADMIN}">
+                            <td style="padding-top: 1em; align-content: center" colspan="2">
+                                <c:url var="unlock" value="controller">
+                                    <c:param name="command" value="lock_or_unlock_card"/>
+                                    <c:param name="card_id" value="${CARD_DATA.id}"/>
+                                    <c:param name="card_new_status" value="${DBMetadata.CARD_STATUS_UNLOCKED}"/>
+                                </c:url>
+                                <a href="${unlock}"><fmt:message key="unlock.this.card"/> </a>
+                            </td>
+                        </c:if>
+                        <td style="padding-top: 1em; align-content: center" colspan="2">
+                            <c:url var="lock" value="controller">
+                                <c:param name="command" value="lock_or_unlock_card"/>
+                                <c:param name="card_id" value="${CARD_DATA.id}"/>
+                                <c:param name="card_new_status" value="${DBMetadata.CARD_STATUS_LOCKED}"/>
+                            </c:url>
+                            <a href="${lock}"><fmt:message key="card.lock"/> </a>
+                        </td>
+                    </tr>
+                </c:if>
+                <tr>
                     <td colspan="4">
                         <c:if test="${not empty ERROR_MSG}">
                             <i class="errorMsg">
@@ -130,6 +169,9 @@
                                 <c:choose>
                                     <c:when test="${ERROR_MSG eq Message.CANT_ACCESS_CARD_INFO}">
                                         <fmt:message key="card.info.no.rights"/>
+                                    </c:when>
+                                    <c:when test="${ERROR_MSG eq Message.CANT_ALTER_EXPIRED_CARD}">
+                                        <fmt:message key="card.err.expired"/>
                                     </c:when>
                                     <c:otherwise>
                                         <fmt:message key="error.unknown"/>
@@ -145,6 +187,11 @@
         </div>
         <br>
         <c:choose>
+            <c:when test="${not empty USER_INFO_ID}">
+                <a href="controller?command=go_to_user_info&checked_user_id=${USER_INFO_ID}">
+                    <fmt:message key="card.info.back"/>
+                </a>
+            </c:when>
             <c:when test="${not empty PREV_PAGE}">
                 <a href="${PREV_PAGE}">
                     <fmt:message key="card.info.back"/>
@@ -156,8 +203,6 @@
                 </a>
             </c:otherwise>
         </c:choose>
-
-
     </div>
 
 </div>

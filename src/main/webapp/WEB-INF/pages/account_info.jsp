@@ -6,6 +6,7 @@
 
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="locale.locale"/>
+<c:set var="USER_INFO_ID" scope="session" value="${param.user_info_id}"/>
 
 <html>
 <head>
@@ -86,7 +87,31 @@
                         </ul>
                     </td>
                 </tr>
-                <c:if test="${ACCOUNT_DATA.statusId != DBMetadata.ACCOUNT_STATUS_BLOCKED}">
+                <c:if test="${USER_ROLE_ID eq DBMetadata.USER_ROLE_ADMIN or USER_ROLE_ID eq DBMetadata.USER_ROLE_EMPLOYEE}">
+                    <tr>
+                        <c:if test="${USER_ROLE_ID eq DBMetadata.USER_ROLE_ADMIN or not VIEW_ONLY}">
+                            <td style="padding-top: 2em; padding-bottom: 2em">
+                                <a href="controller?command=update_account&account_id=${ACCOUNT_DATA.id}&account_new_status=${DBMetadata.ACCOUNT_STATUS_BLOCKED}">
+                                    <fmt:message key="accounts.lock.account"/>
+                                </a>
+                            </td>
+                        </c:if>
+                        <c:if test="${USER_ROLE_ID eq DBMetadata.USER_ROLE_ADMIN}">
+                            <td>
+                                <a href="controller?command=update_account&account_id=${ACCOUNT_DATA.id}&account_new_status=${DBMetadata.ACCOUNT_STATUS_UNLOCKED}">
+                                    <fmt:message key="unlock.this.card"/>
+                                </a>
+                            </td>
+                        </c:if>
+                        <td>
+                            <a href="controller?command=update_account&account_id=${ACCOUNT_DATA.id}&account_new_status=${DBMetadata.ACCOUNT_STATUS_SUSPENDED}">
+                                <fmt:message key="accounts.suspend.account"/>
+                            </a>
+                        </td>
+                    </tr>
+
+                </c:if>
+                <c:if test="${ACCOUNT_DATA.statusId != DBMetadata.ACCOUNT_STATUS_BLOCKED and not VIEW_ONLY}">
                     <tr>
                         <td colspan="4">
                             <a href="controller?command=remove_account_user_self&account_id=${ACCOUNT_DATA.id}">
@@ -184,9 +209,19 @@
 
         </div>
         <br>
-        <a href="controller?command=go_to_accounts_page">
-            <fmt:message key="accounts.info.back"/>
-        </a>
+
+        <c:choose>
+            <c:when test="${not empty USER_INFO_ID}">
+                <a href="controller?command=go_to_user_info&checked_user_id=${USER_INFO_ID}">
+                    <fmt:message key="card.info.back"/>
+                </a>
+            </c:when>
+            <c:otherwise>
+                <a href="controller?command=go_to_accounts_page">
+                    <fmt:message key="card.info.back"/>
+                </a>
+            </c:otherwise>
+        </c:choose>
     </div>
 
 </div>
