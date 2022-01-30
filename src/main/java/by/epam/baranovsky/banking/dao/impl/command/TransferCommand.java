@@ -33,13 +33,13 @@ public class TransferCommand implements OperationCommand {
     static class TransferTypes {
 
         private static final String SQL_INSERT_OPERATION = String.format(
-                "INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, NOW())",
+                "INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, NOW(),?)",
                 DBMetadata.OPERATIONS_TABLE, DBMetadata.OPERATIONS_ID,
                 DBMetadata.OPERATIONS_VALUE,DBMetadata.OPERATIONS_TYPE_ID,
                 DBMetadata.OPERATIONS_ACC_ID,DBMetadata.OPERATIONS_TARGET_ACC_ID,
                 DBMetadata.OPERATIONS_CARD_ID,DBMetadata.OPERATIONS_TARGET_CARD_ID,
                 DBMetadata.OPERATIONS_BILL_ID, DBMetadata.OPERATIONS_PENALTY_ID,
-                DBMetadata.OPERATIONS_DATE);
+                DBMetadata.OPERATIONS_DATE, DBMetadata.OPERATIONS_COMMISSION);
 
         private static final String SQL_UPDATE_ACC = String.format(
                 "UPDATE %s SET %s=%s+? WHERE %s=?",
@@ -54,6 +54,7 @@ public class TransferCommand implements OperationCommand {
                 DBMetadata.BANK_CARDS_ID);
 
         static final TransferType ACC_TO_ACC = (operation) -> {
+            double comm = (operation.getCommission() == null) ? 0d : operation.getCommission();
             OperationCommand.testNonNull(operation.getValue(),
                     operation.getTargetAccountId(), operation.getAccountId());
             List<Query> queries = new ArrayList<>();
@@ -64,12 +65,17 @@ public class TransferCommand implements OperationCommand {
                     operation.getTargetAccountId()));
             queries.add(new Query(
                     SQL_UPDATE_ACC,
-                    -operation.getValue(),
+                    -(operation.getValue()+comm),
                     operation.getAccountId()));
+            queries.add(new Query(
+                    SQL_UPDATE_ACC,
+                    comm,
+                    DBMetadata.BANK_ACCOUNT_ID));
             return queries;
         };
 
         static final TransferType ACC_TO_CARD = (operation) -> {
+            double comm = (operation.getCommission() == null) ? 0d : operation.getCommission();
             OperationCommand.testNonNull(operation.getValue(),
                     operation.getTargetBankCardId(), operation.getAccountId());
             List<Query> queries = new ArrayList<>();
@@ -80,12 +86,17 @@ public class TransferCommand implements OperationCommand {
                     operation.getTargetBankCardId()));
             queries.add(new Query(
                     SQL_UPDATE_ACC,
-                    -operation.getValue(),
+                    -(operation.getValue()+comm),
                     operation.getAccountId()));
+            queries.add(new Query(
+                    SQL_UPDATE_ACC,
+                    comm,
+                    DBMetadata.BANK_ACCOUNT_ID));
             return queries;
         };
 
         static final TransferType CARD_TO_CARD = (operation) -> {
+            double comm = (operation.getCommission() == null) ? 0d : operation.getCommission();
             OperationCommand.testNonNull(operation.getValue(),
                     operation.getTargetBankCardId(), operation.getBankCardId());
             List<Query> queries = new ArrayList<>();
@@ -96,12 +107,17 @@ public class TransferCommand implements OperationCommand {
                     operation.getTargetBankCardId()));
             queries.add(new Query(
                     SQL_UPDATE_ACC_FROM_CARD,
-                    -operation.getValue(),
+                    -(operation.getValue()+comm),
                     operation.getBankCardId()));
+            queries.add(new Query(
+                    SQL_UPDATE_ACC,
+                    comm,
+                    DBMetadata.BANK_ACCOUNT_ID));
             return queries;
         };
 
         static final TransferType CARD_TO_ACC = (operation) -> {
+            double comm = (operation.getCommission() == null) ? 0d : operation.getCommission();
             OperationCommand.testNonNull(operation.getValue(),
                     operation.getBankCardId(), operation.getTargetAccountId());
             List<Query> queries = new ArrayList<>();
@@ -112,8 +128,12 @@ public class TransferCommand implements OperationCommand {
                     operation.getTargetAccountId()));
             queries.add(new Query(
                     SQL_UPDATE_ACC_FROM_CARD,
-                    -operation.getValue(),
+                    -(operation.getValue()+comm),
                     operation.getBankCardId()));
+            queries.add(new Query(
+                    SQL_UPDATE_ACC,
+                    comm,
+                    DBMetadata.BANK_ACCOUNT_ID));
             return queries;
         };
 
@@ -124,6 +144,10 @@ public class TransferCommand implements OperationCommand {
             queries.add(new Query(SQL_UPDATE_ACC,
                     operation.getValue(),
                     operation.getAccountId()));
+            queries.add(new Query(
+                    SQL_UPDATE_ACC,
+                    -operation.getValue(),
+                    DBMetadata.BANK_ACCOUNT_ID));
             return queries;
         };
 
@@ -139,7 +163,8 @@ public class TransferCommand implements OperationCommand {
                     operation.getBankCardId(),
                     operation.getTargetBankCardId(),
                     operation.getBillId(),
-                    operation.getPenaltyId());
+                    operation.getPenaltyId(),
+                    operation.getCommission());
         }
 
     }

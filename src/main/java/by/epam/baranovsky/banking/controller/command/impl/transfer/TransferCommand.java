@@ -1,8 +1,6 @@
 package by.epam.baranovsky.banking.controller.command.impl.transfer;
 
-import by.epam.baranovsky.banking.constant.CommandName;
-import by.epam.baranovsky.banking.constant.DBMetadata;
-import by.epam.baranovsky.banking.constant.Message;
+import by.epam.baranovsky.banking.constant.*;
 import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
@@ -52,7 +50,7 @@ public class TransferCommand extends AbstractCommand {
         }
     }
 
-    private Operation buildOperation(HttpServletRequest request){
+    private Operation buildOperation(HttpServletRequest request) throws ServiceException {
         Operation operation = new Operation();
 
         String account = request.getParameter(RequestParamName.ACCOUNT_ID);
@@ -71,6 +69,17 @@ public class TransferCommand extends AbstractCommand {
         operation.setTargetAccountId(targetAccount != null && !targetAccount.isEmpty() ? Integer.valueOf(targetAccount) : null);
         operation.setBankCardId(card != null && !card.isEmpty() ? Integer.valueOf(card) : null);
         operation.setTargetBankCardId(targetCard != null && !targetCard.isEmpty() ? Integer.valueOf(targetCard) : null);
+        double commission = operation.getValue() * Double.parseDouble(ConfigManager.getInstance().getValue(ConfigParams.TRANSFER_COMMISSION_RATE));
+
+        if(operation.getPenaltyId() != null){
+            return operation;
+        }
+        if(operation.getBillId() != null &&
+                !(billService.findById(operation.getBillId()).getLoanId() == null
+                        || billService.findById(operation.getBillId()).getLoanId() == 0)){
+            return operation;
+        }
+        operation.setCommission(commission);
 
         return operation;
     }
@@ -157,6 +166,8 @@ public class TransferCommand extends AbstractCommand {
             if(!checkAgainstCardBalance(card, operation.getValue())){
                 return Message.NO_MONEY;
             }
+        } else{
+            return Message.OPERATION_ILLEGAL;
         }
 
         return null;

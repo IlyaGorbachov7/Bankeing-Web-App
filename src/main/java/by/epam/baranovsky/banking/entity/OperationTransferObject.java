@@ -12,6 +12,7 @@ public class OperationTransferObject{
     private String cardNumber;
     private String targetCardNumber;
     private Double value;
+    private Double commission;
     private Integer bill;
     private Integer penalty;
     private Integer typeId;

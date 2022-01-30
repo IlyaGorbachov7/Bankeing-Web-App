@@ -23,4 +23,6 @@ public class Operation extends Entity {
     private Integer penaltyId;
     private Date operationDate;
 
+    private Double commission;
+
 }

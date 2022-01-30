@@ -77,7 +77,7 @@
                         <td><b><fmt:message key="card.type"/></b></td>
                         <c:if test="${not empty OWN_CARD.balance}">
                             <td>
-                                <b><fmt:message key="card.balance"/>$</b>
+                                <b><fmt:message key="card.balance"/></b>
                             </td>
                         </c:if>
                     </tr>
@@ -104,11 +104,20 @@
                 </c:if>
                 <tr >
                     <td></td>
-                    <td style="padding-top: 2em; padding-bottom: 2em">
+                    <td style="padding-top: 2em">
                         <b><fmt:message key="operations.value"/>:</b>
                     </td>
-                    <td style="padding-top: 2em; padding-bottom: 2em">
-                       ${TRANSFER_VALUE}
+                    <td style="padding-top: 2em">
+                       ${TRANSFER_VALUE}$
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="padding-bottom: 2em">
+                        <b><fmt:message key="transfer.commission"/>:</b>
+                    </td>
+                    <td style="padding-bottom: 2em">
+                        ${COMMISSION}$
                     </td>
                 </tr>
                 <tr>
@@ -127,19 +136,11 @@
                             <b><fmt:message key="accounts.number"/></b>
                         </td>
                         <td>
-                            <b><fmt:message key="accounts.balance"/></b>
-                        </td>
-                        <td>
-                            <b><fmt:message key="accounts.interest"/></b>
-                        </td>
-                        <td>
                             <b><fmt:message key="accounts.status"/></b>
                         </td>
                     </tr>
                     <tr>
                         <td>${TARGET_ACC.accountNumber}</td>
-                        <td>${TARGET_ACC.balance}$</td>
-                        <td>${TARGET_ACC.yearlyInterestRate}%</td>
                         <td>
                             <c:choose>
                                 <c:when test="${TARGET_ACC.statusId == DBMetadata.ACCOUNT_STATUS_BLOCKED}">

@@ -1,7 +1,6 @@
 package by.epam.baranovsky.banking.controller.command.impl.gotocommand;
 
-import by.epam.baranovsky.banking.constant.CommandName;
-import by.epam.baranovsky.banking.constant.Message;
+import by.epam.baranovsky.banking.constant.*;
 import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
@@ -84,6 +83,23 @@ public class GoToConfirmTransferCommand extends AbstractCommand {
             request.setAttribute(RequestAttributeNames.OWN_ACC, ownAccount);
             request.setAttribute(RequestAttributeNames.OWN_CARD, ownCard);
             request.setAttribute(RequestAttributeNames.TRANSFER_VALUE, value);
+            double commission = value * Double.parseDouble(ConfigManager.getInstance().getValue(ConfigParams.TRANSFER_COMMISSION_RATE));
+            Double commissionToSet=null;
+
+            if(billId != null && !billId.isBlank()){
+                if(billService.findById(Integer.valueOf(billId)).getLoanId() == null
+                        || billService.findById(Integer.valueOf(billId)).getLoanId() == 0){
+                    commissionToSet = commission;
+                }
+            } else if(billId == null || billId.isBlank()){
+                commissionToSet = commission;
+            }
+
+            if (penaltyId != null && !penaltyId.isBlank()) {
+                commissionToSet = null;
+            }
+
+            request.setAttribute(RequestAttributeNames.COMMISSION, commissionToSet);
 
             request.setAttribute(
                     RequestAttributeNames.BILL_ID,
@@ -91,7 +107,6 @@ public class GoToConfirmTransferCommand extends AbstractCommand {
             request.setAttribute(
                     RequestAttributeNames.PENALTY_ID,
                     penaltyId);
-
 
             request.setAttribute(RequestAttributeNames.PREV_PAGE, back);
             request.getRequestDispatcher(PageUrls.TRANSFER_CONFIRM_PAGE).forward(request, response);
@@ -186,6 +201,9 @@ public class GoToConfirmTransferCommand extends AbstractCommand {
 
         if(!card.getUserId().equals(currentUser)){
             return null;
+        }
+        if(!card.getCardTypeId().equals(DBMetadata.CARD_TYPE_CREDIT)){
+            card.setBalance(accountService.findById(card.getAccountId()).getBalance());
         }
 
         return card;

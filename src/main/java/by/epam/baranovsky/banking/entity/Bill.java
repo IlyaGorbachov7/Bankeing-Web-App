@@ -1,6 +1,7 @@
 package by.epam.baranovsky.banking.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 import java.util.Date;
@@ -16,6 +17,7 @@ public class Bill extends Entity {
     private Date dueDate;
 
     private Integer userId;
+    private Integer bearerId;
     private Integer paymentAccountId;
 
     private Integer statusId;
@@ -24,4 +26,5 @@ public class Bill extends Entity {
     private Integer penaltyId;
     private Integer loanId;
 
+    private String notice;
 }

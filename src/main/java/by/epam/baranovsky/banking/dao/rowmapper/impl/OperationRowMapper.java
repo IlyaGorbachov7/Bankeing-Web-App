@@ -27,6 +27,8 @@ public class OperationRowMapper implements RowMapper<Operation> {
         operation.setPenaltyId(resultSet.getInt(DBMetadata.OPERATIONS_PENALTY_ID));
         operation.setOperationDate(resultSet.getTimestamp(DBMetadata.OPERATIONS_DATE));
 
+        operation.setCommission(resultSet.getDouble(DBMetadata.OPERATIONS_COMMISSION));
+
         return operation;
     }
 }

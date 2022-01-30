@@ -27,13 +27,14 @@ public class SqlOperationDAO implements by.epam.baranovsky.banking.dao.Operation
             "%s WHERE %s=?", SQL_SELECT_ALL, DBMetadata.OPERATIONS_ID);
 
     private static final String SQL_UPDATE = String.format(
-            "UPDATE %s SET %s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=? WHERE %s=?",
+            "UPDATE %s SET %s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=? WHERE %s=?",
             DBMetadata.OPERATIONS_TABLE, DBMetadata.OPERATIONS_VALUE,
             DBMetadata.OPERATIONS_DATE,
             DBMetadata.OPERATIONS_TYPE_ID, DBMetadata.OPERATIONS_ACC_ID,
             DBMetadata.OPERATIONS_TARGET_ACC_ID, DBMetadata.OPERATIONS_CARD_ID,
             DBMetadata.OPERATIONS_TARGET_CARD_ID, DBMetadata.OPERATIONS_BILL_ID,
-            DBMetadata.OPERATIONS_PENALTY_ID, DBMetadata.OPERATIONS_ID);
+            DBMetadata.OPERATIONS_PENALTY_ID, DBMetadata.OPERATIONS_COMMISSION,
+            DBMetadata.OPERATIONS_ID);
 
     private static final String SQL_DELETE = String.format(
             "DELETE FROM %s WHERE %s=?",
@@ -45,6 +46,7 @@ public class SqlOperationDAO implements by.epam.baranovsky.banking.dao.Operation
         return queryMaster.executeUpdate(
                 SQL_UPDATE,
                 entity.getValue(),
+                entity.getOperationDate(),
                 entity.getTypeId(),
                 entity.getAccountId(),
                 entity.getTargetAccountId(),
@@ -52,6 +54,7 @@ public class SqlOperationDAO implements by.epam.baranovsky.banking.dao.Operation
                 entity.getTargetBankCardId(),
                 entity.getBillId(),
                 entity.getPenaltyId(),
+                entity.getCommission(),
                 entity.getId());
     }
 

@@ -41,10 +41,13 @@
 
                 if(targetName.localeCompare("card")){
                     document.getElementById("target-account").removeAttribute('hidden');
+                    document.getElementById("input-cexp").setAttribute('value',"");
+                    document.getElementById("input-cnum").setAttribute('value',"");
                     document.getElementById("target-card").setAttribute('hidden', true);
                 }
                 if(targetName.localeCompare("acc")){
                     document.getElementById("target-card").removeAttribute('hidden');
+                    document.getElementById("input-anum").setAttribute('value',"");
                     document.getElementById("target-account").setAttribute('hidden', true);
                 }
 
@@ -97,19 +100,39 @@
                     <tr>
                         <td><b><fmt:message key="operations.value"/>:</b></td>
                         <td colspan="2">
-                            <input type="number" min="0" name="transfer_value" step=".01" required/>
-                        </td>
+                            <c:choose>
+                                <c:when test="${not empty ACCOUNT_DATA}">
+                                    <input type="number" min="0" name="transfer_value" value="${TRANSFER_VALUE}" readonly required/>
+                                </c:when>
+                                <c:otherwise>
+                                    <input type="number" min="0" name="transfer_value" step=".01" required/>
+                                </c:otherwise>
+                            </c:choose>
+                            </td>
                     </tr>
                     <tr><td></td></tr>
                     <tr>
                         <td><b><fmt:message key="transfer.target"/>:</b> </td>
-                        <td>
-                            <select id="target-card-or-acc"  required>
-                                <option disabled selected value> <fmt:message key="transfer.select"/> </option>
-                                <option value="card"><fmt:message key="transfer.card"/></option>
-                                <option value="acc"><fmt:message key="transfer.acc"/></option>
-                            </select>
-                        </td>
+                        <c:choose>
+                            <c:when test="${not empty ACCOUNT_DATA}">
+                                <td>
+                                    <select id="target-card-or-acc" disabled required>
+                                        <option value="card"><fmt:message key="transfer.card"/></option>
+                                        <option selected value="acc"><fmt:message key="transfer.acc"/></option>
+                                    </select>
+                                </td>
+                            </c:when>
+                            <c:otherwise>
+                                <td>
+                                    <select id="target-card-or-acc"  required>
+                                        <option disabled selected value> <fmt:message key="transfer.select"/> </option>
+                                        <option value="card"><fmt:message key="transfer.card"/></option>
+                                        <option value="acc"><fmt:message key="transfer.acc"/></option>
+                                    </select>
+                                </td>
+                            </c:otherwise>
+                        </c:choose>
+
                     </tr>
                     <tr><td></td></tr>
                     <tr id="target-card" hidden>
@@ -118,25 +141,46 @@
                             <b><fmt:message key="transfer.card.num"/>:</b>
                         </td>
                         <td colspan="2">
-                            <input type="text" name="target_card_number" placeholder="<fmt:message key="transfer.card.num.pattern"/>" maxlength="16" pattern="\d{16}"/>
-                            <input type="text" name="target_card_expiration" placeholder="<fmt:message key="transfer.card.expire"/>" pattern="\d{4}\-\d{2}" />
+                            <input id="input-cnum" type="text" name="target_card_number" placeholder="<fmt:message key="transfer.card.num.pattern"/>" maxlength="16" pattern="\d{16}"/>
+                            <input id="input-cexp" type="text" name="target_card_expiration" placeholder="<fmt:message key="transfer.card.expire"/>" pattern="\d{4}\-\d{2}" />
                         </td>
                     </tr>
-                    <tr id="target-account" hidden>
-                        <td></td>
-                        <td>
-                            <b><fmt:message key="transfer.acc.num"/>:</b>
-                        </td>
-                        <td colspan="2">
-                            <input type="text" name="target_account_number" placeholder="<fmt:message key="transfer.acc.num.pattern"/>" pattern="[A-Z]{2}\d{18}" maxlength="20" value="${ACCOUNT_DATA.accountNumber}" style="width: 80%"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                       <td colspan="2">
-                           <input hidden id="submit" type="submit" value="<fmt:message key="logination.submit"/>"/>
-                       </td>
-                    </tr>
+                    <c:choose>
+                        <c:when test="${not empty ACCOUNT_DATA}">
+                            <tr id="target-account">
+                                <td></td>
+                                <td>
+                                    <b><fmt:message key="transfer.acc.num"/>:</b>
+                                </td>
+                                <td colspan="2">
+                                    <input id="input-anum" readonly type="text" name="target_account_number" placeholder="<fmt:message key="transfer.acc.num.pattern"/>" pattern="[A-Z]{2}\d{18}" maxlength="20" value="${ACCOUNT_DATA.accountNumber}" style="width: 80%"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">
+                                    <input id="submit" type="submit" value="<fmt:message key="logination.submit"/>"/>
+                                </td>
+                            </tr>
+                        </c:when>
+                        <c:otherwise>
+                            <tr id="target-account" hidden>
+                                <td></td>
+                                <td>
+                                    <b><fmt:message key="transfer.acc.num"/>:</b>
+                                </td>
+                                <td colspan="2">
+                                    <input id="input-anum" type="text" name="target_account_number" placeholder="<fmt:message key="transfer.acc.num.pattern"/>" pattern="[A-Z]{2}\d{18}" maxlength="20" value="${ACCOUNT_DATA.accountNumber}" style="width: 80%"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="2">
+                                    <input hidden id="submit" type="submit" value="<fmt:message key="logination.submit"/>"/>
+                                </td>
+                            </tr>
+                        </c:otherwise>
+                    </c:choose>
                 </table>
 
             </form>

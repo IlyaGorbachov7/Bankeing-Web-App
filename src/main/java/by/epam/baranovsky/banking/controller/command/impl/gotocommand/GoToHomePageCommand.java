@@ -79,6 +79,7 @@ public class GoToHomePageCommand extends AbstractCommand {
             oto.setBill(operation.getBillId());
             oto.setPenalty(operation.getPenaltyId());
             oto.setDate(operation.getOperationDate());
+            oto.setCommission(operation.getCommission());
             operationPackages.add(oto);
         }
         operationPackages.sort((o1, o2) -> o2.getDate().compareTo(o1.getDate()));

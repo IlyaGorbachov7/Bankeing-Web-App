@@ -31,20 +31,22 @@ public class SqlBillDAO implements BillDAO {
 
 
     private static final String SQL_UPDATE = String.format(
-            "UPDATE %s SET %s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=? WHERE %s=?",
+            "UPDATE %s SET %s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=? WHERE %s=?",
             DBMetadata.BILLS_TABLE, DBMetadata.BILLS_VALUE,
             DBMetadata.BILLS_ISSUE_DATE, DBMetadata.BILLS_DUE_DATE,
             DBMetadata.BILLS_USER_ID, DBMetadata.BILLS_PAYMENT_ACC_ID,
             DBMetadata.BILLS_STATUS_ID, DBMetadata.BILLS_PENALTY_ID,
-            DBMetadata.BILLS_LOAN_ID,DBMetadata.BILLS_ID);
+            DBMetadata.BILLS_LOAN_ID, DBMetadata.BILLS_BEARER_ID,
+            DBMetadata.BILLS_NOTICE, DBMetadata.BILLS_ID);
 
     private static final String SQL_INSERT= String.format(
-            "INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (DEFAULT,?,?,?,?,?,?,?,?)",
+            "INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?)",
             DBMetadata.BILLS_TABLE, DBMetadata.BILLS_ID,
             DBMetadata.BILLS_VALUE, DBMetadata.BILLS_ISSUE_DATE,
             DBMetadata.BILLS_DUE_DATE, DBMetadata.BILLS_USER_ID,
             DBMetadata.BILLS_PAYMENT_ACC_ID,DBMetadata.BILLS_STATUS_ID,
-            DBMetadata.BILLS_PENALTY_ID, DBMetadata.BILLS_LOAN_ID);
+            DBMetadata.BILLS_PENALTY_ID, DBMetadata.BILLS_LOAN_ID,
+            DBMetadata.BILLS_BEARER_ID, DBMetadata.BILLS_NOTICE);
 
     private static final String SQL_DELETE= String.format(
             "DELETE FROM %s WHERE %s=? LIMIT 1",
@@ -64,6 +66,8 @@ public class SqlBillDAO implements BillDAO {
                 entity.getStatusId(),
                 entity.getPenaltyId(),
                 entity.getLoanId(),
+                entity.getBearerId(),
+                entity.getNotice(),
                 entity.getId());
     }
 
@@ -78,7 +82,9 @@ public class SqlBillDAO implements BillDAO {
                 entity.getPaymentAccountId(),
                 entity.getStatusId(),
                 entity.getPenaltyId(),
-                entity.getLoanId());
+                entity.getLoanId(),
+                entity.getBearerId(),
+                entity.getNotice());
     }
 
     @Override

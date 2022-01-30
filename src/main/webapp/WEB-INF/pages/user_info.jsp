@@ -328,7 +328,7 @@
                                                     (<fmt:message key="user.info.belongs.to.user"/>)
                                                 </td>
                                                 <td><b><fmt:message key="operations.date"/>:</b></td>
-                                                <td>${entry.date}</td>
+                                                <td>${entry.date}$</td>
                                             </tr>
                                             <tr>
                                                 <td></td>
@@ -368,7 +368,11 @@
                                                 <td><b><fmt:message key="operations.date"/>:</b></td>
                                                 <td>${entry.date}</td>
                                                 <td><b><fmt:message key="operations.value"/>: </b></td>
-                                                <td>${entry.value}</td>
+                                                <td>${entry.value}
+                                                    <c:if test="${not entry.isAccrual}">
+                                                    + ${entry.commission}
+                                                    </c:if>$
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <c:if test="${entry.bill != 0}">
@@ -413,7 +417,11 @@
                                                 <td><b><fmt:message key="operations.date"/>:</b></td>
                                                 <td>${entry.date}</td>
                                                 <td><b><fmt:message key="operations.value"/>: </b></td>
-                                                <td>${entry.value}</td>
+                                                <td>${entry.value}
+                                                    <c:if test="${not entry.isAccrual}">
+                                                        + ${entry.commission}
+                                                    </c:if>$
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <c:if test="${entry.bill != 0}">
@@ -458,7 +466,11 @@
                                                 <td><b><fmt:message key="operations.date"/>:</b></td>
                                                 <td>${entry.date}</td>
                                                 <td><b><fmt:message key="operations.value"/>: </b></td>
-                                                <td>${entry.value}</td>
+                                                <td>${entry.value}
+                                                    <c:if test="${not entry.isAccrual}">
+                                                        + ${entry.commission}
+                                                    </c:if>$
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <c:if test="${entry.bill != 0}">
@@ -503,7 +515,11 @@
                                                 <td><b><fmt:message key="operations.date"/>:</b></td>
                                                 <td>${entry.date}</td>
                                                 <td><b><fmt:message key="operations.value"/>: </b></td>
-                                                <td>${entry.value}</td>
+                                                <td>${entry.value}
+                                                    <c:if test="${not entry.isAccrual}">
+                                                        + ${entry.commission}
+                                                    </c:if>$
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <c:if test="${entry.bill != 0}">

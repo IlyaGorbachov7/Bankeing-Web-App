@@ -2,6 +2,8 @@ package by.epam.baranovsky.banking.constant;
 
 public class DBMetadata {
 
+    public static final Integer BANK_ACCOUNT_ID=1;
+
     public static final String USERS_TABLE = "users";
     public static final String USERS_ID = "id_users";
     public static final String USERS_EMAIL ="email";
@@ -86,6 +88,8 @@ public class DBMetadata {
     public static final String BILLS_STATUS_ID = "id_bill_status";
     public static final String BILLS_PENALTY_ID = "id_penalty";
     public static final String BILLS_LOAN_ID = "id_loans";
+    public static final String BILLS_BEARER_ID = "bearer_id";
+    public static final String BILLS_NOTICE = "notice";
 
     public static final String BILL_STATUS_TABLE= "bill_status";
     public static final String BILL_STATUS_ID="id_bill_status";
@@ -126,6 +130,7 @@ public class DBMetadata {
     public static final String OPERATIONS_BILL_ID = "id_bill";
     public static final String OPERATIONS_PENALTY_ID = "id_penalty";
     public static final String OPERATIONS_DATE = "operation_date";
+    public static final String OPERATIONS_COMMISSION = "commission";
 
     public static final Integer OPERATION_TYPE_ACC_LOCK =1;
     public static final Integer OPERATION_TYPE_ACC_SUSP =2;

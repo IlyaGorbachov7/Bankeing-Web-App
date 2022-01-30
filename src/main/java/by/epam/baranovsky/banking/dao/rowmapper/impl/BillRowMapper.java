@@ -29,6 +29,9 @@ public class BillRowMapper implements RowMapper<Bill> {
         bill.setPenaltyId(resultSet.getInt(DBMetadata.BILLS_PENALTY_ID));
         bill.setLoanId(resultSet.getInt(DBMetadata.BILLS_LOAN_ID));
 
+        bill.setNotice(resultSet.getString(DBMetadata.BILLS_NOTICE));
+        bill.setBearerId(resultSet.getInt(DBMetadata.BILLS_BEARER_ID));
+
         return bill;
     }
 }

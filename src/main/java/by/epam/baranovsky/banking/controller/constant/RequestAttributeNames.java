@@ -32,6 +32,7 @@ public class RequestAttributeNames {
     public static final String OWN_CARD="OWN_CARD";
     public static final String OWN_ACC="OWN_ACC";
     public static final String TRANSFER_VALUE="TRANSFER_VALUE";
+    public static final String COMMISSION="COMMISSION";
 
     public static final String USER_LOANS="USER_LOANS";
     public static final String USER_BILLS="USER_BILLS";

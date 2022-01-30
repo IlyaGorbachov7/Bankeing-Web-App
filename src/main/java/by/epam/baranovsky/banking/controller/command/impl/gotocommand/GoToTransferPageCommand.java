@@ -107,14 +107,16 @@ public class GoToTransferPageCommand extends AbstractCommand {
         }
 
         Account account = null;
-        if(billId != null){
+        if(billId != null  && !billId.isEmpty()){
             Bill bill = billService.findById(Integer.valueOf(billId));
             account = accountService.findById(bill.getPaymentAccountId());
+            request.setAttribute(RequestAttributeNames.TRANSFER_VALUE, bill.getValue());
         }
-        if(penaltyId != null){
+        if(penaltyId != null && !penaltyId.isEmpty()){
             Penalty penalty = penaltyService.findById(Integer.valueOf(penaltyId));
             if(penalty.getTypeId().equals(DBMetadata.PENALTY_TYPE_FEE)){
                 account = accountService.findById(penalty.getPaymentAccountId());
+                request.setAttribute(RequestAttributeNames.TRANSFER_VALUE, penalty.getValue());
             }
         }
         request.setAttribute(RequestAttributeNames.ACCOUNT_DATA, account);
