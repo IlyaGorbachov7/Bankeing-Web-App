@@ -5,6 +5,7 @@
 
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="locale.locale"/>
+<c:set var="passwordPattern" value="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"/>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -25,7 +26,7 @@
                 </tr>
                 <tr class="formRow">
                     <td><fmt:message key="edit.user.newpass"/>:</td>
-                    <td><input type="password" id="password" name="password"></td>
+                    <td><input type="password" title="<fmt:message key="login.pass.tooltip"/>" id="password" name="password" pattern="${passwordPattern}"></td>
                 </tr>
                 <tr class="formRow">
                     <td><fmt:message key="edit.user.newpass.confirm"/>:</td>

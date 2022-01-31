@@ -1,5 +1,7 @@
 package by.epam.baranovsky.banking.controller.command.impl.bill;
 
+import by.epam.baranovsky.banking.constant.ConfigManager;
+import by.epam.baranovsky.banking.constant.ConfigParams;
 import by.epam.baranovsky.banking.constant.DBMetadata;
 import by.epam.baranovsky.banking.constant.Message;
 import by.epam.baranovsky.banking.controller.command.AbstractCommand;
@@ -27,6 +29,8 @@ import java.util.List;
 
 public class NewBillCommandNoPenalty extends AbstractCommand {
 
+    private static final Integer MAX_BILLS = Integer.valueOf(ConfigManager.getInstance().getValue(ConfigParams.BILLS_REQUESTS_MAX));
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Integer currentUser = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
@@ -49,6 +53,12 @@ public class NewBillCommandNoPenalty extends AbstractCommand {
 
             List<User> list = userService.getByCriteria(createUserCriteria(request));
             if(noQueryErrors(list, request)){
+
+                if(!checkTooManyBills(currentUser, list.get(0).getId())){
+                    request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.TOO_MANY_BILL_REQUESTS);
+                    request.getRequestDispatcher(getPreviousRequestAddress(request)).forward(request,response);
+                    return;
+                }
 
                 Bill bill = new Bill();
                 bill.setBearerId(currentUser);
@@ -143,5 +153,17 @@ public class NewBillCommandNoPenalty extends AbstractCommand {
 
         return !account.getStatusId().equals(DBMetadata.ACCOUNT_STATUS_BLOCKED)
                 && !account.getStatusId().equals(DBMetadata.ACCOUNT_STATUS_PENDING);
+    }
+
+    private boolean checkTooManyBills(Integer currentUser, Integer payingDude) throws ServiceException {
+        Criteria<EntityParameters.BillParam> criteria = new Criteria<>();
+        criteria.add(EntityParameters.BillParam.BEARER, new SingularValue<>(currentUser));
+        criteria.add(EntityParameters.BillParam.USER, new SingularValue<>(payingDude));
+        criteria.add(EntityParameters.BillParam.STATUS_ID,
+                new SingularValue<>(DBMetadata.BILL_STATUS_OVERDUE));
+        criteria.add(EntityParameters.BillParam.STATUS_ID,
+                new SingularValue<>(DBMetadata.BILL_STATUS_PENDING));
+
+        return billService.findByCriteria(criteria).size()<=MAX_BILLS;
     }
 }

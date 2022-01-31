@@ -45,9 +45,9 @@ public class GoToAllUsersCommand extends AbstractCommand {
         Criteria<EntityParameters.UserParams> criteria = new Criteria<>(Criteria.SQL_OR);
         criteria.add(EntityParameters.UserParams.ROLE_ID, new SingularValue<>(DBMetadata.USER_ROLE_REGULAR));
         criteria.add(EntityParameters.UserParams.ROLE_ID, new SingularValue<>(DBMetadata.USER_ROLE_BANNED));
+        criteria.add(EntityParameters.UserParams.ROLE_ID, new SingularValue<>(DBMetadata.USER_ROLE_EMPLOYEE));
 
         if(curentUserRole.equals(DBMetadata.USER_ROLE_ADMIN)){
-            criteria.add(EntityParameters.UserParams.ROLE_ID, new SingularValue<>(DBMetadata.USER_ROLE_EMPLOYEE));
             criteria.add(EntityParameters.UserParams.ROLE_ID, new SingularValue<>(DBMetadata.USER_ROLE_ADMIN));
         }
         return userService.getByCriteria(criteria);

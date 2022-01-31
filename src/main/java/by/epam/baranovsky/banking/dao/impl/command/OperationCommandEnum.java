@@ -12,12 +12,12 @@ public enum OperationCommandEnum {
     ACC_UNLOCK(DBMetadata.OPERATION_TYPE_ACC_UNLOCK,new AccountUnlockCommand()),
     CARD_LOCK(DBMetadata.OPERATION_TYPE_CARD_LOCK, new CardLockCommand()),
     CARD_UNLOCK(DBMetadata.OPERATION_TYPE_CARD_UNLOCK, new CardUnlockCommand()),
-    TRANSFER_ACC_TO_ACC(DBMetadata.OPERATION_TYPE_TRANSFER_A_A,new TransferCommand(TransferCommand.TransferTypes.ACC_TO_ACC)),
-    TRANSFER_ACC_TO_CARD(DBMetadata.OPERATION_TYPE_TRANSFER_A_C,new TransferCommand(TransferCommand.TransferTypes.ACC_TO_CARD)),
-    TRANSFER_CARD_TO_ACC(DBMetadata.OPERATION_TYPE_TRANSFER_C_A,new TransferCommand(TransferCommand.TransferTypes.CARD_TO_ACC)),
-    TRANSFER_CARD_TO_CARD(DBMetadata.OPERATION_TYPE_TRANSFER_C_C,new TransferCommand(TransferCommand.TransferTypes.CARD_TO_CARD)),
+    TRANSFER_ACC_TO_ACC(DBMetadata.OPERATION_TYPE_TRANSFER_A_A,new TransferAccAccCommand()),
+    TRANSFER_ACC_TO_CARD(DBMetadata.OPERATION_TYPE_TRANSFER_A_C,new TransferAccCardCommand()),
+    TRANSFER_CARD_TO_ACC(DBMetadata.OPERATION_TYPE_TRANSFER_C_A,new TransferCardAccCommand()),
+    TRANSFER_CARD_TO_CARD(DBMetadata.OPERATION_TYPE_TRANSFER_C_C,new TransferCardCardCommand()),
     CARD_EXPIRE(DBMetadata.OPERATION_TYPE_CARD_EXPIRE, new CardExpirationCommand()),
-    ACCRUAL(DBMetadata.OPERATION_TYPE_ACCRUAL, new TransferCommand(TransferCommand.TransferTypes.ACCRUAL));
+    ACCRUAL(DBMetadata.OPERATION_TYPE_ACCRUAL, new TransferAccrualCommand());
 
 
     OperationCommandEnum(Integer id, OperationCommand command) {

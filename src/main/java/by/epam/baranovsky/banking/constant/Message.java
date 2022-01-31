@@ -49,6 +49,7 @@ public class Message {
     public static final String NOT_ENOUGH_RIGHTS="you_have_no_power_here";
 
     public static final String BILL_TO_SELF="cannot_add_bills_to_self";
+    public static final String TOO_MANY_BILL_REQUESTS="too_many_bill_requests";
     public static final String ACCOUNT_LOCKED_OR_NOT_YOURS="acc_blocked_or_not_yours";
 
 }

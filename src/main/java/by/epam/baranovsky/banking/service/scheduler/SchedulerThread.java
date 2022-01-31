@@ -22,12 +22,12 @@ public class SchedulerThread extends Thread {
     @Override
     public void run() {
             scheduler.start();
-            scheduler.scheduleJob(AccountAccrual.getDetail(), AccountAccrual.getTrigger());
-            scheduler.scheduleJob(BillStatusCheck.getDetail(), BillStatusCheck.getTrigger());
-            scheduler.scheduleJob(CardExpirationJob.getDetail(), CardExpirationJob.getTrigger());
-            scheduler.scheduleJob(LoanBillsAssignment.getDetail(), LoanBillsAssignment.getTrigger());
-            scheduler.scheduleJob(LoanStatusCheck.getDetail(), LoanStatusCheck.getTrigger());
-            scheduler.scheduleJob(PenaltyJob.getDetail(), PenaltyJob.getTrigger());
+           // scheduler.scheduleJob(AccountAccrual.getDetail(), AccountAccrual.getTrigger());
+           // scheduler.scheduleJob(BillStatusCheck.getDetail(), BillStatusCheck.getTrigger());
+            //scheduler.scheduleJob(CardExpirationJob.getDetail(), CardExpirationJob.getTrigger());
+            //scheduler.scheduleJob(LoanBillsAssignment.getDetail(), LoanBillsAssignment.getTrigger());
+            //scheduler.scheduleJob(LoanStatusCheck.getDetail(), LoanStatusCheck.getTrigger());
+            //scheduler.scheduleJob(PenaltyJob.getDetail(), PenaltyJob.getTrigger());
             readyToShutdown=true;
     }
 

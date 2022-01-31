@@ -111,6 +111,7 @@ public class DBMetadata {
     public static final String LOANS_USER_ID = "users_id_users";
     public static final String LOANS_STATUS_ID = "id_status";
     public static final String LOANS_CARD_ID = "id_card";
+    public static final String LOANS_ACCOUNT_ID = "id_account";
 
     public static final String LOAN_STATUS_TABLE = "loan_status";
     public static final String LOAN_STATUS_ID = "id_loan_status";

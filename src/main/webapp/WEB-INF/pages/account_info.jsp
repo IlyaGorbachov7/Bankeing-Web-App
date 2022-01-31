@@ -198,6 +198,9 @@
                                     <c:when test="${ERROR_MSG eq Message.CARD_CREATE_EXCEPTION}">
                                         <fmt:message key="card.create.exception"/>
                                     </c:when>
+                                    <c:when test="${ERROR_MSG eq Message.WRONG_NEW_STATUS}">
+                                        <fmt:message key="accounts.error.wrong.new.status"/>
+                                    </c:when>
                                     <c:otherwise>
                                         <fmt:message key="error.unknown"/>
                                     </c:otherwise>

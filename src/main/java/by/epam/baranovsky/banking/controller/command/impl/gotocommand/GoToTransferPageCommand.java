@@ -53,9 +53,14 @@ public class GoToTransferPageCommand extends AbstractCommand {
     private Map<BankingCard, String> getUserCardsUpForTransferWithBalance(Integer userId) throws ServiceException {
         List<BankingCard> cards = cardService.findByUser(userId);
         cards.removeIf(card -> !card.getStatusId().equals(DBMetadata.CARD_STATUS_UNLOCKED));
-
         Map<BankingCard, String> resultMap = new HashMap<>();
         for(BankingCard card : cards){
+            if(card.getAccountId() != null
+                    && accountService.findById(card.getAccountId())
+                    .getStatusId().equals(DBMetadata.ACCOUNT_STATUS_BLOCKED)){
+                continue;
+            }
+
             String balance;
             card.setNumber(maskNumber(card.getNumber()));
             if(card.getCardTypeId().equals(DBMetadata.CARD_TYPE_DEBIT)){

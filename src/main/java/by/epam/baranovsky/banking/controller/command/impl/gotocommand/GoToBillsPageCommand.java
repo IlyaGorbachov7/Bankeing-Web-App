@@ -46,7 +46,6 @@ public class GoToBillsPageCommand extends AbstractCommand {
             RequestDispatcher dispatcher = request.getRequestDispatcher(PageUrls.ERROR_PAGE);
             dispatcher.forward(request, response);
         }
-
     }
 
     private List<BillTransferObject> getBillDTOs(List<Bill> bills) throws ServiceException {
@@ -93,9 +92,9 @@ public class GoToBillsPageCommand extends AbstractCommand {
         List<Bill> bills = billService.findByCriteria(criteria);
         bills.sort((o1, o2) -> {
             if(o2.getStatusId().equals(DBMetadata.BILL_STATUS_OVERDUE)){
-                return 1;
+                return -1;
             }
-            return o1.getDueDate().compareTo(o2.getDueDate());
+            return o2.getIssueDate().compareTo(o1.getIssueDate());
         });
 
         return bills;
@@ -110,9 +109,9 @@ public class GoToBillsPageCommand extends AbstractCommand {
         List<Bill> bills = billService.findByCriteria(criteria);
         bills.sort((o1, o2) -> {
             if(o2.getStatusId().equals(DBMetadata.BILL_STATUS_OVERDUE)){
-                return 1;
+                return -1;
             }
-            return o1.getDueDate().compareTo(o2.getDueDate());
+            return o2.getIssueDate().compareTo(o1.getIssueDate());
         });
 
         return bills;

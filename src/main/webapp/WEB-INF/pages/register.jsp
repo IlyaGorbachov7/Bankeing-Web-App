@@ -6,7 +6,7 @@
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="locale.locale"/>
 
-<c:set var="passwordPattern" value="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}\[\]:;<>,\.\?\/~_\+-=\|]).{8,32}$"/>
+<c:set var="passwordPattern" value="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"/>
 <html>
 <head>
     <title><fmt:message key="registration.signup"/></title>
@@ -25,7 +25,7 @@
                 </tr>
                 <tr class="formRow">
                     <td><fmt:message key="user.password"/>:</td>
-                    <td><input title="<fmt:message key="login.pass.tooltip"/>" type="password" id="password" name="password" pattern="${passwordPattern} required></td>
+                    <td><input title="<fmt:message key="login.pass.tooltip"/>" type="password" id="password" name="password" pattern="${passwordPattern}" required></td>
                 </tr>
                 <tr class="formRow">
                     <td><fmt:message key="user.confirmpass"/>:</td>

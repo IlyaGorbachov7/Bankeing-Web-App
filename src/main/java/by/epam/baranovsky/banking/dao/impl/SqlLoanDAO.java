@@ -13,6 +13,7 @@ import by.epam.baranovsky.banking.entity.criteria.Criteria;
 import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SqlLoanDAO implements LoanDAO {
@@ -29,21 +30,27 @@ public class SqlLoanDAO implements LoanDAO {
             "%s WHERE %s=?", SQL_SELECT_ALL, DBMetadata.LOANS_ID);
 
     private static final String SQL_INSERT= String.format(
-            "INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             DBMetadata.LOANS_TABLE, DBMetadata.LOANS_ID, DBMetadata.LOANS_SINGLE_PAYMENT_VALUE,
             DBMetadata.LOANS_STARTING_VALUE, DBMetadata.LOANS_TOTAL_VALUE,
             DBMetadata.LOANS_INTEREST, DBMetadata.LOANS_ISSUE_DATE,
             DBMetadata.LOANS_DUE_DATE, DBMetadata.LOANS_USER_ID,
-            DBMetadata.LOANS_STATUS_ID, DBMetadata.LOANS_CARD_ID);
+            DBMetadata.LOANS_STATUS_ID, DBMetadata.LOANS_CARD_ID,
+            DBMetadata.LOANS_ACCOUNT_ID);
 
     private static final String SQL_UPDATE= String.format(
-            "UPDATE %s SET %s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=? WHERE %s=?",
+            "UPDATE %s SET %s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=?,%s=? WHERE %s=?",
             DBMetadata.LOANS_TABLE, DBMetadata.LOANS_SINGLE_PAYMENT_VALUE,
             DBMetadata.LOANS_STARTING_VALUE, DBMetadata.LOANS_TOTAL_VALUE,
             DBMetadata.LOANS_INTEREST, DBMetadata.LOANS_ISSUE_DATE,
             DBMetadata.LOANS_DUE_DATE, DBMetadata.LOANS_USER_ID,
             DBMetadata.LOANS_STATUS_ID, DBMetadata.LOANS_CARD_ID,
-            DBMetadata.LOANS_ID);
+            DBMetadata.LOANS_ACCOUNT_ID,DBMetadata.LOANS_ID);
+
+    private static final String SQL_UPDATE_ACC = String.format(
+            "UPDATE %s SET %s=%s+? WHERE %s=?",
+            DBMetadata.ACCOUNTS_TABLE, DBMetadata.ACCOUNTS_BALANCE,
+            DBMetadata.ACCOUNTS_BALANCE, DBMetadata.ACCOUNTS_ID);
 
     private static final String SQL_DELETE= String.format(
             "DELETE FROM %s WHERE %s=? LIMIT 1",
@@ -62,13 +69,14 @@ public class SqlLoanDAO implements LoanDAO {
                 entity.getUserId(),
                 entity.getStatusId(),
                 entity.getCardId(),
+                entity.getAccountId(),
                 entity.getId());
     }
 
     @Override
     public Integer create(Loan entity) throws DAOException {
-        return queryMaster.executeUpdate(
-                SQL_INSERT,
+        List<Query> queries = new ArrayList<>();
+        queries.add(new Query(SQL_INSERT,
                 entity.getSinglePaymentValue(),
                 entity.getStartingValue(),
                 entity.getTotalPaymentValue(),
@@ -77,7 +85,17 @@ public class SqlLoanDAO implements LoanDAO {
                 new Date(entity.getDueDate().getTime()),
                 entity.getUserId(),
                 entity.getStatusId(),
-                entity.getCardId());
+                entity.getCardId(),
+                entity.getAccountId()));
+        queries.add(new Query(
+                SQL_UPDATE_ACC,
+                -entity.getStartingValue(),
+                DBMetadata.BANK_ACCOUNT_ID));
+        queries.add(new Query(SQL_UPDATE_ACC,
+                entity.getStartingValue(),
+                entity.getAccountId()));
+
+        return queryMaster.executeTransaction(queries);
     }
 
     @Override

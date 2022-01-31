@@ -43,5 +43,8 @@ public class RequestParamName {
     public static final String BILL_NOTICE="bill_notice";
     public static final String BILL_VALUE="bill_value";
 
+    public static final String LOAN_STARTING="loan_starting_value";
+    public static final String LOAN_MONTHS="loan_length";
+
     private RequestParamName() {}
 }

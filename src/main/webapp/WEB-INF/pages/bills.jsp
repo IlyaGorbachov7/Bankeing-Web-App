@@ -298,6 +298,9 @@
                         <c:when test="${ERROR_MSG eq Message.OPERATION_INVALID_VALUE}">
                             <fmt:message key="transfer.err.invalid.value"/>
                         </c:when>
+                        <c:when test="${ERROR_MSG eq Message.TOO_MANY_BILL_REQUESTS}">
+                            <fmt:message key="bills.error.too.many"/>
+                        </c:when>
                         <c:otherwise>
                             <fmt:message key="error.unknown"/>
                         </c:otherwise>
