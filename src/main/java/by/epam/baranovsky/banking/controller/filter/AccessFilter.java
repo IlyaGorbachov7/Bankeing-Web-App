@@ -54,6 +54,7 @@ public class AccessFilter implements Filter {
         regularUserCommands.add(CommandName.LOCK_OR_SUSP_ACC_COMMAND);
         regularUserCommands.add(CommandName.ADD_USER_TO_ACC_COMMAND);
         regularUserCommands.add(CommandName.REMOVE_SELF_FROM_ACC_COMMAND);
+        regularUserCommands.add(CommandName.NEW_BILL_NO_PENALTY_COMMAND);
     }
 
     @Override

@@ -15,22 +15,9 @@ import java.util.List;
 
 public class LoanServiceImpl implements by.epam.baranovsky.banking.service.LoanService {
 
-    private static volatile LoanServiceImpl instance = null;
     private final LoanValidator validator = new LoanValidator();
     private final LoanDAO loanDAO = SqlDAOFactory.getInstance().getLoanDAO();
 
-    private LoanServiceImpl() {}
-
-    public static LoanServiceImpl getInstance() {
-        if (instance == null) {
-            synchronized (LoanServiceImpl.class) {
-                if (instance == null) {
-                    instance = new LoanServiceImpl();
-                }
-            }
-        }
-        return instance;
-    }
 
     @Override
     public List<Loan> findByCriteria(Criteria<? extends EntityParameters.LoanParams> criteria) throws ServiceException {

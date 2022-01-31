@@ -29,6 +29,7 @@ public class Message {
     public static final String CARD_NOT_YOURS="card_is_not_yours";
     public static final String CANT_ACCESS_CARD_INFO="access_to_card_denied";
     public static final String CREDIT_CARD= "this_is_a_credit_card";
+    public static final String CANNOT_ADD_SELF= "cannot_add_self";
 
     public static final String PENALTY_BILL_INTERSECTION="penalty_and_bill_intersect";
 
@@ -46,5 +47,8 @@ public class Message {
     public static final String ACCOUNT_NOT_PENDING="this_account_is_not_pending";
     public static final String CANT_ALTER_EXPIRED_CARD ="cant_alter_expired";
     public static final String NOT_ENOUGH_RIGHTS="you_have_no_power_here";
+
+    public static final String BILL_TO_SELF="cannot_add_bills_to_self";
+    public static final String ACCOUNT_LOCKED_OR_NOT_YOURS="acc_blocked_or_not_yours";
 
 }

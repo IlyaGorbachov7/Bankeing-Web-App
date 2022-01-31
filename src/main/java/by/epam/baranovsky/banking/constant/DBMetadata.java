@@ -85,7 +85,7 @@ public class DBMetadata {
     public static final String BILLS_DUE_DATE = "due_date";
     public static final String BILLS_USER_ID = "id_user";
     public static final String BILLS_PAYMENT_ACC_ID = "id_payment_account";
-    public static final String BILLS_STATUS_ID = "id_bill_status";
+    public static final String BILLS_STATUS_ID = "id_status";
     public static final String BILLS_PENALTY_ID = "id_penalty";
     public static final String BILLS_LOAN_ID = "id_loans";
     public static final String BILLS_BEARER_ID = "bearer_id";
@@ -98,6 +98,7 @@ public class DBMetadata {
     public static final Integer BILL_STATUS_PENDING = 1;
     public static final Integer BILL_STATUS_CLOSED = 2;
     public static final Integer BILL_STATUS_OVERDUE = 3;
+    public static final Integer BILL_STATUS_REQUESTED = 4;
 
     public static final String LOANS_TABLE = "loans";
     public static final String LOANS_ID = "single_payment_value";

@@ -1,8 +1,6 @@
 package by.epam.baranovsky.banking.controller.command.impl.account;
 
-import by.epam.baranovsky.banking.constant.CommandName;
-import by.epam.baranovsky.banking.constant.DBMetadata;
-import by.epam.baranovsky.banking.constant.Message;
+import by.epam.baranovsky.banking.constant.*;
 import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
@@ -25,7 +23,7 @@ public class NewAccCommand extends AbstractCommand {
 
     private static final Double DEFAULT_BALANCE = 0d;
     private static final Double DEFAULT_RATE = 0d;
-    private static final Integer MAX_ACC_REQUESTS = 3;
+    private static final Integer MAX_ACC_REQUESTS = Integer.valueOf(ConfigManager.getInstance().getValue(ConfigParams.ACCOUNT_REQUESTS_MAX));
     private static final String DEFAULT_COUNTRY_CODE="BY";
     private static final String REDIRECT_TO_ACCS=String.format(
             "%s?%s=%s",

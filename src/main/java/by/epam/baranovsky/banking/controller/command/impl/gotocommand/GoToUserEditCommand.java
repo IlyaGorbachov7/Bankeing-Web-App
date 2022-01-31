@@ -21,7 +21,7 @@ public class GoToUserEditCommand extends AbstractCommand {
         Integer userId = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
 
         try {
-            User user = UserServiceImpl.getInstance().getById(userId);
+            User user = userService.getById(userId);
             request.setAttribute(RequestAttributeNames.USER_DATA, user);
         } catch (ServiceException e) {
             logger.error(e);

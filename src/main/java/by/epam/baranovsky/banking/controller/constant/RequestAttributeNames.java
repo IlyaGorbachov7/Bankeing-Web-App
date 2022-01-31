@@ -41,4 +41,7 @@ public class RequestAttributeNames {
     public static final String ALL_USERS="ALL_USERS";
     public static final String VIEW_ONLY="VIEW_ONLY";
 
+    public static final String SENT_BILLS="SENT_BILLS";
+    public static final String ACQUIRED_BILLS="ACQUIRED_BILLS";
+
 }

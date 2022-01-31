@@ -409,6 +409,9 @@
                 <a href="controller?command=go_to_cards_page"><fmt:message key="cards.title"/></a>
             </div>
             <div class="whitebox">
+                <a href="controller?command=go_to_bills_page"><fmt:message key="bills.title"/></a>
+            </div>
+            <div class="whitebox">
                 <a href="controller?command=go_to_transfer_page"><fmt:message key="transfer.title"/></a>
             </div>
             <c:if test="${USER_ROLE_ID eq DBMetadata.USER_ROLE_ADMIN or USER_ROLE_ID eq DBMetadata.USER_ROLE_EMPLOYEE}">

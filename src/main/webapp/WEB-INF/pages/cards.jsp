@@ -97,6 +97,9 @@
             </a>
         </div>
         <div class="whitebox">
+            <a href="controller?command=go_to_bills_page"><fmt:message key="bills.title"/></a>
+        </div>
+        <div class="whitebox">
             <a href="controller?command=go_to_transfer_page"><fmt:message key="transfer.title"/></a>
         </div>
         <div class="whitebox">
@@ -125,6 +128,7 @@
                 </i>
             </div>
         </c:if>
+        <a href="controller?command=logout"><fmt:message key="home.logout.button"/></a>
         <br>
         <br>
         <div>

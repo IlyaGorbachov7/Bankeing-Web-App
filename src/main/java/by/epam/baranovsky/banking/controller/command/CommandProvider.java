@@ -8,6 +8,7 @@ import by.epam.baranovsky.banking.controller.command.impl.account.LockOrSuspendA
 import by.epam.baranovsky.banking.controller.command.impl.account.NewAccCommand;
 import by.epam.baranovsky.banking.controller.command.impl.account.RemoveSelfFromAccCommand;
 import by.epam.baranovsky.banking.controller.command.impl.admin.ChangeUserRoleCommand;
+import by.epam.baranovsky.banking.controller.command.impl.bill.NewBillCommandNoPenalty;
 import by.epam.baranovsky.banking.controller.command.impl.card.LockCardCommand;
 import by.epam.baranovsky.banking.controller.command.impl.card.NewCardCommand;
 import by.epam.baranovsky.banking.controller.command.impl.employee.*;
@@ -62,6 +63,8 @@ public class CommandProvider {
         commandMap.put(CommandName.GOTO_PENDING_ACCOUNTS, new GoToPendingAccountsCommand());
         commandMap.put(CommandName.DELETE_PENDING_ACC, new DeletePendingAccountCommand());
         commandMap.put(CommandName.LOCK_OR_UNLOCK_CARD_ADMIN, new LockOrUnlockCardCommand());
+
+        commandMap.put(CommandName.NEW_BILL_NO_PENALTY_COMMAND, new NewBillCommandNoPenalty());
 
     }
 

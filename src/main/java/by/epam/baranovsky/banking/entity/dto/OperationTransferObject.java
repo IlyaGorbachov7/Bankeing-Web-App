@@ -1,4 +1,4 @@
-package by.epam.baranovsky.banking.entity;
+package by.epam.baranovsky.banking.entity.dto;
 
 import lombok.Data;
 

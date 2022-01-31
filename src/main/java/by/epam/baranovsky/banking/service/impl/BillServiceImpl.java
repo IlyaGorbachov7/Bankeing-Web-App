@@ -18,20 +18,6 @@ public class BillServiceImpl implements BillService {
 
     private final BillValidator validator = new BillValidator();
     private final BillDAO billDAO = SqlDAOFactory.getInstance().getBillDAO();
-    private static volatile BillServiceImpl instance = null;
-
-    private BillServiceImpl() {}
-
-    public static BillServiceImpl getInstance() {
-        if (instance == null) {
-            synchronized (BillServiceImpl.class) {
-                if (instance == null) {
-                    instance = new BillServiceImpl();
-                }
-            }
-        }
-        return instance;
-    }
 
     @Override
     public List<Bill> findByCriteria(Criteria<? extends EntityParameters.BillParam> criteria) throws ServiceException {

@@ -2,12 +2,16 @@ package by.epam.baranovsky.banking.service.scheduler.jobs;
 
 import by.epam.baranovsky.banking.constant.DBMetadata;
 import by.epam.baranovsky.banking.service.*;
+import by.epam.baranovsky.banking.service.factory.ServiceFactory;
+import by.epam.baranovsky.banking.service.factory.impl.SqlServiceFactory;
 import by.epam.baranovsky.banking.service.impl.*;
 import org.apache.log4j.Logger;
 import org.quartz.*;
 
 
 public abstract class AbstractJob implements Job {
+
+    private static final ServiceFactory FACTORY = SqlServiceFactory.getInstance();
 
     protected static final String GROUP_NAME = "scheduledJobs";
     protected static final Integer BILL_STATUS_PENDING = DBMetadata.BILL_STATUS_PENDING;
@@ -38,16 +42,16 @@ public abstract class AbstractJob implements Job {
     protected static final Integer CARD_STATUS_LOCKED=DBMetadata.CARD_STATUS_LOCKED;
     protected static final Integer CARD_STATUS_EXPIRED=DBMetadata.CARD_STATUS_EXPIRED;
 
-    protected static final Integer BANK_ACCOUNT_ID=1;
+    protected static final Integer BANK_ACCOUNT_ID=DBMetadata.BANK_ACCOUNT_ID;
+    protected static final UserService userService = FACTORY.getUserService();
+    protected static final BillService billService = FACTORY.getBillService();
+    protected static final LoanService loanService = FACTORY.getLoanService();
+    protected static final AccountService accountService = FACTORY.getAccountService();
+    protected static final OperationService operationService = FACTORY.getOperationService();
+    protected static final PenaltyService penaltyService = FACTORY.getPenaltyService();
+    protected static final BankCardService bankCardService = FACTORY.getBankCardService();
 
     public static final Logger logger = Logger.getLogger(AbstractJob.class);
-
-    protected static final BillService billService = BillServiceImpl.getInstance();
-    protected static final LoanService loanService = LoanServiceImpl.getInstance();
-    protected static final AccountService accountService = AccountServiceImpl.getInstance();
-    protected static final OperationService operationService = OperationServiceImpl.getInstance();
-    protected static final PenaltyService penaltyService = PenaltyServiceImpl.getInstance();
-    protected static final BankCardService bankCardService = BankCardServiceImpl.getInstance();
 
 
     public BillService getBillService() {

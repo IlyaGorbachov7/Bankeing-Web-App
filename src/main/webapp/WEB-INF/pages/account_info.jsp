@@ -177,6 +177,9 @@
                                     <c:when test="${ERROR_MSG eq Message.NOT_YOUR_ACCOUNT}">
                                         <fmt:message key="accounts.error.alien"/>
                                     </c:when>
+                                    <c:when test="${ERROR_MSG eq Message.CANNOT_ADD_SELF}">
+                                        <fmt:message key="accounts.error.wrong.add.self"/>
+                                    </c:when>
                                     <c:when test="${ERROR_MSG eq Message.ACCOUNT_LOCKED}">
                                         <fmt:message key="account.info.locked"/>
                                     </c:when>

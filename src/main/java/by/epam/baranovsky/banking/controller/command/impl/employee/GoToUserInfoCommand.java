@@ -10,6 +10,7 @@ import by.epam.baranovsky.banking.entity.*;
 import by.epam.baranovsky.banking.entity.criteria.Criteria;
 import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
 import by.epam.baranovsky.banking.entity.criteria.SingularValue;
+import by.epam.baranovsky.banking.entity.dto.OperationTransferObject;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
 
 import javax.servlet.ServletException;
@@ -76,6 +77,9 @@ public class GoToUserInfoCommand extends AbstractCommand {
     private List<Bill> getUserBills(Integer userId) throws ServiceException {
         Criteria<EntityParameters.BillParam> criteria = new Criteria<>();
         criteria.add(EntityParameters.BillParam.USER, new SingularValue<>(userId));
+        criteria.add(EntityParameters.BillParam.STATUS_ID, new SingularValue<>(DBMetadata.BILL_STATUS_PENDING));
+        criteria.add(EntityParameters.BillParam.STATUS_ID, new SingularValue<>(DBMetadata.BILL_STATUS_CLOSED));
+        criteria.add(EntityParameters.BillParam.STATUS_ID, new SingularValue<>(DBMetadata.BILL_STATUS_OVERDUE));
         List<Bill> bills= billService.findByCriteria(criteria);
         bills.sort((o1, o2) -> {
             if(o1.getStatusId().equals(DBMetadata.BILL_STATUS_OVERDUE)){
@@ -105,7 +109,7 @@ public class GoToUserInfoCommand extends AbstractCommand {
         return finalMap;
     }
 
-    private List<OperationTransferObject> getUserOperationDTOs( List<Account> accounts, Map<BankingCard, String> cards) throws ServiceException{
+    private List<OperationTransferObject> getUserOperationDTOs(List<Account> accounts, Map<BankingCard, String> cards) throws ServiceException{
 
         List<Integer> userAccs = getUserAccountIds(accounts);
         List<Integer> userCards = getUserCardsIds(cards);

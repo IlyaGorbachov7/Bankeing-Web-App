@@ -16,22 +16,8 @@ import java.util.List;
 
 public class OperationServiceImpl implements OperationService {
 
-    private static volatile OperationServiceImpl instance = null;
     private final OperationValidator validator = new OperationValidator();
     private final OperationDAO operationDAO = SqlDAOFactory.getInstance().getOperationDAO();
-
-    private OperationServiceImpl() {}
-
-    public static OperationServiceImpl getInstance() {
-        if (instance == null) {
-            synchronized (OperationServiceImpl.class) {
-                if (instance == null) {
-                    instance = new OperationServiceImpl();
-                }
-            }
-        }
-        return instance;
-    }
 
     @Override
     public List<Operation> findByCriteria(Criteria<? extends EntityParameters.OperationParam> criteria) throws ServiceException {

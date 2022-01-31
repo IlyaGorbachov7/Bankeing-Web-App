@@ -4,7 +4,6 @@ public class RequestParamName {
     public static final String CONTROLLER="controller";
     public static final String COMMAND_NAME="command";
     public static final String LOCALE="locale";
-    public static final String PREVIUOS_REQUEST="previous_request";
 
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
@@ -40,6 +39,9 @@ public class RequestParamName {
     public static final String ID_CHECKED_USER="checked_user_id";
     public static final String ACC_NEW_INTEREST="new_interest_rate";
     public static final String USER_NEW_ROLE="new_role_id";
+
+    public static final String BILL_NOTICE="bill_notice";
+    public static final String BILL_VALUE="bill_value";
 
     private RequestParamName() {}
 }

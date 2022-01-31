@@ -18,7 +18,7 @@ public class SchedulerListener implements ServletContextListener {
         try {
             thread = new SchedulerThread();
             thread.setDaemon(true);
-            thread.start();
+            //thread.start();
         } catch (Exception e) {
             logger.error("Failed to start scheduled jobs.",e);
             throw new RuntimeException("Failed to start scheduled jobs.",e);
@@ -27,13 +27,13 @@ public class SchedulerListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
-
+      /*
         try {
             thread.end();
         } catch (SchedulerException e) {
             logger.error("Failed to finish scheduled jobs.",e);
             throw new RuntimeException("Failed to finish scheduled jobs.",e);
-        }
+        }*/
         logger.info("Finishing scheduled tasks.");
     }
 }

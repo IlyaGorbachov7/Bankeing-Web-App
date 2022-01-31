@@ -43,5 +43,7 @@ public class CommandName {
     public static final String DELETE_PENDING_ACC="delete_pending_account";
     public static final String LOCK_OR_UNLOCK_CARD_ADMIN ="lock_or_unlock_card";
 
+    public static final String NEW_BILL_NO_PENALTY_COMMAND="new_bill_no_penalty";
+
     private CommandName(){}
 }

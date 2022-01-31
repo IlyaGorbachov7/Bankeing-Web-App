@@ -36,7 +36,9 @@ public class EntityParameters {
         STATUS_ID(DBMetadata.BILLS_STATUS_ID),
         STATUS_NAME(DBMetadata.BILL_STATUS_NAME),
         PENALTY(DBMetadata.BILLS_PENALTY_ID),
-        LOAN(DBMetadata.BILLS_LOAN_ID);
+        LOAN(DBMetadata.BILLS_LOAN_ID),
+        NOTICE(DBMetadata.BILLS_NOTICE),
+        BEARER(DBMetadata.BILLS_BEARER_ID);
 
         private final String column;
 

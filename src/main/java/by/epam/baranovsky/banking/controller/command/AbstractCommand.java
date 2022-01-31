@@ -3,6 +3,8 @@ package by.epam.baranovsky.banking.controller.command;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
 import by.epam.baranovsky.banking.controller.constant.SessionParamName;
 import by.epam.baranovsky.banking.service.*;
+import by.epam.baranovsky.banking.service.factory.ServiceFactory;
+import by.epam.baranovsky.banking.service.factory.impl.SqlServiceFactory;
 import by.epam.baranovsky.banking.service.impl.*;
 import org.apache.log4j.Logger;
 
@@ -14,16 +16,15 @@ import java.util.Map;
 
 public abstract class AbstractCommand implements Command{
 
-    private static final String PREV_REQUEST_PATTERN=
-            "controller%3F([a-zA-Z0-9._~-]+%3D[a-zA-Z0-9._~-]+)(%26[a-zA-Z0-9._~-]+%3D[a-zA-Z0-9._~-]+)*";
+    private static final ServiceFactory FACTORY = SqlServiceFactory.getInstance();
 
-    protected static final UserService userService = UserServiceImpl.getInstance();
-    protected static final BillService billService = BillServiceImpl.getInstance();
-    protected static final LoanService loanService = LoanServiceImpl.getInstance();
-    protected static final AccountService accountService = AccountServiceImpl.getInstance();
-    protected static final OperationService operationService = OperationServiceImpl.getInstance();
-    protected static final PenaltyService penaltyService = PenaltyServiceImpl.getInstance();
-    protected static final BankCardService cardService = BankCardServiceImpl.getInstance();
+    protected static final UserService userService = FACTORY.getUserService();
+    protected static final BillService billService = FACTORY.getBillService();
+    protected static final LoanService loanService = FACTORY.getLoanService();
+    protected static final AccountService accountService = FACTORY.getAccountService();
+    protected static final OperationService operationService = FACTORY.getOperationService();
+    protected static final PenaltyService penaltyService = FACTORY.getPenaltyService();
+    protected static final BankCardService cardService = FACTORY.getBankCardService();
 
     protected static final Logger logger = Logger.getLogger(AbstractCommand.class);
 

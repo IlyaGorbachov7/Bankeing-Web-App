@@ -16,22 +16,8 @@ import java.util.List;
 
 public class PenaltyServiceImpl implements PenaltyService {
 
-    private static volatile PenaltyServiceImpl instance = null;
     private final PenaltyValidator validator = new PenaltyValidator();
     private final PenaltyDAO penaltyDAO = SqlDAOFactory.getInstance().getPenaltyDAO();
-
-    private PenaltyServiceImpl() {}
-
-    public static PenaltyServiceImpl getInstance() {
-        if (instance == null) {
-            synchronized (PenaltyServiceImpl.class) {
-                if (instance == null) {
-                    instance = new PenaltyServiceImpl();
-                }
-            }
-        }
-        return instance;
-    }
 
     @Override
     public List<Penalty> findByCriteria(Criteria<? extends EntityParameters.PenaltyParams> criteria) throws ServiceException {

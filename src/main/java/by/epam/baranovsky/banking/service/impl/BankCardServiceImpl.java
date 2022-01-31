@@ -16,20 +16,7 @@ public class BankCardServiceImpl implements BankCardService {
 
     private final BankCardValidator validator = new BankCardValidator();
     private final BankCardDAO cardDAO = SqlDAOFactory.getInstance().getBankCardDAO();
-    private static volatile BankCardServiceImpl instance = null;
 
-    private BankCardServiceImpl() {}
-
-    public static BankCardServiceImpl getInstance() {
-        if (instance == null) {
-            synchronized (BankCardServiceImpl.class) {
-                if (instance == null) {
-                    instance = new BankCardServiceImpl();
-                }
-            }
-        }
-        return instance;
-    }
 
     @Override
     public BankingCard findById(Integer id) throws ServiceException {

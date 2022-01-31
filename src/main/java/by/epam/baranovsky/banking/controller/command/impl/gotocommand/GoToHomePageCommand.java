@@ -8,9 +8,9 @@ import by.epam.baranovsky.banking.entity.*;
 import by.epam.baranovsky.banking.entity.criteria.Criteria;
 import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
 import by.epam.baranovsky.banking.entity.criteria.SingularValue;
+import by.epam.baranovsky.banking.entity.dto.OperationTransferObject;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
 import by.epam.baranovsky.banking.service.impl.UserServiceImpl;
-import lombok.Data;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -29,7 +29,7 @@ public class GoToHomePageCommand extends AbstractCommand {
 
         if(userId != null){
             try {
-                User user = UserServiceImpl.getInstance().getById(userId);
+                User user = userService.getById(userId);
                 request.setAttribute(RequestAttributeNames.USER_DATA, user);
                 request.setAttribute(
                         RequestAttributeNames.OPERATIONS_DATA,

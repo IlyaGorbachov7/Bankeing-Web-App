@@ -20,22 +20,8 @@ import java.util.List;
 public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserService {
 
     private static final Integer DEFAULT_ROLE = DBMetadata.USER_ROLE_REGULAR;
-    private static volatile UserServiceImpl instance = null;
     private final UserValidator validator = new UserValidator();
     private final UserDAO userDAO = SqlDAOFactory.getInstance().getUserDAO();
-
-    private UserServiceImpl() {}
-
-    public static UserServiceImpl getInstance() {
-        if (instance == null) {
-            synchronized (UserServiceImpl.class) {
-                if (instance == null) {
-                    instance = new UserServiceImpl();
-                }
-            }
-        }
-        return instance;
-    }
 
     @Override
     public User loginUser(String email, String password) throws ServiceException {

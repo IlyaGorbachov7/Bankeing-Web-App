@@ -52,7 +52,12 @@ public class AddUserToAccCommand extends AbstractCommand {
             }
 
             List<User> list = userService.getByCriteria(createUserCriteria(request));
-            if(!handleQueryErrors(list, request, response)){
+            if(!handleQueryErrors(list, request)){
+                request.getRequestDispatcher(PageUrls.ACCOUNT_INFO_PAGE).forward(request,response);
+                return;
+            }
+            if(list.get(0).getId().equals(currentUser)){
+                request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.CANNOT_ADD_SELF);
                 request.getRequestDispatcher(PageUrls.ACCOUNT_INFO_PAGE).forward(request,response);
                 return;
             }
@@ -67,7 +72,7 @@ public class AddUserToAccCommand extends AbstractCommand {
 
     }
 
-    private boolean handleQueryErrors(List<User> list, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private boolean handleQueryErrors(List<User> list, HttpServletRequest request) {
 
         if(list.isEmpty()){
             request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.NO_SUCH_USER);

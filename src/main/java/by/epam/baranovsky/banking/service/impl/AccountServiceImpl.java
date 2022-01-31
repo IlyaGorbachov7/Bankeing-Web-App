@@ -15,20 +15,6 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountValidator validator = new AccountValidator();
     private final AccountDAO accountDAO = SqlDAOFactory.getInstance().getAccountDAO();
-    private static volatile AccountServiceImpl instance = null;
-
-    private AccountServiceImpl() {}
-
-    public static AccountServiceImpl getInstance() {
-        if (instance == null) {
-            synchronized (AccountServiceImpl.class) {
-                if (instance == null) {
-                    instance = new AccountServiceImpl();
-                }
-            }
-        }
-        return instance;
-    }
 
     @Override
     public Account findById(Integer id) throws ServiceException {
