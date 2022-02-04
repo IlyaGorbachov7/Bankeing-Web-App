@@ -25,8 +25,6 @@ public class GoToUserInfoCommand extends AbstractCommand {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Integer userId = Integer.valueOf(request.getParameter(RequestParamName.ID_CHECKED_USER));
-        Integer currentRole = (Integer) request.getSession().getAttribute(SessionParamName.USER_ROLE_ID);
-        Integer currentUser = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
 
         try{
             User user = userService.getById(userId);

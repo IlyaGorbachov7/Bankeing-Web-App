@@ -141,10 +141,30 @@
             </a>
         </div>
         <div class="whitebox">
+            <a href="controller?command=go_to_bill_requests">
+                <fmt:message key="bill.requests.title"/>
+            </a>
+        </div>
+        <div class="whitebox">
             <a href="controller?command=go_to_main_page">
                 <fmt:message key="edit.user.goto.main"/>
             </a>
         </div>
+        <c:if test="${not empty ERROR_MSG}">
+            <div class="whitebox">
+                <i class="errorMsg">
+                    <fmt:message key="logination.error"/>:
+                    <c:choose>
+                        <c:when test="${ERROR_MSG eq Message.WRONG_NEW_ROLE}">
+                            <fmt:message key="change.user.role.wrong.role"/>
+                        </c:when>
+                        <c:otherwise>
+                            <fmt:message key="error.unknown"/>
+                        </c:otherwise>
+                    </c:choose>
+                </i>
+            </div>
+        </c:if>
         <br>
         <a href="controller?command=logout"><fmt:message key="home.logout.button"/></a>
         <br>

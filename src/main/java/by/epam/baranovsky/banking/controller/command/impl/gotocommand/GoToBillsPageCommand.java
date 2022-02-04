@@ -48,7 +48,7 @@ public class GoToBillsPageCommand extends AbstractCommand {
         }
     }
 
-    private List<BillTransferObject> getBillDTOs(List<Bill> bills) throws ServiceException {
+    protected List<BillTransferObject> getBillDTOs(List<Bill> bills) throws ServiceException {
         List<BillTransferObject> dtoList = new ArrayList<>();
 
         for(Bill bill : bills){

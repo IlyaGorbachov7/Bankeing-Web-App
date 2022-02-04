@@ -9,10 +9,12 @@ import by.epam.baranovsky.banking.controller.command.impl.account.NewAccCommand;
 import by.epam.baranovsky.banking.controller.command.impl.account.RemoveSelfFromAccCommand;
 import by.epam.baranovsky.banking.controller.command.impl.admin.ChangeUserRoleCommand;
 import by.epam.baranovsky.banking.controller.command.impl.bill.NewBillCommandNoPenalty;
+import by.epam.baranovsky.banking.controller.command.impl.bill.NewBillWithPenaltyCommand;
 import by.epam.baranovsky.banking.controller.command.impl.card.LockCardCommand;
 import by.epam.baranovsky.banking.controller.command.impl.card.NewCardCommand;
 import by.epam.baranovsky.banking.controller.command.impl.employee.*;
 import by.epam.baranovsky.banking.controller.command.impl.gotocommand.*;
+import by.epam.baranovsky.banking.controller.command.impl.loan.NewLoanCommand;
 import by.epam.baranovsky.banking.controller.command.impl.transfer.TransferCommand;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
 
@@ -65,7 +67,11 @@ public class CommandProvider {
         commandMap.put(CommandName.LOCK_OR_UNLOCK_CARD_ADMIN, new LockOrUnlockCardCommand());
 
         commandMap.put(CommandName.NEW_BILL_NO_PENALTY_COMMAND, new NewBillCommandNoPenalty());
-
+        commandMap.put(CommandName.NEW_BILL_WITH_PENALTY_COMMAND, new NewBillWithPenaltyCommand());
+        commandMap.put(CommandName.GOTO_BILL_REQUESTS, new GoToBillRequestsCommand());
+        commandMap.put(CommandName.NEW_LOAN, new NewLoanCommand());
+        commandMap.put(CommandName.APPROVE_BILL, new ApproveBillRequest());
+        commandMap.put(CommandName.DELETE_BILL_REQUEST, new DeleteBillRequest());
     }
 
     public static CommandProvider getInstance(){

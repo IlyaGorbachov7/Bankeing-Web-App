@@ -21,6 +21,7 @@ public class AccountRowMapper implements RowMapper<Account> {
         account.setStatusId(resultSet.getInt(DBMetadata.ACCOUNTS_ACCOUNT_STATUS_ID));
         account.setStatusName(resultSet.getString(DBMetadata.ACCOUNT_STATUS_DESC));
         account.setUsers(null);
+
         return account;
     }
 }

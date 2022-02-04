@@ -792,7 +792,7 @@
         </div>
         <br>
         <c:choose>
-            <c:when test="${fn.contains(PREV_PAGE, 'go_to_account_info')}">
+            <c:when test="${fn.contains(PREV_PAGE, 'go_to_account_info') or fn.contains(PREV_PAGE, 'go_to_bill_requests')}">
                 <a href="${PREV_PAGE}">
                     <fmt:message key="card.info.back"/>
                 </a>

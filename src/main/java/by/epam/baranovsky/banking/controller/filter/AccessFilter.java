@@ -33,6 +33,9 @@ public class AccessFilter implements Filter {
         employeeCommands.add(CommandName.UPDATE_ACCOUNT);
         employeeCommands.add(CommandName.DELETE_PENDING_ACC);
         employeeCommands.add(CommandName.LOCK_OR_UNLOCK_CARD_ADMIN);
+        employeeCommands.add(CommandName.GOTO_BILL_REQUESTS);
+        employeeCommands.add(CommandName.DELETE_BILL_REQUEST);
+        employeeCommands.add(CommandName.APPROVE_BILL);
 
         regularUserCommands.add(CommandName.LOGOUT_COMMAND);
         regularUserCommands.add(CommandName.GOTO_ACC_INFO_COMMAND);
@@ -55,6 +58,8 @@ public class AccessFilter implements Filter {
         regularUserCommands.add(CommandName.ADD_USER_TO_ACC_COMMAND);
         regularUserCommands.add(CommandName.REMOVE_SELF_FROM_ACC_COMMAND);
         regularUserCommands.add(CommandName.NEW_BILL_NO_PENALTY_COMMAND);
+        regularUserCommands.add(CommandName.NEW_BILL_WITH_PENALTY_COMMAND);
+        regularUserCommands.add(CommandName.NEW_LOAN);
     }
 
     @Override

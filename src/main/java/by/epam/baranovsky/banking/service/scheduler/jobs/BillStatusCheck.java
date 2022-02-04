@@ -18,7 +18,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
 public class BillStatusCheck extends AbstractJob {
 
     private static final String NAME = "billStatusCheck";
-    private static final JobDetail DETAIL = JobBuilder.newJob(AccountAccrual.class)
+    private static final JobDetail DETAIL = JobBuilder.newJob(BillStatusCheck.class)
             .withIdentity(NAME, GROUP_NAME)
             .build();
     private static final Trigger TRIGGER = newTrigger()

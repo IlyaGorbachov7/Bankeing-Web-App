@@ -3,8 +3,10 @@ package by.epam.baranovsky.banking.controller.command.impl.loan;
 import by.epam.baranovsky.banking.constant.ConfigManager;
 import by.epam.baranovsky.banking.constant.ConfigParams;
 import by.epam.baranovsky.banking.constant.DBMetadata;
+import by.epam.baranovsky.banking.constant.Message;
 import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
+import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
 import by.epam.baranovsky.banking.controller.constant.SessionParamName;
 import by.epam.baranovsky.banking.entity.Loan;
@@ -45,24 +47,29 @@ public class NewLoanCommand extends AbstractCommand {
 
         int length = Integer.parseInt(request.getParameter(RequestParamName.LOAN_MONTHS));
 
-        if(length<MIN_TIME){
-            //error msg
+        if(length<MIN_TIME || length>MAX_TIME){
+            request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.LOAN_TOO_SHORT_OR_LONG);
             request.getRequestDispatcher(getPreviousRequestAddress(request)).forward(request,response);
             return;
         }
         if(startingValue<MIN_VALUE){
-            //error msg
+            request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.LOAN_VALUE_TOO_SMALL);
             request.getRequestDispatcher(getPreviousRequestAddress(request)).forward(request,response);
             return;
         }
         try{
             if(!accountService.findUsers(accountService.findById(accountId).getId()).contains(currentUser)){
-                //error msg
+                request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.LOAN_NOT_FOR_YOUR_ACCOUNT);
+                request.getRequestDispatcher(getPreviousRequestAddress(request)).forward(request,response);
+                return;
+            }
+            if(accountService.findById(DBMetadata.BANK_ACCOUNT_ID).getBalance()<startingValue){
+                request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.NO_MONEY);
                 request.getRequestDispatcher(getPreviousRequestAddress(request)).forward(request,response);
                 return;
             }
             if(!checkIfCanGetLoan(currentUser)){
-                //error msg
+                request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.TOO_MANY_LOANS);
                 request.getRequestDispatcher(getPreviousRequestAddress(request)).forward(request,response);
                 return;
             }
@@ -71,10 +78,11 @@ public class NewLoanCommand extends AbstractCommand {
             loan.setStatusId(DBMetadata.LOAN_STATUS_PENDING);
             loan.setIssueDate(new Date());
             loan.setAccountId(accountId);
-            loan.setDueDate(Date.from((LocalDate.now().plusMonths(1)).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+            loan.setDueDate(Date.from((LocalDate.now().plusMonths(length)).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
             loan.setUserId(currentUser);
 
             loanService.create(loan);
+            response.sendRedirect(getPreviousRequestAddress(request));
         } catch (ServiceException e) {
             logger.error(e);
             request.getRequestDispatcher(PageUrls.ERROR_PAGE).forward(request,response);
@@ -95,7 +103,7 @@ public class NewLoanCommand extends AbstractCommand {
 
     private Loan calculateLoan(Double startingValue, Integer time){
         Loan loan = new Loan();
-
+        loan.setStartingValue(startingValue);
         double deltaInterest = MAX_INTEREST-MIN_INTEREST;
         double deltaTime = MAX_TIME-MIN_TIME;
         double interest = MIN_INTEREST + deltaInterest*(1-((time-MIN_TIME)/deltaTime));
@@ -107,7 +115,6 @@ public class NewLoanCommand extends AbstractCommand {
         loan.setTotalPaymentValue(totalValue);
 
         loan.setSinglePaymentValue(totalValue/time);
-
         return loan;
     }
 }

@@ -1,8 +1,6 @@
 package by.epam.baranovsky.banking.controller.command.impl.card;
 
-import by.epam.baranovsky.banking.constant.CommandName;
-import by.epam.baranovsky.banking.constant.DBMetadata;
-import by.epam.baranovsky.banking.constant.Message;
+import by.epam.baranovsky.banking.constant.*;
 import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
@@ -13,13 +11,7 @@ import by.epam.baranovsky.banking.entity.User;
 import by.epam.baranovsky.banking.entity.criteria.Criteria;
 import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
 import by.epam.baranovsky.banking.entity.criteria.SingularValue;
-import by.epam.baranovsky.banking.service.AccountService;
-import by.epam.baranovsky.banking.service.BankCardService;
-import by.epam.baranovsky.banking.service.UserService;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
-import by.epam.baranovsky.banking.service.impl.AccountServiceImpl;
-import by.epam.baranovsky.banking.service.impl.BankCardServiceImpl;
-import by.epam.baranovsky.banking.service.impl.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -30,16 +22,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 public class NewCardCommand extends AbstractCommand {
 
-    private static final String REDIRECT_TO_CARDS=String.format(
-            "%s?%s=%s",
-            RequestParamName.CONTROLLER,
-            RequestParamName.COMMAND_NAME,
-            CommandName.GOTO_CARDS);
+    public static final Integer MAX_CARDS = Integer.valueOf(ConfigManager.getInstance()
+            .getValue(ConfigParams.CARDS_PER_USER));
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -48,6 +36,13 @@ public class NewCardCommand extends AbstractCommand {
         try{
             Integer currentUser = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
             String newUserParam = request.getParameter(RequestParamName.CARD_NEW_USER_ID);
+
+            if(!canHaveMoreCards(currentUser)){
+                request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.TOO_MANY_CARDS);
+                request.getRequestDispatcher(getPreviousRequestAddress(request)).forward(request,response);
+                return;
+            }
+
             Integer newUserId;
             if(newUserParam != null && newUserParam.equals(String.valueOf(currentUser))){
                 newUserId = currentUser;
@@ -197,4 +192,7 @@ public class NewCardCommand extends AbstractCommand {
         return criteria;
     }
 
+    private boolean canHaveMoreCards(Integer userId) throws ServiceException {
+        return cardService.findByUser(userId).size()<MAX_CARDS;
+    }
 }

@@ -152,6 +152,16 @@
             <a href="controller?command=go_to_bills_page"><fmt:message key="bills.title"/></a>
         </div>
         <div class="whitebox">
+            <a href="controller?command=go_to_loans_page">
+                <fmt:message key="loans.title"/>
+            </a>
+        </div>
+        <div class="whitebox">
+            <a href="controller?command=go_to_penalties_page">
+                <fmt:message key="penalties.title"/>
+            </a>
+        </div>
+        <div class="whitebox">
             <a href="controller?command=go_to_transfer_page"><fmt:message key="transfer.title"/></a>
         </div>
         <div class="whitebox">

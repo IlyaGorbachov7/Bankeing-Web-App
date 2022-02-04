@@ -21,5 +21,7 @@ public class PageUrls {
     public static final String ALL_USERS_PAGE="/WEB-INF/pages/all_users.jsp";
     public static final String PENDING_ACCS_PAGE="/WEB-INF/pages/pending_accounts.jsp";
     public static final String USER_INFO_PAGE="/WEB-INF/pages/user_info.jsp";
+    public static final String PENDING_BILLS_PAGE="/WEB-INF/pages/bill_requests.jsp";
+
     private PageUrls(){}
 }

@@ -16,12 +16,6 @@ public class LoanValidator extends AbstractValidator{
             return false;
         }
 
-        if(SqlServiceFactory.getInstance()
-                .getAccountService().findById(DBMetadata.BANK_ACCOUNT_ID)
-                .getBalance() < loan.getStartingValue()){
-            return false;
-        }
-
         return loan.getStartingValue()>=0
                 && loan.getSinglePaymentValue()>=0
                 && loan.getTotalPaymentValue()>=0;

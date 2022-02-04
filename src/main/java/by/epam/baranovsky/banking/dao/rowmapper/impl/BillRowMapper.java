@@ -26,11 +26,18 @@ public class BillRowMapper implements RowMapper<Bill> {
         bill.setStatusId(resultSet.getInt(DBMetadata.BILL_STATUS_ID));
         bill.setStatusName(resultSet.getString(DBMetadata.BILL_STATUS_NAME));
 
-        bill.setPenaltyId(resultSet.getInt(DBMetadata.BILLS_PENALTY_ID));
-        bill.setLoanId(resultSet.getInt(DBMetadata.BILLS_LOAN_ID));
-
         bill.setNotice(resultSet.getString(DBMetadata.BILLS_NOTICE));
         bill.setBearerId(resultSet.getInt(DBMetadata.BILLS_BEARER_ID));
+
+        bill.setPenaltyId(
+                resultSet.getInt(DBMetadata.BILLS_PENALTY_ID) != 0
+                        ? resultSet.getInt(DBMetadata.BILLS_PENALTY_ID)
+                        : null);
+
+        bill.setLoanId(
+                resultSet.getInt(DBMetadata.BILLS_LOAN_ID) != 0
+                        ? resultSet.getInt(DBMetadata.BILLS_LOAN_ID)
+                        : null);
 
         return bill;
     }

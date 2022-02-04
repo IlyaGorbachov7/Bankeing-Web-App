@@ -15,7 +15,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
 public class CardExpirationJob extends AbstractJob{
 
     private static final String NAME = "cardExpiration";
-    private static final JobDetail DETAIL = JobBuilder.newJob(AccountAccrual.class)
+    private static final JobDetail DETAIL = JobBuilder.newJob(CardExpirationJob.class)
             .withIdentity(NAME, GROUP_NAME)
             .build();
     private static final Trigger TRIGGER = newTrigger()

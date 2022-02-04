@@ -28,6 +28,7 @@ public class SchedulerThread extends Thread {
             //scheduler.scheduleJob(LoanBillsAssignment.getDetail(), LoanBillsAssignment.getTrigger());
             //scheduler.scheduleJob(LoanStatusCheck.getDetail(), LoanStatusCheck.getTrigger());
             //scheduler.scheduleJob(PenaltyJob.getDetail(), PenaltyJob.getTrigger());
+            //scheduler.scheduleJob(RemoveHangingBillsJob.getDetail(), RemoveHangingBillsJob.getTrigger());
             readyToShutdown=true;
     }
 

@@ -43,5 +43,6 @@ public class RequestAttributeNames {
 
     public static final String SENT_BILLS="SENT_BILLS";
     public static final String ACQUIRED_BILLS="ACQUIRED_BILLS";
+    public static final String BILL_REQUESTS="BILL_REQUESTS";
 
 }

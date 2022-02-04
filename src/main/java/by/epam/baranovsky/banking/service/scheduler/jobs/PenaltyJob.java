@@ -18,7 +18,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
 public class PenaltyJob extends AbstractJob {
 
     private static final String NAME = "penaltyAccounting";
-    private static final JobDetail DETAIL = JobBuilder.newJob(AccountAccrual.class)
+    private static final JobDetail DETAIL = JobBuilder.newJob(PenaltyJob.class)
             .withIdentity(NAME, GROUP_NAME)
             .build();
     private static final Trigger TRIGGER = newTrigger()

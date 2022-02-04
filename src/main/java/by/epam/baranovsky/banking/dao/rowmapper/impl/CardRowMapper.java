@@ -22,17 +22,26 @@ public class CardRowMapper implements RowMapper<BankingCard> {
         card.setRegistrationDate(resultSet.getDate(DBMetadata.BANK_CARDS_REGISTRATION_DATE));
         card.setExpirationDate(resultSet.getDate(DBMetadata.BANK_CARDS_EXPIRATION_DATE));
 
-        card.setOverdraftMax(resultSet.getDouble(DBMetadata.BANK_CARDS_OVERDRAFT_MAXIMUM));
-        card.setOverdraftInterestRate(resultSet.getDouble(DBMetadata.BANK_CARDS_OVERDRAFT_INTEREST));
-
         card.setUserId(resultSet.getInt(DBMetadata.BANK_CARDS_USER_ID));
-        card.setAccountId(resultSet.getInt(DBMetadata.BANK_CARDS_ACCOUNT_ID));
 
         card.setStatusId(resultSet.getInt(DBMetadata.BANK_CARDS_STATUS_ID));
         card.setStatusName(resultSet.getString(DBMetadata.CARD_STATUS_NAME));
 
         card.setCardTypeId(resultSet.getInt(DBMetadata.BANK_CARDS_TYPE_ID));
         card.setCardTypeName(resultSet.getString(DBMetadata.CARD_TYPE_NAME));
+
+        card.setAccountId(
+                resultSet.getInt(DBMetadata.BANK_CARDS_ACCOUNT_ID) != 0
+                        ? resultSet.getInt(DBMetadata.BANK_CARDS_ACCOUNT_ID)
+                        : null);
+        card.setOverdraftMax(
+                resultSet.getDouble(DBMetadata.BANK_CARDS_OVERDRAFT_MAXIMUM) != 0
+                        ? resultSet.getDouble(DBMetadata.BANK_CARDS_OVERDRAFT_MAXIMUM)
+                        : null);
+        card.setOverdraftInterestRate(
+                resultSet.getDouble(DBMetadata.BANK_CARDS_OVERDRAFT_INTEREST) != 0
+                        ? resultSet.getDouble(DBMetadata.BANK_CARDS_OVERDRAFT_INTEREST)
+                        : null);
 
         return card;
     }

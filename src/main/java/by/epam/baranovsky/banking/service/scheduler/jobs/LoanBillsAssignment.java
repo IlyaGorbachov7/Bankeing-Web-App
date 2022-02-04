@@ -19,7 +19,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
 public class LoanBillsAssignment extends AbstractJob{
 
     private static final String NAME = "loanBillsAssignment";
-    private static final JobDetail DETAIL = JobBuilder.newJob(AccountAccrual.class)
+    private static final JobDetail DETAIL = JobBuilder.newJob(LoanBillsAssignment.class)
             .withIdentity(NAME, GROUP_NAME)
             .build();
     private static final Trigger TRIGGER = newTrigger()

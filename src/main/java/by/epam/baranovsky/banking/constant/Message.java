@@ -25,6 +25,7 @@ public class Message {
     public static final String NOT_YOUR_ACCOUNT="this_account_does_not_belong_to_you";
     public static final String ACCOUNT_INFO_ERROR="account_info_error";
     public static final String CARD_CREATE_EXCEPTION="card_create_exception";
+    public static final String TOO_MANY_CARDS= "card_limit_reached";
     public static final String ACCOUNT_LOCKED="account_is_locked";
     public static final String CARD_NOT_YOURS="card_is_not_yours";
     public static final String CANT_ACCESS_CARD_INFO="access_to_card_denied";
@@ -50,6 +51,14 @@ public class Message {
 
     public static final String BILL_TO_SELF="cannot_add_bills_to_self";
     public static final String TOO_MANY_BILL_REQUESTS="too_many_bill_requests";
+    public static final String DUE_DATE_TOO_CLOSE="due_date_too_close";
+    public static final String BILL_CANNOT_DELETE="cannot_delete_bill";
+    public static final String BILL_CANNOT_APPROVE="cannot_approve_bill";
     public static final String ACCOUNT_LOCKED_OR_NOT_YOURS="acc_blocked_or_not_yours";
+
+    public static final String LOAN_TOO_SHORT_OR_LONG ="loan_too_short_or_long";
+    public static final String LOAN_VALUE_TOO_SMALL="loan_too_small";
+    public static final String LOAN_NOT_FOR_YOUR_ACCOUNT="loan_not_your_acc";
+    public static final String TOO_MANY_LOANS="too_many_loans";
 
 }

@@ -46,7 +46,9 @@ public class GoToLoansPageCommand extends AbstractCommand {
         Criteria<EntityParameters.LoanParams> criteria = new Criteria<>();
         criteria.add(EntityParameters.LoanParams.USER, new SingularValue<>(userId));
 
-        return loanService.findByCriteria(criteria);
+        List<Loan> loans = loanService.findByCriteria(criteria);
+        loans.removeIf(loan -> loan.getCardId() != null && loan.getCardId() != 0);
+        return loans;
     }
 
     private List<Account> getUserAccountsToAcceptPayments(Integer userId) throws ServiceException {

@@ -35,6 +35,10 @@ public class RequestParamName {
 
     public static final String BILL_ID="bill_id";
     public static final String PENALTY_ID="penalty_id";
+    public static final String PENALTY_TYPE_ID="penalty_type_id";
+    public static final String PENALTY_NOTICE="penalty_notice";
+    public static final String PENALTY_VALUE="penalty_value";
+
 
     public static final String ID_CHECKED_USER="checked_user_id";
     public static final String ACC_NEW_INTEREST="new_interest_rate";
@@ -42,6 +46,7 @@ public class RequestParamName {
 
     public static final String BILL_NOTICE="bill_notice";
     public static final String BILL_VALUE="bill_value";
+    public static final String BILL_DUE_DATE="bill_due_date";
 
     public static final String LOAN_STARTING="loan_starting_value";
     public static final String LOAN_MONTHS="loan_length";

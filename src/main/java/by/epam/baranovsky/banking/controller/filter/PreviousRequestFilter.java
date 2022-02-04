@@ -38,6 +38,10 @@ public class PreviousRequestFilter implements Filter {
         ignoredCommands.add(CommandName.DELETE_PENDING_ACC);
         ignoredCommands.add(CommandName.LOCK_OR_UNLOCK_CARD_ADMIN);
         ignoredCommands.add(CommandName.NEW_BILL_NO_PENALTY_COMMAND);
+        ignoredCommands.add(CommandName.NEW_BILL_WITH_PENALTY_COMMAND);
+        ignoredCommands.add(CommandName.NEW_LOAN);
+        ignoredCommands.add(CommandName.APPROVE_BILL);
+        ignoredCommands.add(CommandName.DELETE_BILL_REQUEST);
 
     }
 

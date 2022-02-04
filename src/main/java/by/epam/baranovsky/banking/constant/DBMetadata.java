@@ -101,7 +101,7 @@ public class DBMetadata {
     public static final Integer BILL_STATUS_REQUESTED = 4;
 
     public static final String LOANS_TABLE = "loans";
-    public static final String LOANS_ID = "single_payment_value";
+    public static final String LOANS_ID = "id_loans";
     public static final String LOANS_SINGLE_PAYMENT_VALUE = "single_payment_value";
     public static final String LOANS_STARTING_VALUE = "starting_value";
     public static final String LOANS_TOTAL_VALUE = "total_payment_value";

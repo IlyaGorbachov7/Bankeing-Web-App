@@ -44,6 +44,11 @@ public class CommandName {
     public static final String LOCK_OR_UNLOCK_CARD_ADMIN ="lock_or_unlock_card";
 
     public static final String NEW_BILL_NO_PENALTY_COMMAND="new_bill_no_penalty";
+    public static final String NEW_BILL_WITH_PENALTY_COMMAND="new_bill_with_penalty";
+    public static final String NEW_LOAN="new_loan";
+    public static final String GOTO_BILL_REQUESTS="go_to_bill_requests";
+    public static final String APPROVE_BILL="approve_bill";
+    public static final String DELETE_BILL_REQUEST="delete_bill_request";
 
     private CommandName(){}
 }

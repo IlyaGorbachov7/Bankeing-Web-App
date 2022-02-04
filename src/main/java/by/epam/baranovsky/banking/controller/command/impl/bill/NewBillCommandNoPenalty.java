@@ -29,7 +29,8 @@ import java.util.List;
 
 public class NewBillCommandNoPenalty extends AbstractCommand {
 
-    private static final Integer MAX_BILLS = Integer.valueOf(ConfigManager.getInstance().getValue(ConfigParams.BILLS_REQUESTS_MAX));
+    protected static final Integer MAX_BILLS = Integer.valueOf(
+            ConfigManager.getInstance().getValue(ConfigParams.BILLS_REQUESTS_MAX));
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -81,7 +82,7 @@ public class NewBillCommandNoPenalty extends AbstractCommand {
 
     }
 
-    private Criteria<EntityParameters.UserParams> createUserCriteria(HttpServletRequest request){
+    protected Criteria<EntityParameters.UserParams> createUserCriteria(HttpServletRequest request){
         Criteria<EntityParameters.UserParams> criteria = new Criteria<>();
 
         criteria.add(
@@ -112,7 +113,7 @@ public class NewBillCommandNoPenalty extends AbstractCommand {
         return criteria;
     }
 
-    private boolean noQueryErrors(List<User> list, HttpServletRequest request) {
+    protected boolean noQueryErrors(List<User> list, HttpServletRequest request) {
         Integer currentUser = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
 
         if(list.isEmpty()){
@@ -138,7 +139,7 @@ public class NewBillCommandNoPenalty extends AbstractCommand {
         return true;
     }
 
-    private boolean validateAccount(Integer accountId, Integer currentUser) throws ServiceException {
+    protected boolean validateAccount(Integer accountId, Integer currentUser) throws ServiceException {
         Account account = accountService.findById(accountId);
 
         if(account == null){
@@ -155,7 +156,7 @@ public class NewBillCommandNoPenalty extends AbstractCommand {
                 && !account.getStatusId().equals(DBMetadata.ACCOUNT_STATUS_PENDING);
     }
 
-    private boolean checkTooManyBills(Integer currentUser, Integer payingDude) throws ServiceException {
+    protected boolean checkTooManyBills(Integer currentUser, Integer payingDude) throws ServiceException {
         Criteria<EntityParameters.BillParam> criteria = new Criteria<>();
         criteria.add(EntityParameters.BillParam.BEARER, new SingularValue<>(currentUser));
         criteria.add(EntityParameters.BillParam.USER, new SingularValue<>(payingDude));
@@ -164,6 +165,6 @@ public class NewBillCommandNoPenalty extends AbstractCommand {
         criteria.add(EntityParameters.BillParam.STATUS_ID,
                 new SingularValue<>(DBMetadata.BILL_STATUS_PENDING));
 
-        return billService.findByCriteria(criteria).size()<=MAX_BILLS;
+        return billService.findByCriteria(criteria).size()<MAX_BILLS;
     }
 }

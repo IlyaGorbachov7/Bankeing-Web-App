@@ -13,21 +13,50 @@ public class OperationRowMapper implements RowMapper<Operation> {
         Operation operation = new Operation();
 
         operation.setId(resultSet.getInt(DBMetadata.OPERATIONS_ID));
-        operation.setValue(resultSet.getDouble(DBMetadata.OPERATIONS_VALUE));
 
         operation.setTypeId(resultSet.getInt(DBMetadata.OPERATION_TYPES_ID));
         operation.setTypeName(resultSet.getString(DBMetadata.OPERATION_TYPES_NAME));
-
-        operation.setAccountId(resultSet.getInt(DBMetadata.OPERATIONS_ACC_ID));
-        operation.setTargetAccountId(resultSet.getInt(DBMetadata.OPERATIONS_TARGET_ACC_ID));
-
-        operation.setBankCardId(resultSet.getInt(DBMetadata.OPERATIONS_CARD_ID));
-        operation.setTargetBankCardId(resultSet.getInt(DBMetadata.OPERATIONS_TARGET_CARD_ID));
-        operation.setBillId(resultSet.getInt(DBMetadata.OPERATIONS_BILL_ID));
-        operation.setPenaltyId(resultSet.getInt(DBMetadata.OPERATIONS_PENALTY_ID));
         operation.setOperationDate(resultSet.getTimestamp(DBMetadata.OPERATIONS_DATE));
 
-        operation.setCommission(resultSet.getDouble(DBMetadata.OPERATIONS_COMMISSION));
+        operation.setValue(
+                resultSet.getDouble(DBMetadata.OPERATIONS_VALUE) !=0
+                        ? resultSet.getDouble(DBMetadata.OPERATIONS_VALUE)
+                        : null);
+
+        operation.setAccountId(
+                resultSet.getInt(DBMetadata.OPERATIONS_ACC_ID) !=0
+                        ?  resultSet.getInt(DBMetadata.OPERATIONS_ACC_ID)
+                        : null);
+
+        operation.setTargetAccountId(
+                resultSet.getInt(DBMetadata.OPERATIONS_TARGET_ACC_ID) !=0
+                        ?  resultSet.getInt(DBMetadata.OPERATIONS_TARGET_ACC_ID)
+                        : null);
+
+        operation.setBankCardId(
+                resultSet.getInt(DBMetadata.OPERATIONS_CARD_ID) !=0
+                        ?  resultSet.getInt(DBMetadata.OPERATIONS_CARD_ID)
+                        : null);
+
+        operation.setTargetBankCardId(
+                resultSet.getInt(DBMetadata.OPERATIONS_TARGET_CARD_ID) !=0
+                        ?  resultSet.getInt(DBMetadata.OPERATIONS_TARGET_CARD_ID)
+                        : null);
+
+        operation.setBillId(
+                resultSet.getInt(DBMetadata.OPERATIONS_BILL_ID) !=0
+                        ?  resultSet.getInt(DBMetadata.OPERATIONS_BILL_ID)
+                        : null);
+
+        operation.setPenaltyId(
+                resultSet.getInt(DBMetadata.OPERATIONS_PENALTY_ID) !=0
+                        ?  resultSet.getInt(DBMetadata.OPERATIONS_PENALTY_ID)
+                        : null);
+
+        operation.setCommission(
+                resultSet.getDouble(DBMetadata.OPERATIONS_COMMISSION) != 0
+                        ? resultSet.getDouble(DBMetadata.OPERATIONS_COMMISSION)
+                        : null);
 
         return operation;
     }
