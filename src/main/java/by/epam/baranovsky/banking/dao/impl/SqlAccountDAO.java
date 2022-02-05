@@ -79,7 +79,7 @@ public class SqlAccountDAO implements AccountDAO {
     );
 
     private static final String SQL_DELETE_USER_HAS_ACCOUNT_BY_ACC_AND_USER = String.format(
-            "DELETE FROM %s WHERE %s=? AND %s=? LIMIT 1",
+            "DELETE FROM %s WHERE %s=? AND %s=?",
             DBMetadata.USERS_HAS_ACCOUNTS_TABLE,
             DBMetadata.USERS_HAS_ACCOUNTS_ACCOUNT_ID,
             DBMetadata.USERS_HAS_ACCOUNTS_USER_ID

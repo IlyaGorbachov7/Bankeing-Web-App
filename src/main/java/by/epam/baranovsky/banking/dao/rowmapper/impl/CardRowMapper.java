@@ -13,7 +13,6 @@ public class CardRowMapper implements RowMapper<BankingCard> {
         BankingCard card = new BankingCard();
 
         card.setId(resultSet.getInt(DBMetadata.BANK_CARDS_ID));
-        card.setBalance(resultSet.getDouble(DBMetadata.BANK_CARDS_BALANCE));
 
         card.setCvc(resultSet.getString(DBMetadata.BANK_CARDS_CVC));
         card.setNumber(resultSet.getString(DBMetadata.BANK_CARDS_NUMBER));
@@ -42,6 +41,11 @@ public class CardRowMapper implements RowMapper<BankingCard> {
                 resultSet.getDouble(DBMetadata.BANK_CARDS_OVERDRAFT_INTEREST) != 0
                         ? resultSet.getDouble(DBMetadata.BANK_CARDS_OVERDRAFT_INTEREST)
                         : null);
+        card.setBalance(
+                resultSet.getDouble(DBMetadata.BANK_CARDS_BALANCE) != 0
+                        ? resultSet.getDouble(DBMetadata.BANK_CARDS_BALANCE)
+                        : null);
+
 
         return card;
     }

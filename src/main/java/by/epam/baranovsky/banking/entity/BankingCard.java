@@ -1,11 +1,16 @@
 package by.epam.baranovsky.banking.entity;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serial;
 import java.util.Date;
 
 @Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class BankingCard extends Entity{
 
     @Serial

@@ -19,7 +19,7 @@ public class SqlPenaltyDAO implements by.epam.baranovsky.banking.dao.PenaltyDAO 
     private static final QueryMaster<Penalty> queryMaster = new SqlQueryMaster<>(mapper);
 
     private static final String SQL_SELECT_ALL = String.format(
-            "SELECT * FROM %s LEFT JOIN %S ON %s.%s=%s.%s LEFT JOIN %s ON %s=%s",
+            "SELECT * FROM %s LEFT JOIN %s ON %s.%s=%s.%s LEFT JOIN %s ON %s=%s",
             DBMetadata.PENALTIES_TABLE, DBMetadata.PENALTY_TYPE_TABLE,
             DBMetadata.PENALTIES_TABLE, DBMetadata.PENALTIES_TYPE_ID,
             DBMetadata.PENALTY_TYPE_TABLE, DBMetadata.PENALTY_TYPE_ID,
@@ -33,7 +33,7 @@ public class SqlPenaltyDAO implements by.epam.baranovsky.banking.dao.PenaltyDAO 
             "INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s) VALUES (DEFAULT,?,?,?,?,?,?)",
             DBMetadata.PENALTIES_TABLE, DBMetadata.PENALTIES_ID,
             DBMetadata.PENALTIES_VALUE, DBMetadata.PENALTIES_NOTICE, DBMetadata.PENALTIES_PAYMENT_ACC_ID,
-            DBMetadata.PENALTY_TYPE_ID, DBMetadata.PENALTIES_USER_ID,
+            DBMetadata.PENALTIES_TYPE_ID, DBMetadata.PENALTIES_USER_ID,
             DBMetadata.PENALTIES_STATUS_ID);
 
     private static final String SQL_UPDATE = String.format(

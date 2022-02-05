@@ -1,10 +1,14 @@
 package by.epam.baranovsky.banking.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serial;
 
 @Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class Penalty extends Entity {
 
     @Serial

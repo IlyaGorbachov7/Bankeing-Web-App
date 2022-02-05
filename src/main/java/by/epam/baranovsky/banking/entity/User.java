@@ -1,12 +1,16 @@
 package by.epam.baranovsky.banking.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.Serial;
 import java.util.Date;
 
 @Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class User extends Entity {
 
     @Serial
