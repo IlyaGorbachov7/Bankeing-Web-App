@@ -18,6 +18,11 @@ import java.util.List;
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
 
+/**
+ * A job that removes bills with unspecified due date after a certain time.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class RemoveHangingBillsJob extends AbstractJob{
 
     public static final Integer TIME_LIMIT_HANGING = Integer.valueOf(
@@ -26,12 +31,20 @@ public class RemoveHangingBillsJob extends AbstractJob{
     private static final JobDetail DETAIL = JobBuilder.newJob(RemoveHangingBillsJob.class)
             .withIdentity(NAME, GROUP_NAME)
             .build();
+    /**
+     * Fires every 8 hours.
+     */
     private static final Trigger TRIGGER = newTrigger()
             .withIdentity(NAME, GROUP_NAME)
             .withSchedule(cronSchedule("0 0 0/8 ? * * *"))
             .forJob(NAME, GROUP_NAME)
             .build();
 
+    /**
+     * Checks if bills are hanging and deletes hanging bills.
+     * @param jobExecutionContext context of the job
+     * @throws JobExecutionException if ServiceException occurs
+     */
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
@@ -47,6 +60,12 @@ public class RemoveHangingBillsJob extends AbstractJob{
         }
     }
 
+    /**
+     * Checks if bill is hanging.
+     * @param bill bill to check
+     * @return {@code true} if more than
+     * TIME_LIMIT_HANGING in months has passed since issue date.
+     */
     private boolean isHanging(Bill bill){
 
         Period period = Period.between(

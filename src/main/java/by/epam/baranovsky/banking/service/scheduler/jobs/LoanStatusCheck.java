@@ -14,18 +14,31 @@ import java.util.List;
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
 
+/**
+ * A job that checks if loans are paid or overdue.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class LoanStatusCheck extends AbstractJob{
 
     private static final String NAME = "loanStatusCheck";
     private static final JobDetail DETAIL = JobBuilder.newJob(LoanStatusCheck.class)
             .withIdentity(NAME, GROUP_NAME)
             .build();
+    /**
+     * Fires every day at 23:45
+     */
     private static final Trigger TRIGGER = newTrigger()
             .withIdentity(NAME, GROUP_NAME)
             .withSchedule(cronSchedule("0 45 23 ? * * *"))
             .forJob(NAME, GROUP_NAME)
             .build();
 
+    /**
+     * Checks if loan is overdue or paid and updates accordingly.
+     * @param jobExecutionContext context of the job
+     * @throws JobExecutionException if ServiceException occurs
+     */
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
@@ -47,6 +60,16 @@ public class LoanStatusCheck extends AbstractJob{
 
     }
 
+    /**
+     * Checks if loan is paid and updates it.
+     * <p>
+     *     Loan is considered paid if there are paid bills
+     *     in system that have id of this loan assigned to them
+     *     and the sum of their values is equal or more than bill's value.
+     * </p>
+     * @param loan a loan to check.
+     * @throws ServiceException
+     */
     private void checkPayment(Loan loan) throws ServiceException {
 
         Criteria<EntityParameters.BillParam> criteria = new Criteria<>();
@@ -66,7 +89,11 @@ public class LoanStatusCheck extends AbstractJob{
             loanService.update(loan);
         }
     }
-
+    /**
+     * Checks if loan is overdue and updates it.
+     * @param loan a loan to check.
+     * @throws ServiceException
+     */
     private void checkOverdue(Loan loan) throws ServiceException {
         Date today = new Date();
         if(loan.getDueDate().compareTo(today)>0

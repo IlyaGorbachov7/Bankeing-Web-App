@@ -1,9 +1,7 @@
 package by.epam.baranovsky.banking.service.scheduler.jobs;
 
-import by.epam.baranovsky.banking.entity.Account;
-import by.epam.baranovsky.banking.entity.BankingCard;
-import by.epam.baranovsky.banking.entity.Bill;
-import by.epam.baranovsky.banking.entity.Penalty;
+import by.epam.baranovsky.banking.constant.DBMetadata;
+import by.epam.baranovsky.banking.entity.*;
 import by.epam.baranovsky.banking.entity.criteria.Criteria;
 import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
 import by.epam.baranovsky.banking.entity.criteria.SingularValue;
@@ -15,18 +13,33 @@ import java.util.List;
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
 
+/**
+ * A job that inflicts penalties if there are any
+ * and as well checks if penalty can be lifted and lifts it.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class PenaltyJob extends AbstractJob {
 
     private static final String NAME = "penaltyAccounting";
     private static final JobDetail DETAIL = JobBuilder.newJob(PenaltyJob.class)
             .withIdentity(NAME, GROUP_NAME)
             .build();
+    /**
+     * Fires every day at 1:00am.
+     */
     private static final Trigger TRIGGER = newTrigger()
             .withIdentity(NAME, GROUP_NAME)
             .withSchedule(cronSchedule("0 0 1 ? * * *"))
             .forJob(NAME, GROUP_NAME)
             .build();
 
+    /**
+     * Lifts inflicted penalties and inflicts uninflicted but pending penalties.
+     * @param jobExecutionContext context for the job
+     * @throws JobExecutionException if ServiceException occurs
+     */
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
@@ -58,6 +71,11 @@ public class PenaltyJob extends AbstractJob {
         return TRIGGER;
     }
 
+    /**
+     * Checks if can lift penalty and lifts it.
+     * @param penalty penalty to check
+     * @throws ServiceException
+     */
     private void liftPenaltyIfAble(Penalty penalty) throws ServiceException {
         PenaltyLiftCommand command
                 = PenaltyCommandEnum.getLiftCommand(penalty.getTypeId());
@@ -66,6 +84,11 @@ public class PenaltyJob extends AbstractJob {
         }
     }
 
+    /**
+     * Inflicts penalty.
+     * @param penalty penalty to inflict
+     * @throws ServiceException
+     */
     private void inflictPenalty(Penalty penalty) throws ServiceException {
         PenaltyInflictCommand command
                 = PenaltyCommandEnum.getInflictCommand(penalty.getTypeId());
@@ -74,27 +97,63 @@ public class PenaltyJob extends AbstractJob {
         }
     }
 
+    /**
+     * Interface for commands for lifting penalties of different kind.
+     */
     private interface PenaltyLiftCommand {
         void lift(Penalty penalty) throws ServiceException;
     }
 
+    /**
+     * Interface for commands for inflicting penalties of any kind.
+     */
     private interface PenaltyInflictCommand {
         void inflict(Penalty penalty) throws ServiceException;
     }
 
+    /**
+     * Enumeration for commands to inflict/lift for every kind of penalties.
+     * <p>
+     *     To lift a FEE, user must pay for it.
+     * </p>
+     * <p>
+     *     Lifting ACCOUNT LOCK is impossible by user;
+     *     Inflicting ACCOUNT LOCK locks all accounts of a certain user.
+     * </p>
+     * <p>
+     *     To lift ACCOUNT SUSPENSION, user needs to pay for all bills and fees;
+     *     Inflicting ACCOUNT SUSPENSION suspends every account of a user.
+     * </p>
+     * <p>
+     *     To lift CARD LOCK, user needs to pay for all bills and fees;
+     *     Inflicting CARD LOCK locks every card of a user.
+     * </p>
+     *<p>
+     *     Lifting and inflicting a lawsuit is impossible by application means.
+     *</p>
+     */
     private enum PenaltyCommandEnum {
 
         FEE(
                 PENALTY_TYPE_FEE,
                 penalty -> {
-                    Criteria<EntityParameters.BillParam> criteria = new Criteria<>();
+                    Criteria<EntityParameters.OperationParam> criteria = new Criteria<>();
                     criteria.add(
-                            EntityParameters.BillParam.PENALTY,
+                            EntityParameters.OperationParam.PENALTY,
                             new SingularValue<>(penalty.getId()));
+                    criteria.add(
+                            EntityParameters.OperationParam.ACCOUNT,
+                            new SingularValue<>(penalty.getPaymentAccountId()));
+                    criteria.add(
+                            EntityParameters.OperationParam.TYPE_ID,
+                            new SingularValue<>(DBMetadata.OPERATION_TYPE_TRANSFER_A_A));
+                    criteria.add(
+                            EntityParameters.OperationParam.TYPE_ID,
+                            new SingularValue<>(DBMetadata.OPERATION_TYPE_TRANSFER_C_A));
 
                     Double sum = 0d;
-                    for (Bill bill : billService.findByCriteria(criteria)) {
-                        sum += bill.getValue();
+                    for (Operation operation : operationService.findByCriteria(criteria)) {
+                        sum += operation.getValue();
                     }
                     if (sum >= penalty.getValue()) {
                         penalty.setStatusId(PENALTY_STATUS_CLOSED);
@@ -110,6 +169,9 @@ public class PenaltyJob extends AbstractJob {
                 penalty ->{
                     List<Account> accountList
                             = accountService.findByUserId(penalty.getUserId());
+                    accountList.removeIf(account ->
+                            !account.getStatusId().equals(DBMetadata.ACCOUNT_STATUS_SUSPENDED)
+                                    && !account.getStatusId().equals(DBMetadata.ACCOUNT_STATUS_UNLOCKED));
                     for(Account account : accountList){
                         account.setStatusId(ACC_STATUS_LOCKED);
                         account.setUsers(null);
@@ -156,6 +218,8 @@ public class PenaltyJob extends AbstractJob {
                 penalty ->{
                     List<Account> accountList
                             = accountService.findByUserId(penalty.getUserId());
+                    accountList.removeIf(account -> !account.getStatusId().equals(DBMetadata.ACCOUNT_STATUS_UNLOCKED));
+
                     for(Account account : accountList){
                         account.setStatusId(ACC_STATUS_SUSPENDED);
                         account.setUsers(null);
@@ -212,8 +276,17 @@ public class PenaltyJob extends AbstractJob {
                 penalty -> {},
                 penalty -> {});
 
+        /**
+         * Type of penalty
+         */
         Integer typeId;
+        /**
+         * Command to lift penalty
+         */
         PenaltyLiftCommand liftCommand;
+        /**
+         * Command to inflict penalty
+         */
         PenaltyInflictCommand inflictCommand;
 
         PenaltyCommandEnum(Integer penaltyType,

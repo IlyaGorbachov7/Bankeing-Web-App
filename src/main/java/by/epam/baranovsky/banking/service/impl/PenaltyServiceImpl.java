@@ -42,7 +42,7 @@ public class PenaltyServiceImpl implements PenaltyService {
     }
 
     @Override
-    public Integer update(Penalty penalty) throws ServiceException {
+    public boolean update(Penalty penalty) throws ServiceException {
         Integer result;
         try{
             if(!validator.validate(penalty)){
@@ -55,7 +55,7 @@ public class PenaltyServiceImpl implements PenaltyService {
         } catch (DAOException e) {
             throw  new ServiceException("Unable to update penalty in DB.",e);
         }
-        return result;
+        return result>0;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class PenaltyServiceImpl implements PenaltyService {
     }
 
     @Override
-    public Integer delete(Integer id) throws ServiceException {
+    public boolean delete(Integer id) throws ServiceException {
         try {
             return delete(penaltyDAO.findEntityById(id));
         } catch (DAOException e) {
@@ -82,7 +82,7 @@ public class PenaltyServiceImpl implements PenaltyService {
     }
 
     @Override
-    public Integer delete(Penalty penalty) throws ServiceException {
+    public boolean delete(Penalty penalty) throws ServiceException {
         Integer res;
         try {
             if(!validator.validate(penalty)){
@@ -92,7 +92,7 @@ public class PenaltyServiceImpl implements PenaltyService {
         } catch (DAOException e) {
             throw  new ServiceException("Unable to delete penalty from DB.",e);
         }
-        return res;
+        return res>0;
     }
 
     @Override

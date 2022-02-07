@@ -42,7 +42,7 @@ public class LoanServiceImpl implements by.epam.baranovsky.banking.service.LoanS
     }
 
     @Override
-    public Integer update(Loan loan) throws ServiceException {
+    public boolean update(Loan loan) throws ServiceException {
         Integer result;
         try{
             if(!validator.validate(loan)){
@@ -55,7 +55,7 @@ public class LoanServiceImpl implements by.epam.baranovsky.banking.service.LoanS
         } catch (DAOException e) {
             throw  new ServiceException("Unable to update loan in DB.",e);
         }
-        return result;
+        return result>0;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class LoanServiceImpl implements by.epam.baranovsky.banking.service.LoanS
     }
 
     @Override
-    public Integer delete(Integer id) throws ServiceException {
+    public boolean delete(Integer id) throws ServiceException {
         try {
             return delete(loanDAO.findEntityById(id));
         } catch (DAOException e) {
@@ -82,7 +82,7 @@ public class LoanServiceImpl implements by.epam.baranovsky.banking.service.LoanS
     }
 
     @Override
-    public Integer delete(Loan loan) throws ServiceException {
+    public boolean delete(Loan loan) throws ServiceException {
         Integer res;
         try {
             if(!validator.validate(loan)){
@@ -92,7 +92,7 @@ public class LoanServiceImpl implements by.epam.baranovsky.banking.service.LoanS
         } catch (DAOException e) {
             throw  new ServiceException("Unable to delete loan from DB.",e);
         }
-        return res;
+        return res>0;
     }
 
     @Override

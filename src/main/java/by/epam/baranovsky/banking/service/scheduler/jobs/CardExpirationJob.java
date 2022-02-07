@@ -12,18 +12,31 @@ import java.util.List;
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
 
+/**
+ * A job that performs expiration of cards
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class CardExpirationJob extends AbstractJob{
 
     private static final String NAME = "cardExpiration";
     private static final JobDetail DETAIL = JobBuilder.newJob(CardExpirationJob.class)
             .withIdentity(NAME, GROUP_NAME)
             .build();
+    /**
+     * Fires at 20:00:00pm every day
+     */
     private static final Trigger TRIGGER = newTrigger()
             .withIdentity(NAME, GROUP_NAME)
             .withSchedule(cronSchedule("0 0 20 ? * * *"))
             .forJob(NAME, GROUP_NAME)
             .build();
 
+    /**
+     * Checks if cards have expired and updates them.
+     * @param jobExecutionContext context of the job
+     * @throws JobExecutionException
+     */
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {

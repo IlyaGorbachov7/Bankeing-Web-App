@@ -2,6 +2,9 @@ package by.epam.baranovsky.banking.service.factory;
 
 import by.epam.baranovsky.banking.service.*;
 
+/**
+ * Service factory interface.
+ */
 public interface ServiceFactory {
 
     UserService getUserService();
@@ -17,6 +20,5 @@ public interface ServiceFactory {
     LoanService getLoanService();
 
     PenaltyService getPenaltyService();
-
 
 }

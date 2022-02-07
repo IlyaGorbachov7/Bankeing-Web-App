@@ -85,7 +85,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Integer update(Account account) throws ServiceException {
+    public boolean update(Account account) throws ServiceException {
         Integer result = 0;
 
         try {
@@ -100,7 +100,7 @@ public class AccountServiceImpl implements AccountService {
             throw new ServiceException(e);
         }
 
-        return result;
+        return result>0;
     }
 
     @Override
@@ -121,7 +121,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Integer delete(Integer id) throws ServiceException {
+    public boolean delete(Integer id) throws ServiceException {
         try {
             return delete(accountDAO.findEntityById(id));
         } catch (DAOException e) {
@@ -130,7 +130,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Integer delete(Account account) throws ServiceException {
+    public boolean delete(Account account) throws ServiceException {
         Integer result = 0;
 
         try {
@@ -142,7 +142,7 @@ public class AccountServiceImpl implements AccountService {
             throw new ServiceException(e);
         }
 
-        return result;
+        return result>0;
     }
 
     @Override

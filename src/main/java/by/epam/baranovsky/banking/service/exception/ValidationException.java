@@ -2,6 +2,12 @@ package by.epam.baranovsky.banking.service.exception;
 
 import by.epam.baranovsky.banking.constant.Message;
 
+/**
+ * Service validation exception class - is thrown when entity validation is failed.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class ValidationException extends ServiceException{
 
     public ValidationException() {

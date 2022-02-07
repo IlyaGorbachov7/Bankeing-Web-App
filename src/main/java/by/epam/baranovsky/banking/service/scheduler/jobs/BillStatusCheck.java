@@ -14,20 +14,31 @@ import java.util.List;
 
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
-
+/**
+ * A job that checks if bills are paid or overdue.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class BillStatusCheck extends AbstractJob {
 
     private static final String NAME = "billStatusCheck";
     private static final JobDetail DETAIL = JobBuilder.newJob(BillStatusCheck.class)
             .withIdentity(NAME, GROUP_NAME)
             .build();
+    /**
+     * Fires at second :00, at minute :30, every hour starting at 00am, of every day
+     */
     private static final Trigger TRIGGER = newTrigger()
             .withIdentity(NAME, GROUP_NAME)
-            .withSchedule(cronSchedule(" 0 30 0/1 ? * * *"))
+            .withSchedule(cronSchedule("0 30 0/1 ? * * *"))
             .forJob(NAME, GROUP_NAME)
             .build();
 
-
+    /**
+     *
+     * @param jobExecutionContext context of the job
+     * @throws JobExecutionException if ServiceException occurs
+     */
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {
@@ -45,6 +56,16 @@ public class BillStatusCheck extends AbstractJob {
         }
     }
 
+    /**
+     * Checks if bill is paid and closes it if is.
+     * <p>
+     *     A bill is considered paid if there are transfers
+     *     in system that have id of this bill assigned to them
+     *     and the sum of their values is equal or more than bill's value.
+     * </p>
+     * @param bill bill to check and update
+     * @throws ServiceException
+     */
     private void checkPayment(Bill bill) throws ServiceException{
         Criteria<EntityParameters.OperationParam> criteria = new Criteria<>();
         criteria.add(EntityParameters.OperationParam.BILL, new SingularValue<>(bill.getId()));
@@ -65,6 +86,15 @@ public class BillStatusCheck extends AbstractJob {
         }
     }
 
+    /**
+     * Checks if bill is overdue and changes its status.
+     * <p>
+     *     A bill is considered overdue if its due date
+     *     has passed.
+     * </p>
+     * @param bill bill to check and update
+     * @throws ServiceException
+     */
     private void checkOverdue(Bill bill) throws ServiceException {
         Date today = new Date();
 
@@ -77,6 +107,11 @@ public class BillStatusCheck extends AbstractJob {
 
     }
 
+    /**
+     * Assigns penalties to overdue bills if there are penalties.
+     * @param bill bill to check and update
+     * @throws ServiceException
+     */
     private void assignPenalties(Bill bill) throws ServiceException {
 
         if(bill.getStatusId().equals(BILL_STATUS_OVERDUE)

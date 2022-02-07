@@ -8,7 +8,13 @@ import by.epam.baranovsky.banking.service.impl.*;
 import org.apache.log4j.Logger;
 import org.quartz.*;
 
-
+/**
+ * Abstract parent classfor every jobs.
+ * Stores required services and constants.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public abstract class AbstractJob implements Job {
 
     private static final ServiceFactory FACTORY = SqlServiceFactory.getInstance();
@@ -52,25 +58,4 @@ public abstract class AbstractJob implements Job {
     protected static final BankCardService bankCardService = FACTORY.getBankCardService();
 
     public static final Logger logger = Logger.getLogger(AbstractJob.class);
-
-
-    public BillService getBillService() {
-        return billService;
-    }
-
-    public LoanService getLoanService() {
-        return loanService;
-    }
-
-    public AccountService getAccountService() {
-        return accountService;
-    }
-
-    public OperationService getOperationService() {
-        return operationService;
-    }
-
-    public PenaltyService getPenaltyService() {
-        return penaltyService;
-    }
 }

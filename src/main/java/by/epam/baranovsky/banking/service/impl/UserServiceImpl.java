@@ -124,7 +124,7 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
     }
 
     @Override
-    public Integer updateUser(User user) throws ServiceException {
+    public boolean updateUser(User user) throws ServiceException {
 
         Integer result = 0;
 
@@ -145,11 +145,11 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
             throw new ServiceException(e);
         }
 
-        return result;
+        return result>0;
     }
 
     @Override
-    public Integer deleteUser(User user) throws ServiceException {
+    public boolean deleteUser(User user) throws ServiceException {
         Integer result = 0;
 
         try{
@@ -159,6 +159,6 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
             throw new ServiceException(e);
         }
 
-        return result;
+        return result>0;
     }
 }

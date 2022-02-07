@@ -42,7 +42,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public Integer update(Bill bill) throws ServiceException {
+    public boolean update(Bill bill) throws ServiceException {
         Integer result;
         try{
             if(!validator.validate(bill)){
@@ -55,7 +55,7 @@ public class BillServiceImpl implements BillService {
         } catch (DAOException e) {
             throw  new ServiceException("Unable to update bill in DB.",e);
         }
-        return result;
+        return result>0;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public Integer delete(Integer id) throws ServiceException {
+    public boolean delete(Integer id) throws ServiceException {
         try {
             return delete(billDAO.findEntityById(id));
         } catch (DAOException e) {
@@ -82,7 +82,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public Integer delete(Bill bill) throws ServiceException {
+    public boolean delete(Bill bill) throws ServiceException {
         Integer res;
         try {
             if(!validator.validate(bill)){
@@ -92,7 +92,7 @@ public class BillServiceImpl implements BillService {
         } catch (DAOException e) {
             throw  new ServiceException("Unable to delete bill from DB.",e);
         }
-        return res;
+        return res>0;
     }
 
     @Override

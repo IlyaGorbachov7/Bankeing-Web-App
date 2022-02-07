@@ -42,7 +42,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public Integer update(Operation operation) throws ServiceException {
+    public boolean update(Operation operation) throws ServiceException {
         Integer result;
         try{
             if(!validator.validate(operation)){
@@ -55,7 +55,7 @@ public class OperationServiceImpl implements OperationService {
         } catch (DAOException e) {
             throw  new ServiceException("Unable to update operation in DB.",e);
         }
-        return result;
+        return result>0;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public Integer delete(Integer id) throws ServiceException {
+    public boolean delete(Integer id) throws ServiceException {
         try {
             return delete(operationDAO.findEntityById(id));
         } catch (DAOException e) {
@@ -82,17 +82,17 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public Integer delete(Operation operation) throws ServiceException {
+    public boolean delete(Operation operation) throws ServiceException {
         Integer res;
         try {
             if(!validator.validate(operation)){
-                throw new ValidationException("Wrong input.");
+                throw new ValidationException();
             }
             res = operationDAO.delete(operation);
         } catch (DAOException e) {
             throw  new ServiceException("Unable to delete operation from DB.",e);
         }
-        return res;
+        return res>0;
     }
 
     @Override

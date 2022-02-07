@@ -86,7 +86,7 @@ public class BankCardServiceImpl implements BankCardService {
     }
 
     @Override
-    public Integer update(BankingCard card) throws ServiceException {
+    public boolean update(BankingCard card) throws ServiceException {
         Integer result;
         try{
             if(!validator.validate(card)){
@@ -99,7 +99,7 @@ public class BankCardServiceImpl implements BankCardService {
         } catch (DAOException e) {
             throw  new ServiceException(e);
         }
-        return result;
+        return result>0;
     }
 
     @Override
@@ -117,7 +117,7 @@ public class BankCardServiceImpl implements BankCardService {
     }
 
     @Override
-    public Integer delete(Integer id) throws ServiceException {
+    public boolean delete(Integer id) throws ServiceException {
         try {
             return delete(cardDAO.findEntityById(id));
         } catch (DAOException e) {
@@ -126,7 +126,7 @@ public class BankCardServiceImpl implements BankCardService {
     }
 
     @Override
-    public Integer delete(BankingCard card) throws ServiceException {
+    public boolean delete(BankingCard card) throws ServiceException {
         Integer res;
         try {
             if(!validator.validate(card)){
@@ -136,7 +136,7 @@ public class BankCardServiceImpl implements BankCardService {
         } catch (DAOException e) {
             throw  new ServiceException(e);
         }
-        return res;
+        return res>0;
     }
 
     @Override
