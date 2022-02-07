@@ -2,10 +2,22 @@ package by.epam.baranovsky.banking.entity.dto;
 
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * Data transfer object for Bill class.
+ *
+ * @see by.epam.baranovsky.banking.entity.Bill
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 @Data
-public class BillTransferObject{
+public class BillTransferObject implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private Integer id;
     private Double value;

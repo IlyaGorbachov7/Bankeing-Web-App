@@ -1,8 +1,12 @@
 package by.epam.baranovsky.banking.constant;
 
 import java.util.ResourceBundle;
-
-public class ConfigManager {
+/**
+ * Utility class that manages retrieving data from config resource bundle.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
+public final class ConfigManager {
 
     private static final ConfigManager instance = new ConfigManager();
     private static final String CONFIG_BUNDLE="config";

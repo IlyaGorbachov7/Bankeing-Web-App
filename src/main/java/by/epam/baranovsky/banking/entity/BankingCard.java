@@ -1,6 +1,5 @@
 package by.epam.baranovsky.banking.entity;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -8,6 +7,12 @@ import lombok.ToString;
 import java.io.Serial;
 import java.util.Date;
 
+/**
+ * Java bean that represents a banking card.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)

@@ -8,6 +8,12 @@ import org.mindrot.jbcrypt.BCrypt;
 import java.io.Serial;
 import java.util.Date;
 
+/**
+ * Java bean that represents user of an application.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
@@ -18,22 +24,19 @@ public class User extends Entity {
 
     private String password;
     private String email;
+
     private Integer roleId;
     private String roleName;
+
     private String firstName;
     private String lastName;
     private String patronymic;
+
     private String passportSeries;
     private String passportNumber;
+
     private Date birthDate;
     private Date dateCreated;
     private Date lastLogin;
 
-    private String bcrypt(String password){
-        return BCrypt.hashpw(password, BCrypt.gensalt(10));
-    }
-
-    public String getBcryptPassword(){
-        return bcrypt(password);
-    }
 }

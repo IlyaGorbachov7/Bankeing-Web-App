@@ -1,6 +1,6 @@
 package by.epam.baranovsky.banking.controller.constant;
 
-public class RequestAttributeNames {
+public final class RequestAttributeNames {
     private RequestAttributeNames(){}
 
     public static final String USER_DATA = "USER_DATA";

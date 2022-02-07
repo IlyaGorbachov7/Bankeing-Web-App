@@ -1,16 +1,49 @@
 package by.epam.baranovsky.banking.entity.criteria;
 
-import by.epam.baranovsky.banking.constant.DBMetadata;
 import by.epam.baranovsky.banking.dao.query.Query;
 import lombok.Data;
+import lombok.Getter;
 
 import java.util.*;
 
+/**
+ * Criteria class that is used to retrieve DB entities by parameters.
+ * <p>
+ *     Generates JDBC SQL prepared statement (query) based on parameters
+ *     and on string constant that defines the algorithm of generation.
+ *     Criteria can generate query where a retrieved object must
+ *     satisfy all the parameters listed or one of parameters listed.
+ * </p>
+ * <p>
+ *     However, if criteria has to accept multiple values for same DB column,
+ *     an entity will have to satisfy only one of such values.
+ * </p>
+ *
+ * @param <T> the type of enum that serves as a source of entity's parameters,
+ *          so criteria won't include parameters for different entities.
+ * @see EntityEnum
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class Criteria<T extends EntityEnum> {
 
+    /**
+     * Constant to enable 'satisfy all' algorithm.
+     */
     public static final String SQL_AND = "AND";
+    /**
+     * Constant to enable 'satisfy one' algorithm.
+     */
     public static final String SQL_OR = "OR";
+    /**
+     * List of parameters of criteria.
+     * @see Parameter
+     */
     private final List<Parameter> parameters = new ArrayList<>();
+    /**
+     * A particle that will be included in a query
+     * between parameters.
+     */
     private final String particle;
 
     public Criteria(){
@@ -24,6 +57,16 @@ public class Criteria<T extends EntityEnum> {
         else this.particle=SQL_AND;
     }
 
+    /**
+     * Adds a parameter to a criteria.
+     * Creates an instance of Parameter with given name and value.
+     *
+     * @param name Name of parameter retrieved from corresponding EntityEnum.
+     * @param value Value of a parameter.
+     * @return {@code false} if a parameter with same name and value already
+     * exists within criteria, {@code true} otherwise.
+     * @see CriteriaValue
+     */
     public boolean add(T name, CriteriaValue<?> value){
         Parameter parameterToAdd = new Parameter(name, value);
 
@@ -36,6 +79,32 @@ public class Criteria<T extends EntityEnum> {
         return true;
     }
 
+    /**
+     * Generates SQL query for a criteria.
+     * <p>
+     *     In fact,appends generated conditions to a SQL query.
+     *     Trying to retrieve anything using a criteria
+     *     without parameters will give no results.
+     * </p>
+     * <p>
+     *     Generation algorithm:
+     *     <ul>
+     *         <li>Divides list of parameters into groups of eponymous parameters.</li>
+     *         <li>For each parameter in each group calls for generateSqlCondition() method
+     *         to generate single condition string.</li>
+     *         <li>Puts values of parameters into a list.</li>
+     *         <li>Puts 'OR' between parameters in group of there are more than one.</li>
+     *         <li>Unites all groups into a single condition string, putting @{code particle}
+     *         between groups.</li>
+     *         <li>Appends this string to a starting query.</li>
+     *         <li>Creates an instance of Query using generated query string and list of parameters.</li>
+     *     </ul>
+     * </p>
+     * @see Parameter#generateSqlCondition()
+     * @param sqlQueryStart A query to append generated parameters to.
+     * @return Instance of Query with a prepared statement
+     * and an array of parameters for that statement in correct order.
+     */
     public Query generateQuery(String sqlQueryStart){
 
         StringBuilder builder = new StringBuilder(sqlQueryStart);
@@ -75,9 +144,21 @@ public class Criteria<T extends EntityEnum> {
 
     }
 
+    /**
+     * Inner class that represents a parameter of a criteria.
+     * @author Baranovsky E. K.
+     * @version 1.0.0
+     */
     @Data
-    private class Parameter{
+    public class Parameter{
+        /**
+         * Name of this parameter: instance of EntityEnum.
+         */
         private T name;
+        /**
+         * Value of this parameter: instance of CriteriaValue.
+         * @see CriteriaValue
+         */
         private CriteriaValue<?> value;
 
         public Parameter(T name, CriteriaValue<?> value) {
@@ -85,29 +166,13 @@ public class Criteria<T extends EntityEnum> {
             this.value = value;
         }
 
+        /**
+         * Generates single SQL condition depending on what kind of value is passed.
+         * @return sql-style condition with given column name
+         * and values replaced by question marks.
+         */
         public String generateSqlCondition(){
-            StringBuilder builder = new StringBuilder(" (");
-
-            if(value instanceof Range){
-                builder.append(name.getColumn())
-                        .append(">=?");
-                builder.append(" AND ");
-                builder.append(name.getColumn())
-                        .append("<=?");
-            } else if (value instanceof SingularValue){
-
-                if(((SingularValue<?>) value).getValue() instanceof Date){
-                    Date valueDate = (java.util.Date) ((SingularValue<?>) value).getValue();
-                    ((SingularValue<Date>) value).setValue(new java.sql.Date(valueDate.getTime()));
-                }
-
-                builder.append(name.getColumn())
-                        .append("=?");
-            }
-
-            builder.append(")");
-
-            return builder.toString();
+            return value.generateSqlCondition(name);
         }
     }
 }

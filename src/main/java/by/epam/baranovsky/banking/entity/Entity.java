@@ -4,6 +4,12 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * An abstract class that represents an entity with database ID.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 @Data
 public abstract class Entity implements Serializable {
 
@@ -11,7 +17,4 @@ public abstract class Entity implements Serializable {
 
     protected Entity() {}
 
-    protected Entity(Integer id) {
-        this.id = id;
-    }
 }

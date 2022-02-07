@@ -1,6 +1,6 @@
 package by.epam.baranovsky.banking.controller.constant;
 
-public class RequestParamName {
+public final class RequestParamName {
     public static final String CONTROLLER="controller";
     public static final String COMMAND_NAME="command";
     public static final String LOCALE="locale";

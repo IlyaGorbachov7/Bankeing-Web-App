@@ -1,6 +1,21 @@
 package by.epam.baranovsky.banking.constant;
 
-public class DBMetadata {
+/**
+ * Utility class that stores constants related to database.
+ * <p>
+ *     Contains:
+ *     <ul>
+ *         <li>Strings that store names of DBs columns.</li>
+ *         <li>Integers that store IDs of DBs constant values
+ *         that do not possess entity classes linked to them,
+ *         such as status IDs or user roles IDs.</li>
+ *         <li>ID of a financial account that belongs to the bank (host).</li>
+ *     </ul>
+ * </p>
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
+public final class DBMetadata {
 
     public static final Integer BANK_ACCOUNT_ID=1;
 
@@ -177,5 +192,6 @@ public class DBMetadata {
     public static final Integer PENALTY_TYPE_CARDS_LOCK= 3;
     public static final Integer PENALTY_TYPE_FEE = 4;
     public static final Integer PENALTY_TYPE_LAWSUIT = 5;
+
     private DBMetadata() {}
 }

@@ -1,6 +1,12 @@
 package by.epam.baranovsky.banking.constant;
 
-public class CommandName {
+/**
+ * Utility class that stores constant strings
+ * that represent names of commands.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
+public final class CommandName {
 
     public static final String GOTO_LOGIN= "go_to_login_page";
     public static final String GOTO_REGISTER= "go_to_register_page";

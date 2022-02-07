@@ -8,6 +8,12 @@ import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Java bean that represents a financial account.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)

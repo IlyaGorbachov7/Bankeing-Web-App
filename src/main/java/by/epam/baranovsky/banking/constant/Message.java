@@ -1,8 +1,13 @@
 package by.epam.baranovsky.banking.constant;
 
-public class Message {
+/**
+ * Utility class that stores constant strings
+ * that represent error messages.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
+public final class Message {
 
-    public static final String LOGIN_FAIlED="login_failed";
     public static final String LOGIN_EXCEPTION="login_exception";
     public static final String WRONG_EMAIL_OR_PASS="wrong_email_or_password";
     public static final String NO_SUCH_USER ="no_such_user";

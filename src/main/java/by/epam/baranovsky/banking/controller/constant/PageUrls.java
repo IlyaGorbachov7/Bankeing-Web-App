@@ -1,6 +1,6 @@
 package by.epam.baranovsky.banking.controller.constant;
 
-public class PageUrls {
+public final class PageUrls {
 
     public static final String HOME_PAGE="/WEB-INF/pages/home.jsp";
     public static final String LOGIN_PAGE="/WEB-INF/pages/login.jsp";

@@ -2,8 +2,15 @@ package by.epam.baranovsky.banking.entity.criteria;
 
 import by.epam.baranovsky.banking.constant.DBMetadata;
 
+/**
+ * Utility class that contains enumerations of entity parameters.
+ */
 public class EntityParameters {
 
+    /**
+     * Enumeration that contains parameters for Operation entity.
+     * @see by.epam.baranovsky.banking.entity.Operation
+     */
     public enum OperationParam implements EntityEnum{
         VALUE(DBMetadata.OPERATIONS_VALUE),
         ACCOUNT(DBMetadata.OPERATIONS_ACC_ID),
@@ -27,6 +34,10 @@ public class EntityParameters {
         }
     }
 
+    /**
+     * Enumeration that contains parameters for Bill entity.
+     * @see by.epam.baranovsky.banking.entity.Bill
+     */
     public enum BillParam implements EntityEnum{
         VALUE(DBMetadata.BILLS_VALUE),
         ISSUE_DATE(DBMetadata.BILLS_ISSUE_DATE),
@@ -52,6 +63,10 @@ public class EntityParameters {
         }
     }
 
+    /**
+     * Enumeration that contains parameters for Loan entity.
+     * @see by.epam.baranovsky.banking.entity.Loan
+     */
     public enum LoanParams implements EntityEnum{
         SINGLE_PAYMENT_VALUE(DBMetadata.LOANS_SINGLE_PAYMENT_VALUE),
         STARTING_VALUE(DBMetadata.LOANS_STARTING_VALUE),
@@ -76,6 +91,10 @@ public class EntityParameters {
         }
     }
 
+    /**
+     * Enumeration that contains parameters for Penalty entity.
+     * @see by.epam.baranovsky.banking.entity.Penalty
+     */
     public enum PenaltyParams implements EntityEnum{
         VALUE(DBMetadata.PENALTIES_VALUE),
         NOTICE(DBMetadata.PENALTIES_NOTICE),
@@ -98,6 +117,10 @@ public class EntityParameters {
         }
     }
 
+    /**
+     * Enumeration that contains parameters for User entity.
+     * @see by.epam.baranovsky.banking.entity.User
+     */
     public enum UserParams implements EntityEnum{
         EMAIL(DBMetadata.USERS_EMAIL),
         PASSWORD(DBMetadata.USERS_PASSWORD),
@@ -124,8 +147,21 @@ public class EntityParameters {
         }
     }
 
+    private EntityParameters(){}
+
 }
 
+/**
+ * Interface that is used to generalize enumerations
+ * that contain parameters for DB entities.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 interface EntityEnum{
+    /**
+     * Returns a name of a column in database that is associated with given parameter name.
+     * @return name of a column in database.
+     */
     String getColumn();
 }

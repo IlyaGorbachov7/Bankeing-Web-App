@@ -7,6 +7,12 @@ import lombok.ToString;
 import java.io.Serial;
 import java.util.Date;
 
+/**
+ * Java bean that represents a loan that is assigned to a user.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
