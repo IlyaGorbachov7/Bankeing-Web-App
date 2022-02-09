@@ -8,6 +8,7 @@ import by.epam.baranovsky.banking.entity.criteria.SingularValue;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
 import org.quartz.*;
 
+import java.util.Date;
 import java.util.List;
 
 import static org.quartz.CronScheduleBuilder.cronSchedule;
@@ -48,6 +49,10 @@ public class PenaltyJob extends AbstractJob {
 
             for (Penalty penalty : penalties) {
 
+                if(penalty.getPaymentAccountId() != null){
+                    checkPenaltyWithBlockedAccs(penalty);
+                }
+
                 if(penalty.getStatusId().equals(PENALTY_STATUS_INFLICTED)){
                     liftPenaltyIfAble(penalty);
                 }
@@ -70,6 +75,22 @@ public class PenaltyJob extends AbstractJob {
     public static Trigger getTrigger() {
         return TRIGGER;
     }
+
+    /**
+     * If penalty's payment account is locked and thus cannot accept payments,
+     * changes payment account to bank's own account.
+     * @param penalty Penalty to check and update.
+     * @throws ServiceException
+     */
+    private void checkPenaltyWithBlockedAccs(Penalty penalty) throws ServiceException {
+        Account paymentAccount = accountService.findById(penalty.getPaymentAccountId());
+
+        if(paymentAccount.getStatusId().equals(DBMetadata.ACCOUNT_STATUS_BLOCKED)){
+            penalty.setPaymentAccountId(DBMetadata.BANK_ACCOUNT_ID);
+            penaltyService.update(penalty);
+        }
+    }
+
 
     /**
      * Checks if can lift penalty and lifts it.

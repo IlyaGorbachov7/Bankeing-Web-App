@@ -4,7 +4,7 @@ import by.epam.baranovsky.banking.constant.DBMetadata;
 import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
-import by.epam.baranovsky.banking.controller.constant.SessionParamName;
+import by.epam.baranovsky.banking.controller.constant.SessionAttributeName;
 import by.epam.baranovsky.banking.entity.Account;
 import by.epam.baranovsky.banking.entity.BankingCard;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
@@ -18,12 +18,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of Command
+ * used to forward user to the page that list their cards
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class GoToCardsPageCommand extends AbstractCommand {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Integer userId = (Integer) session.getAttribute(SessionParamName.USER_ID);
+        Integer userId = (Integer) session.getAttribute(SessionAttributeName.USER_ID);
         try{
             List<BankingCard> userCards = cardService.findByUser(userId);
             userCards.removeIf(card ->
@@ -31,7 +40,7 @@ public class GoToCardsPageCommand extends AbstractCommand {
                             || card.getStatusId().equals(DBMetadata.CARD_STATUS_EXPIRED)
                             || card.getStatusId().equals(DBMetadata.CARD_STATUS_PENDING));
             for(BankingCard card : userCards){
-                card.setNumber(maskNumber(card.getNumber()));
+                card.setNumber(maskCardNumber(card.getNumber()));
             }
             request.setAttribute(RequestAttributeNames.USER_CARDS, userCards);
             request.setAttribute(RequestAttributeNames.USER_ACCOUNTS, getAccountNumbers(userId));
@@ -45,6 +54,12 @@ public class GoToCardsPageCommand extends AbstractCommand {
         dispatcher.forward(request, response);
     }
 
+    /**
+     * Retrieves all unlocked cards of the user.
+     * @param userId ID of the user.
+     * @return List of unlocked cards of the user.
+     * @throws ServiceException
+     */
     private List<String> getAccountNumbers(Integer userId) throws ServiceException {
         List<String> numbers = new ArrayList<>();
         for(Account account : accountService.findByUserId(userId)){

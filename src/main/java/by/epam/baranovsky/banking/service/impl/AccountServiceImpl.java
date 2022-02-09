@@ -11,11 +11,21 @@ import by.epam.baranovsky.banking.service.validator.AccountValidator;
 
 import java.util.List;
 
+/**
+ * Implementation of AccountService.
+ * Provides utils for working with Account entities.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class AccountServiceImpl implements AccountService {
 
     private final AccountValidator validator = new AccountValidator();
     private final AccountDAO accountDAO = SqlDAOFactory.getInstance().getAccountDAO();
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Account findById(Integer id) throws ServiceException {
         Account account;
@@ -29,6 +39,9 @@ public class AccountServiceImpl implements AccountService {
         return account;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Account findByNumber(String number) throws ServiceException {
         Account account;
@@ -45,6 +58,9 @@ public class AccountServiceImpl implements AccountService {
         return account;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Account> findByUserId(Integer id) throws ServiceException {
         List<Account> accounts;
@@ -58,6 +74,9 @@ public class AccountServiceImpl implements AccountService {
         return accounts;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Account> findByStatusId(Integer id) throws ServiceException {
         List<Account> accounts;
@@ -71,6 +90,9 @@ public class AccountServiceImpl implements AccountService {
         return accounts;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Integer> findUsers(Integer id) throws ServiceException {
         List<Integer> users;
@@ -84,6 +106,9 @@ public class AccountServiceImpl implements AccountService {
         return users;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean update(Account account) throws ServiceException {
         Integer result = 0;
@@ -103,6 +128,9 @@ public class AccountServiceImpl implements AccountService {
         return result>0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Account create(Account account) throws ServiceException {
         Account created;
@@ -120,6 +148,9 @@ public class AccountServiceImpl implements AccountService {
         return created;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean delete(Integer id) throws ServiceException {
         try {
@@ -129,6 +160,9 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean delete(Account account) throws ServiceException {
         Integer result = 0;
@@ -145,6 +179,9 @@ public class AccountServiceImpl implements AccountService {
         return result>0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Account> findAll() throws ServiceException {
         List<Account> accounts;

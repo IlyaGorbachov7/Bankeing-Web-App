@@ -81,15 +81,15 @@
                                 <option disabled selected value> <fmt:message key="transfer.select"/> </option>
                                 <optgroup label="<fmt:message key="transfer.card"/>">
                                     <c:forEach var="card" items="${USER_CARDS}">
-                                        <option value="${card.key.id}">
-                                            <fmt:message key="transfer.card"/> ${card.key.number} <fmt:message key="transfer.balance"/>: ${card.value}
+                                        <option value="${card.value.id}">
+                                            <fmt:message key="transfer.card"/> ${card.value.number} <fmt:message key="transfer.balance"/>: ${card.key}
                                         </option>
                                     </c:forEach>
                                 </optgroup>
                                 <optgroup label="<fmt:message key="transfer.acc"/>">
                                     <c:forEach var="acc" items="${USER_ACCOUNTS}">
-                                        <option value="${acc.key.id}">
-                                            <fmt:message key="transfer.acc"/> ${acc.key.accountNumber} <fmt:message key="transfer.balance"/>: ${acc.value}
+                                        <option value="${acc.value.id}">
+                                            <fmt:message key="transfer.acc"/> ${acc.value.accountNumber} <fmt:message key="transfer.balance"/>: ${acc.key}
                                         </option>
                                     </c:forEach>
                                 </optgroup>

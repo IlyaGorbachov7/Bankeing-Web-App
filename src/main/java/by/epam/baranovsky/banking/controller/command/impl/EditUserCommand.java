@@ -6,12 +6,10 @@ import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
-import by.epam.baranovsky.banking.controller.constant.SessionParamName;
+import by.epam.baranovsky.banking.controller.constant.SessionAttributeName;
 import by.epam.baranovsky.banking.entity.User;
-import by.epam.baranovsky.banking.service.UserService;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
 import by.epam.baranovsky.banking.service.exception.ValidationException;
-import by.epam.baranovsky.banking.service.impl.UserServiceImpl;
 import org.mindrot.jbcrypt.BCrypt;
 
 import javax.servlet.RequestDispatcher;
@@ -24,6 +22,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Implementation of Command
+ * used for editing of user data.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class EditUserCommand extends AbstractCommand {
 
     private static final String REDIRECT_TO_HOME=String.format(
@@ -32,6 +36,17 @@ public class EditUserCommand extends AbstractCommand {
             RequestParamName.COMMAND_NAME,
             CommandName.GOTO_MAIN);
 
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     *     User can only edit his personal data.
+     * </p>
+     * <p>
+     *     If editing was successful, redirects to home page.
+     *     Otherwise, forwards back to edit data page.
+     * </p>
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Object userData = request.getSession().getAttribute(RequestAttributeNames.USER_DATA);
@@ -74,7 +89,7 @@ public class EditUserCommand extends AbstractCommand {
 
     private User getUpdatedUser(HttpServletRequest request) throws ServiceException {
 
-        User user = userService.getById((Integer) request.getSession().getAttribute(SessionParamName.USER_ID));
+        User user = userService.getById((Integer) request.getSession().getAttribute(SessionAttributeName.USER_ID));
 
         String email = request.getParameter(RequestParamName.EMAIL);
         String password = request.getParameter(RequestParamName.PASSWORD);

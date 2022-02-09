@@ -11,10 +11,13 @@ import by.epam.baranovsky.banking.entity.Operation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardExpirationCommand implements OperationCommand{
-
-    private static final QueryMaster<Operation> queryMaster
-            = new SqlQueryMaster<>(RowMapperFactory.getOperationRowMapper());
+/**
+ * Implementation of OperationCommand
+ * for card expiration operation.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
+public class CardExpirationCommand extends AbstractOperationCommand{
 
     private static final String SQL_INSERT_OPERATION = String.format(
             "INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (DEFAULT, NULL, 11, NUll, NULL, ?, NULL, NULL, NULL, NOW())",
@@ -30,6 +33,16 @@ public class CardExpirationCommand implements OperationCommand{
             DBMetadata.BANK_CARDS_TABLE, DBMetadata.BANK_CARDS_STATUS_ID,
             DBMetadata.BANK_CARDS_ID);
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     *     Updates card passed in operation's
+     *     bankCardId field (changes status to expired).
+     * </p>
+     * @param operation Operation to save to DB.
+     * @throws DAOException if QueryMaster throws DAOException
+     *      * or if bank card id of operation is {@code null}.
+     */
     @Override
     public int create(Operation operation) throws DAOException {
         OperationCommand.testNonNull(operation.getBankCardId());

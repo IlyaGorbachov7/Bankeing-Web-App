@@ -6,7 +6,7 @@ import by.epam.baranovsky.banking.constant.DBMetadata;
 import by.epam.baranovsky.banking.constant.Message;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
-import by.epam.baranovsky.banking.controller.constant.SessionParamName;
+import by.epam.baranovsky.banking.controller.constant.SessionAttributeName;
 import by.epam.baranovsky.banking.entity.Bill;
 import by.epam.baranovsky.banking.entity.Penalty;
 import by.epam.baranovsky.banking.entity.User;
@@ -19,20 +19,29 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Implementation of Command
+ * used for requesting employees to create
+ * new bill with penalty.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class NewBillWithPenaltyCommand extends NewBillCommandNoPenalty {
 
     private static final Integer MIN_LENGTH_MONTHS = Integer.valueOf(
             ConfigManager.getInstance().getValue(ConfigParams.BILL_MIN_LENGTH));
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer currentUser = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
+        Integer currentUser = (Integer) request.getSession().getAttribute(SessionAttributeName.USER_ID);
         Integer accountId = Integer.valueOf(request.getParameter(RequestParamName.ACCOUNT_ID));
         String notice = request.getParameter(RequestParamName.BILL_NOTICE);
         String dueDateStr = request.getParameter(RequestParamName.BILL_DUE_DATE);
@@ -99,7 +108,14 @@ public class NewBillWithPenaltyCommand extends NewBillCommandNoPenalty {
 
     }
 
-
+    /**
+     * Checks if due date is valid.
+     * @param dueDate Due date of a bill.
+     * @param issueDate Issue date of a bill.
+     * @return {@code true} if due date is not before issue date and if
+     * it is no less than {@code MIN_LENGTH_MONTHS} months away from issue date,
+     * {@code false} otherwise.
+     */
     private boolean checkDueDate(Date dueDate, Date issueDate){
 
         if(issueDate.compareTo(dueDate)>=0){
@@ -113,6 +129,15 @@ public class NewBillWithPenaltyCommand extends NewBillCommandNoPenalty {
         return period.toTotalMonths() > MIN_LENGTH_MONTHS;
     }
 
+    /**
+     * Builds a penalty and saves it to data source.
+     * @param typeId Type ID of a penalty.
+     * @param notice Notice for a penalty, if any.
+     * @param value Value of a penalty, if any.
+     * @param bill ID of a bill from which user ID will be extracted.
+     * @return ID of a created penalty.
+     * @throws ServiceException
+     */
     private Integer createPenalty(Integer typeId, String notice, String value, Bill bill) throws ServiceException {
         Penalty penalty = new Penalty();
 

@@ -5,7 +5,7 @@ import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
-import by.epam.baranovsky.banking.controller.constant.SessionParamName;
+import by.epam.baranovsky.banking.controller.constant.SessionAttributeName;
 import by.epam.baranovsky.banking.entity.Account;
 import by.epam.baranovsky.banking.entity.BankingCard;
 import by.epam.baranovsky.banking.entity.Loan;
@@ -22,16 +22,29 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Implementation of Command
+ * used for money transfers.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class TransferCommand extends AbstractCommand {
 
     private static final String REDIRECT_TO_SUCCESS = String.format("%s?%s=%s",
             RequestParamName.CONTROLLER, RequestParamName.COMMAND_NAME,
             CommandName.GOTO_TRANSFER_SUCCESS_COMMAND);
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     *     Redirects to transfer success page if transfer was successful,
+     *     forwards to transfer failure page otherwise.
+     * </p>
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try{
-            Integer currentUser = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
+            Integer currentUser = (Integer) request.getSession().getAttribute(SessionAttributeName.USER_ID);
             Operation operation = buildOperation(request);
             String errorMessage = checkOperation(operation, currentUser);
 
@@ -50,6 +63,12 @@ public class TransferCommand extends AbstractCommand {
         }
     }
 
+    /**
+     * Builds an operation from request's parameters.
+     * @param request Servlet request to get parameters from.
+     * @return Transfer operation.
+     * @throws ServiceException
+     */
     private Operation buildOperation(HttpServletRequest request) throws ServiceException {
         Operation operation = new Operation();
 
@@ -84,6 +103,15 @@ public class TransferCommand extends AbstractCommand {
         return operation;
     }
 
+    /**
+     * Gets operation type ID based on value of passed values.
+     * @param acc String representation of operation's account ID.
+     * @param targetAcc String representation of operation's target account ID.
+     * @param card String representation of operation's card ID.
+     * @param targetCard String representation of operation's target card ID.
+     * @return Type ID of an operation,
+     * or {@code null} if no type could be found for passed values.
+     */
     private Integer getTransferType(String acc, String targetAcc, String card, String targetCard){
 
         if(acc != null && !acc.isEmpty()){
@@ -105,6 +133,15 @@ public class TransferCommand extends AbstractCommand {
         return null;
     }
 
+    /**
+     * Validates fields of an operation.
+     * @param operation Operation to validate.
+     * @param currentUser ID of current user.
+     * @return Error message string if any errors have occurred,
+     * {@code null} otherwise.
+     * @throws ServiceException
+     * @see #checkNullParams(Operation)
+     */
     private String checkOperation(Operation operation, Integer currentUser) throws ServiceException {
 
         if(checkNullParams(operation) != null){
@@ -173,6 +210,14 @@ public class TransferCommand extends AbstractCommand {
         return null;
     }
 
+    /**
+     * Checks if any of important fields
+     * (or field combinations) of an operation are null.
+     * @param operation Operation to validate.
+     * @return Error message string if any such fields are null,
+     * {@code null} otherwise.
+     * @throws ServiceException
+     */
     private String checkNullParams(Operation operation) throws ServiceException {
         if(operation.getTypeId() == null ){
             return Message.OPERATION_ILLEGAL;
@@ -206,6 +251,15 @@ public class TransferCommand extends AbstractCommand {
         return null;
     }
 
+    /**
+     * Checks if account entity, that is linked to operation's account ID
+     * or to the bank card, that is tied to operation's card ID,
+     * is blocked or suspended.
+     * @param operation Operation to check.
+     * @return Error message string if account is locked or suspended,
+     * {@code null} otherwise.
+     * @throws ServiceException
+     */
     private String checkIfAccLockedOrSuspended(Operation operation) throws ServiceException {
 
         if(operation.getBillId() != null || operation.getPenaltyId() != null){
@@ -236,6 +290,13 @@ public class TransferCommand extends AbstractCommand {
         return null;
     }
 
+    /**
+     * Checks if the target of operation (be it card or account) is locked.
+     * @param operation Operation to check.
+     * @return Error message string if target of operation is locked
+     * {@code null} otherwise.
+     * @throws ServiceException
+     */
     private String checkIfTargetIsLocked(Operation operation) throws ServiceException{
         int targetAcc = 0;
 
@@ -264,11 +325,22 @@ public class TransferCommand extends AbstractCommand {
         return null;
     }
 
-
+    /**
+     * Checks if sender account has enough money to do a transaction.
+     * @param account Account to check.
+     * @param value Value of the transfer.
+     * @return {@code true} if balance is sufficient, {@code false} otherwise
+     */
     private boolean checkAgainstAccountBalance(Account account, Double value){
         return account.getBalance()>value;
     }
 
+    /**
+     * Checks if sender card has enough money to do a transaction.
+     * @param card Card to check.
+     * @param value Value of the transfer.
+     * @return {@code true} if balance is sufficient, {@code false} otherwise
+     */
     private boolean checkAgainstCardBalance(BankingCard card, Double value) throws ServiceException {
         if(card.getCardTypeId().equals(DBMetadata.CARD_TYPE_DEBIT)){
             if(accountService.findById(card.getAccountId()).getBalance()<value){
@@ -289,6 +361,12 @@ public class TransferCommand extends AbstractCommand {
         return true;
     }
 
+    /**
+     * Calculates overdraft sum that can be spent from a card.
+     * @param card Card to check.
+     * @return Sum available for overdraft.
+     * @throws ServiceException
+     */
     private Double getUnspentOverdraft(BankingCard card) throws ServiceException {
         Double overdraftSum = 0d;
         Criteria<EntityParameters.LoanParams> criteria = new Criteria<>();

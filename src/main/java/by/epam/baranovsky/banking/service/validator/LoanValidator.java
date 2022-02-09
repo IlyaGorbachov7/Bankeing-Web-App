@@ -16,6 +16,7 @@ public class LoanValidator extends AbstractValidator{
      * @param loan Loan to validate.
      * @return {@code false} if:
      * <ul>
+     *     <li>Object itself is null</li>
      *     <li>Due date, issue date, user id, starting value, total payment value,
      *     single payment value, interest rate or account id are null</li>
      *     <li>Starting value, single payment value,
@@ -25,7 +26,7 @@ public class LoanValidator extends AbstractValidator{
      */
     public boolean validate(Loan loan) throws ServiceException {
 
-        if(!notNull(loan.getDueDate(), loan.getIssueDate(),
+        if(!notNull(loan, loan.getDueDate(), loan.getIssueDate(),
                 loan.getUserId(), loan.getStartingValue(),
                 loan.getTotalPaymentValue(), loan.getSinglePaymentValue(),
                 loan.getYearlyInterestRate(), loan.getAccountId())){

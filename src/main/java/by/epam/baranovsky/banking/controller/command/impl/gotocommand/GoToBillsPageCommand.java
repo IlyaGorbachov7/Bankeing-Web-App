@@ -4,7 +4,7 @@ import by.epam.baranovsky.banking.constant.DBMetadata;
 import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
-import by.epam.baranovsky.banking.controller.constant.SessionParamName;
+import by.epam.baranovsky.banking.controller.constant.SessionAttributeName;
 import by.epam.baranovsky.banking.entity.Account;
 import by.epam.baranovsky.banking.entity.Bill;
 import by.epam.baranovsky.banking.entity.Penalty;
@@ -21,14 +21,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Implementation of Command
+ * used to forward user to the page that lists all their bills.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class GoToBillsPageCommand extends AbstractCommand {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer currentUser = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
+        Integer currentUser = (Integer) request.getSession().getAttribute(SessionAttributeName.USER_ID);
 
         try {
             request.setAttribute(
@@ -48,6 +56,12 @@ public class GoToBillsPageCommand extends AbstractCommand {
         }
     }
 
+    /**
+     * Wraps bills with transfer objects.
+     * @param bills List of bills to parse.
+     * @return List of instances of BillTransferObject parsed from bills.
+     * @throws ServiceException
+     */
     protected List<BillTransferObject> getBillDTOs(List<Bill> bills) throws ServiceException {
         List<BillTransferObject> dtoList = new ArrayList<>();
 
@@ -83,6 +97,12 @@ public class GoToBillsPageCommand extends AbstractCommand {
         return dtoList;
     }
 
+    /**
+     * Retrieves bills where user is recipient.
+     * @param userId User in question.
+     * @return List of bills where user is recipient.
+     * @throws ServiceException
+     */
     private List<Bill> getAcquiredBills(Integer userId) throws ServiceException {
         Criteria<EntityParameters.BillParam> criteria = new Criteria<>();
         criteria.add(EntityParameters.BillParam.USER, new SingularValue<>(userId));
@@ -100,6 +120,12 @@ public class GoToBillsPageCommand extends AbstractCommand {
         return bills;
     }
 
+    /**
+     * Retrieves bills where user is bearer.
+     * @param userId User in question.
+     * @return List of bills where user is bearer.
+     * @throws ServiceException
+     */
     private List<Bill> getSentBills(Integer userId) throws ServiceException {
         Criteria<EntityParameters.BillParam> criteria = new Criteria<>();
         criteria.add(EntityParameters.BillParam.BEARER, new SingularValue<>(userId));
@@ -117,11 +143,24 @@ public class GoToBillsPageCommand extends AbstractCommand {
         return bills;
     }
 
+    /**
+     * Retrieves full name of the user.
+     * @param userId User in question.
+     * @return String representation of user's full name.
+     * @throws ServiceException
+     */
     private String getFullNameOfUser(Integer userId) throws ServiceException {
         User user = userService.getById(userId);
         return user.getLastName() + " " + user.getFirstName() + " " + (user.getPatronymic() != null ? user.getPatronymic() :  "");
     }
 
+    /**
+     * Retrieves all accounts that belong to the user
+     * and that can be used to receive payments at given moment.
+     * @param userId User in question.
+     * @return List of accounts ready to accept payments.
+     * @throws ServiceException
+     */
     private List<Account> getUserAccountsToAcceptPayments(Integer userId) throws ServiceException {
         List<Account> accounts = accountService.findByUserId(userId);
 

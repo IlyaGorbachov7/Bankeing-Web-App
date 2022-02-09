@@ -7,8 +7,21 @@ import by.epam.baranovsky.banking.entity.Loan;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Implementation of RowMapper
+ * used to build Loan entities.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class LoanRowMapper implements RowMapper<Loan> {
 
+    /**
+     * {@inheritDoc}
+     * @param resultSet JDBC ResultSet of a query.
+     * @return instance of Loan.
+     * @throws SQLException
+     */
     @Override
     public Loan map(ResultSet resultSet) throws SQLException {
         Loan loan = new Loan();

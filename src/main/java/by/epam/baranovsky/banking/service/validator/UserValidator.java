@@ -25,6 +25,7 @@ public class UserValidator extends AbstractValidator {
      * @param user User to validate.
      * @return {@code false} if:
      * <ul>
+     *     <li>Object itself is null</li>
      *     <li>First name, last name, role id, email, passport number, passport series,
      *     birth date or password are null.</li>
      *     <li>Email is invalid</li>
@@ -34,7 +35,7 @@ public class UserValidator extends AbstractValidator {
      */
     public boolean validate(User user) {
 
-        if(!notNull(user.getFirstName(), user.getLastName(), user.getRoleId(),
+        if(!notNull(user, user.getFirstName(), user.getLastName(), user.getRoleId(),
                 user.getEmail(), user.getPassportNumber(), user.getPassportSeries(),
                 user.getBirthDate(), user.getPassword())){
             return false;

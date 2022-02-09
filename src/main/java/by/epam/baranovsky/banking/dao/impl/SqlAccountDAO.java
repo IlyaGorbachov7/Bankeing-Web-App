@@ -12,9 +12,17 @@ import by.epam.baranovsky.banking.entity.Account;
 
 import java.util.*;
 
+/**
+ * Implementation of AccountDAO for use with MySQL DB.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class SqlAccountDAO implements AccountDAO {
 
+    /** Mapper to parse ResultSet objects into entities. */
     private static final RowMapper<Account> mapper = RowMapperFactory.getAccountRowMapper();
+
+    /** Object that executes SQL queries. */
     private static final QueryMaster<Account> queryMaster = new SqlQueryMaster<>(mapper);
 
     private static final String SQL_FIND_ALL = String.format(
@@ -85,7 +93,16 @@ public class SqlAccountDAO implements AccountDAO {
             DBMetadata.USERS_HAS_ACCOUNTS_USER_ID
     );
 
-
+    /**
+     * {@inheritDoc}
+     * <p>
+     *     If account's list of users is not null and not empty,
+     *     updates not only accounts table, but also table that
+     *     stores connections between users and accounts.
+     * </p>
+     * @return Number of rows affected in DB.
+     * @throws DAOException if DAOException is thrown by QueryMaster.
+     */
     @Override
     public Integer update(Account entity) throws DAOException {
 
@@ -129,6 +146,14 @@ public class SqlAccountDAO implements AccountDAO {
         return queryMaster.executeTransaction(queries);
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     *     Also inserts rows into table linking users and accounts.
+     * </p>
+     * @return Generated key of inserted row.
+     * @throws DAOException if DAOException is thrown by QueryMaster.
+     */
     @Override
     public Integer create(Account entity) throws DAOException {
 
@@ -148,41 +173,75 @@ public class SqlAccountDAO implements AccountDAO {
         return queryMaster.executeTransaction(queries);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public Account findEntityById(Integer id) throws DAOException {
         return queryMaster.executeSingleEntityQuery(SQL_FIND_BY_ID, id);
     }
 
+    /**
+     * {@inheritDoc}
+     * @return Number of rows affected in DB.
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public Integer delete(Integer id) throws DAOException {
         return queryMaster.executeUpdate(SQL_DELETE_ACCOUNT, id);
     }
 
+    /**
+     * {@inheritDoc}
+     * @return Number of rows affected in DB.
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public Integer delete(Account entity) throws DAOException {
         return delete(entity.getId());
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public List<Account> findAll() throws DAOException {
         return queryMaster.executeQuery(SQL_FIND_ALL);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public Account findByNumber(String number) throws DAOException {
         return queryMaster.executeSingleEntityQuery(SQL_FIND_BY_NUMBER, number);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public List<Account> findByUserId(Integer id) throws DAOException {
         return queryMaster.executeQuery(SQL_FIND_BY_USER, id);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public List<Account> findByStatusId(Integer id) throws DAOException {
         return queryMaster.executeQuery(SQL_FIND_BY_STATUS,id);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public List<Integer> findUsers(Integer id) throws DAOException {
 

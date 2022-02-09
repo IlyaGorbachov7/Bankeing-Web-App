@@ -1,5 +1,11 @@
 package by.epam.baranovsky.banking.controller.constant;
 
+/**
+ * Utility class that stores constant strings
+ * that represent addressed of java servlet pages.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public final class PageUrls {
 
     public static final String HOME_PAGE="/WEB-INF/pages/home.jsp";

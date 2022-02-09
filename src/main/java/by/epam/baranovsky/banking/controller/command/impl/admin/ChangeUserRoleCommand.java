@@ -14,7 +14,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Implementation of Command
+ * used for changing role of the user
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class ChangeUserRoleCommand extends AbstractCommand {
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     *     Redirects to previous page in case of success.
+     * </p>
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -40,7 +53,11 @@ public class ChangeUserRoleCommand extends AbstractCommand {
 
     }
 
-
+    /**
+     * Checks if ID of new role is valid.
+     * @param newRole ID of new role.
+     * @return {@code true} if new role matches existing roles, {@code false} otherwise.
+     */
     private boolean checkRoleChangeValidity(Integer newRole){
         return newRole.equals(DBMetadata.USER_ROLE_ADMIN)
                 || newRole.equals(DBMetadata.USER_ROLE_EMPLOYEE)

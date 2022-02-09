@@ -11,10 +11,13 @@ import by.epam.baranovsky.banking.entity.Operation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardUnlockCommand implements OperationCommand{
-
-    private static final QueryMaster<Operation> queryMaster
-            = new SqlQueryMaster<>(RowMapperFactory.getOperationRowMapper());
+/**
+ * Implementation of OperationCommand
+ * for card unlocking operation.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
+public class CardUnlockCommand extends AbstractOperationCommand{
 
     private static final String SQL_INSERT_OPERATION = String.format(
             "INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (DEFAULT, NULL, 5, NUll, NULL, ?, NULL, NULL, ?, NOW())",
@@ -28,6 +31,16 @@ public class CardUnlockCommand implements OperationCommand{
     private static final String SQL_UPDATE_CARD = "UPDATE bank_cards " +
             "SET id_card_status=1 WHERE id_bank_Cards=?";
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     *     Updates card passed in operation's
+     *     bankCardId field (changes status to unlocked).
+     * </p>
+     * @param operation Operation to save to DB.
+     * @throws DAOException if QueryMaster throws DAOException
+     *      * or if bank card id of operation is {@code null}.
+     */
     @Override
     public int create(Operation operation) throws DAOException {
         OperationCommand.testNonNull(operation.getBankCardId());

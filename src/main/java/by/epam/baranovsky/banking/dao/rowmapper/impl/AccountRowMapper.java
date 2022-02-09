@@ -7,8 +7,21 @@ import by.epam.baranovsky.banking.entity.Account;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Implementation of RowMapper
+ * used to build Account entities.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class AccountRowMapper implements RowMapper<Account> {
 
+    /**
+     * {@inheritDoc}
+     * @param resultSet JDBC ResultSet of a query.
+     * @return instance of Account.
+     * @throws SQLException
+     */
     @Override
     public Account map(ResultSet resultSet) throws SQLException {
 

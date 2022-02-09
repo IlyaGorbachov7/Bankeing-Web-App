@@ -1,15 +1,11 @@
 package by.epam.baranovsky.banking.controller.command.impl.employee;
 
-import by.epam.baranovsky.banking.constant.DBMetadata;
 import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
-import by.epam.baranovsky.banking.controller.constant.SessionParamName;
+import by.epam.baranovsky.banking.controller.constant.SessionAttributeName;
 import by.epam.baranovsky.banking.entity.User;
-import by.epam.baranovsky.banking.entity.criteria.Criteria;
-import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
-import by.epam.baranovsky.banking.entity.criteria.SingularValue;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
 
 import javax.servlet.ServletException;
@@ -18,18 +14,24 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Implementation of Command
+ * used for forwarding user to the page that lists all users registered in the system.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class GoToAllUsersCommand extends AbstractCommand {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try{
             String searchEmail = request.getParameter(RequestParamName.EMAIL);
+            Integer currentId = (Integer) request.getSession().getAttribute(SessionAttributeName.USER_ID);
 
-            Integer currentRole = (Integer) request.getSession().getAttribute(SessionParamName.USER_ROLE_ID);
-            Integer currentId = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
-
-            List<User> users = getAllUsersAvailableToBrowse(currentRole);
-            users.removeIf(user -> user.getId().equals(currentId));
+            List<User> users = getAllUsersAvailableToBrowse(currentId);
             if(searchEmail != null && !searchEmail.isBlank()){
                 users.removeIf(user -> !user.getEmail().contains(searchEmail));
             }
@@ -41,16 +43,17 @@ public class GoToAllUsersCommand extends AbstractCommand {
         }
     }
 
-    private List<User> getAllUsersAvailableToBrowse(Integer curentUserRole) throws ServiceException {
-        Criteria<EntityParameters.UserParams> criteria = new Criteria<>(Criteria.SQL_OR);
-        criteria.add(EntityParameters.UserParams.ROLE_ID, new SingularValue<>(DBMetadata.USER_ROLE_REGULAR));
-        criteria.add(EntityParameters.UserParams.ROLE_ID, new SingularValue<>(DBMetadata.USER_ROLE_BANNED));
-        criteria.add(EntityParameters.UserParams.ROLE_ID, new SingularValue<>(DBMetadata.USER_ROLE_EMPLOYEE));
+    /**
+     * Retrieves all users except the one browsing.
+     * @return List of all users except the one browsing.
+     * @throws ServiceException
+     */
+    private List<User> getAllUsersAvailableToBrowse(Integer currentUserID)
+            throws ServiceException {
 
-        if(curentUserRole.equals(DBMetadata.USER_ROLE_ADMIN)){
-            criteria.add(EntityParameters.UserParams.ROLE_ID, new SingularValue<>(DBMetadata.USER_ROLE_ADMIN));
-        }
-        return userService.getByCriteria(criteria);
+        List<User> result = userService.getAll();
+        result.removeIf(user -> user.getId().equals(currentUserID));
+        return result;
     }
 
 }

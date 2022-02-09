@@ -22,6 +22,7 @@ public final class ConfigParams {
     public static final String LOANS_MAX_LOANS="loans.max.active.loans";
     public static final String BILL_MIN_LENGTH="bills.min.length.months";
     public static final String BILL_HANGING_TIME_LIMIT="bills.hanging.limit.months";
+    public static final String BILL_DELAY_TIME="bills.locked.acc.delay.time.days";
 
 
     private ConfigParams(){}

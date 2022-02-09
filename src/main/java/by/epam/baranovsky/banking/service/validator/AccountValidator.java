@@ -20,6 +20,7 @@ public class AccountValidator extends AbstractValidator{
      * @param account Account to validate.
      * @return {@code false} if:
      * <ul>
+     *     <li>Object itself is null</li>
      *     <li>Number, balance, status id or interest rate are null.</li>
      *     <li>Account does not have users</li>
      *     <li>Account's number does not match NUMBER_PATTERN</li>
@@ -29,7 +30,7 @@ public class AccountValidator extends AbstractValidator{
      */
     public boolean validate(Account account){
 
-        if(!notNull(account.getAccountNumber(), account.getBalance(),
+        if(!notNull(account, account.getAccountNumber(), account.getBalance(),
                 account.getStatusId(), account.getYearlyInterestRate())){
             return false;
         }

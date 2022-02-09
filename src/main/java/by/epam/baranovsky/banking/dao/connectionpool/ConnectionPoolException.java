@@ -1,5 +1,10 @@
 package by.epam.baranovsky.banking.dao.connectionpool;
 
+/**
+ * Exception for connection pool.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class ConnectionPoolException extends Exception {
 
     private static final long serialVersionUID = 1L;

@@ -6,8 +6,21 @@ import by.epam.baranovsky.banking.entity.BankingCard;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+/**
+ * Implementation of RowMapper
+ * used to build BankingCard entities.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class CardRowMapper implements RowMapper<BankingCard> {
+
+    /**
+     * {@inheritDoc}
+     * @param resultSet JDBC ResultSet of a query.
+     * @return instance of BankingCard.
+     * @throws SQLException
+     */
     @Override
     public BankingCard map(ResultSet resultSet) throws SQLException {
         BankingCard card = new BankingCard();

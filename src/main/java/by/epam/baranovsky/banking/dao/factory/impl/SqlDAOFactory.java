@@ -4,6 +4,11 @@ import by.epam.baranovsky.banking.dao.*;
 import by.epam.baranovsky.banking.dao.factory.DAOFactory;
 import by.epam.baranovsky.banking.dao.impl.*;
 
+/**
+ * Implementation of DAOFactory for use with MySQL database DAOs.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class SqlDAOFactory implements DAOFactory {
 
     private static volatile SqlDAOFactory instance;
@@ -14,7 +19,6 @@ public class SqlDAOFactory implements DAOFactory {
     private final BillDAO billDAO = new SqlBillDAO();
     private final LoanDAO loanDAO = new SqlLoanDAO();
     private final PenaltyDAO penaltyDAO = new SqlPenaltyDAO();
-
 
     private SqlDAOFactory(){}
 

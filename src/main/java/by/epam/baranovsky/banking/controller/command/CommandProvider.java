@@ -16,17 +16,33 @@ import by.epam.baranovsky.banking.controller.command.impl.employee.*;
 import by.epam.baranovsky.banking.controller.command.impl.gotocommand.*;
 import by.epam.baranovsky.banking.controller.command.impl.loan.NewLoanCommand;
 import by.epam.baranovsky.banking.controller.command.impl.transfer.TransferCommand;
+import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class that stores all accessible servlet commands and provides them for use.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class CommandProvider {
 
     private static volatile CommandProvider instance;
+    /**
+     * Map that stores commands by names that are used as request command parameter's value.
+     * @see CommandName
+     */
     private final Map<String, Command> commandMap = new HashMap<>();
 
+    /**
+     * Default constructor. Fills {@code commandMap} with commands.
+     */
     private CommandProvider(){
         commandMap.put(CommandName.GOTO_LOGIN, new GoToLoginPageCommand());
         commandMap.put(CommandName.GOTO_REGISTER, new GoToRegisterPageCommand());
@@ -85,9 +101,15 @@ public class CommandProvider {
         return instance;
     }
 
+    /**
+     * Retrieves command by its name, which is retrieved from request's parameters.
+     * @param request Servlet request with 'command' parameter.
+     * @return Instance of Command with such name retrieved from {@code commandMap},
+     * or {@code null} if there is no such command in {@code commandMap}.
+     */
     public Command getCommand(HttpServletRequest request){
         String param = request.getParameter(RequestParamName.COMMAND_NAME);
         return commandMap.get(param);
-    }
+   }
 
 }

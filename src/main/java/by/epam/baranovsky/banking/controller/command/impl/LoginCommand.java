@@ -6,12 +6,10 @@ import by.epam.baranovsky.banking.constant.Message;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
-import by.epam.baranovsky.banking.controller.constant.SessionParamName;
+import by.epam.baranovsky.banking.controller.constant.SessionAttributeName;
 import by.epam.baranovsky.banking.entity.User;
-import by.epam.baranovsky.banking.service.UserService;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
 import by.epam.baranovsky.banking.service.exception.ValidationException;
-import by.epam.baranovsky.banking.service.impl.UserServiceImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,6 +18,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * Implementation of Command
+ * used for user authentication.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class LoginCommand extends AbstractCommand {
 
     private static final String REDIRECT_TO_HOME=String.format(
@@ -28,6 +32,16 @@ public class LoginCommand extends AbstractCommand {
             RequestParamName.COMMAND_NAME,
             CommandName.GOTO_MAIN);
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     *     If authentication was successful, redirects to home page.
+     *     Otherwise, forwards back to authentication page.
+     * </p>
+     * <p>
+     *     Puts retrieved user data to session.
+     * </p>
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -39,8 +53,8 @@ public class LoginCommand extends AbstractCommand {
         try{
             user = userService.loginUser(email, password);
             HttpSession session = request.getSession();
-            session.setAttribute(SessionParamName.USER_ID, user.getId());
-            session.setAttribute(SessionParamName.USER_ROLE_ID, user.getRoleId());
+            session.setAttribute(SessionAttributeName.USER_ID, user.getId());
+            session.setAttribute(SessionAttributeName.USER_ROLE_ID, user.getRoleId());
             response.sendRedirect(REDIRECT_TO_HOME);
         } catch (ValidationException e){
             request.setAttribute(RequestAttributeNames.ERROR_MSG, e.getMessage());
@@ -52,7 +66,5 @@ public class LoginCommand extends AbstractCommand {
             RequestDispatcher dispatcher = request.getRequestDispatcher(PageUrls.LOGIN_PAGE);
             dispatcher.forward(request,response);
         }
-
-
     }
 }

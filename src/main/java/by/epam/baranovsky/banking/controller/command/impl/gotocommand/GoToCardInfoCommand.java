@@ -6,7 +6,7 @@ import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
-import by.epam.baranovsky.banking.controller.constant.SessionParamName;
+import by.epam.baranovsky.banking.controller.constant.SessionAttributeName;
 import by.epam.baranovsky.banking.entity.Account;
 import by.epam.baranovsky.banking.entity.BankingCard;
 import by.epam.baranovsky.banking.entity.Loan;
@@ -22,8 +22,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Implementation of Command
+ * used to forward user to the page that displays information on given bank card.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class GoToCardInfoCommand extends AbstractCommand {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int cardId = Integer.parseInt(request.getParameter(RequestParamName.CARD_ID));
@@ -31,8 +40,8 @@ public class GoToCardInfoCommand extends AbstractCommand {
         if(cardId > 0){
             try{
                 BankingCard card = cardService.findById(cardId);
-                Integer currentUserId = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
-                Integer currentUserRole = (Integer) request.getSession().getAttribute(SessionParamName.USER_ROLE_ID);
+                Integer currentUserId = (Integer) request.getSession().getAttribute(SessionAttributeName.USER_ID);
+                Integer currentUserRole = (Integer) request.getSession().getAttribute(SessionAttributeName.USER_ROLE_ID);
 
                 if(!canAccessInfo(currentUserId, currentUserRole, card)){
                     request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.CANT_ACCESS_CARD_INFO);
@@ -64,6 +73,14 @@ public class GoToCardInfoCommand extends AbstractCommand {
 
     }
 
+    /**
+     * Checks if user can access info about card.
+     * @param currentUser ID of current user.
+     * @param role ID of role of current user.
+     * @param card Card to check.
+     * @return {@code true} if user can access info, {@code false} otherwise.
+     * @throws ServiceException
+     */
     private boolean canAccessInfo(Integer currentUser, Integer role, BankingCard card) throws ServiceException {
         Account cardAccount = accountService.findById(card.getAccountId());
 
@@ -75,6 +92,12 @@ public class GoToCardInfoCommand extends AbstractCommand {
                 || accountService.findUsers(cardAccount.getId()).contains(currentUser);
     }
 
+    /**
+     * Calculates overdraft sum that can be spent from a card.
+     * @param card Card to check.
+     * @return Sum available for overdraft.
+     * @throws ServiceException
+     */
     private Double getOverdraftSum(BankingCard card) throws ServiceException {
         Double result = 0d;
         Criteria<EntityParameters.LoanParams> criteria = new Criteria<>();

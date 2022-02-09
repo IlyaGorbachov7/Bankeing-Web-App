@@ -1,8 +1,12 @@
 package by.epam.baranovsky.banking.dao.exception;
 
+/**
+ * Exception for Data Access Layer.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class DAOException extends Exception {
-
-    private static final long serialVersionUID = 1L;
 
     public DAOException() {
         super();

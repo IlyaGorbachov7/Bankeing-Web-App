@@ -170,7 +170,7 @@ public final class DBMetadata {
     public static final String PENALTIES_VALUE = "value";
     public static final String PENALTIES_NOTICE="notice";
     public static final String PENALTIES_PAYMENT_ACC_ID="id_payment_account";
-    public static final String PENALTIES_TYPE_ID="id_type";
+    public static final String PENALTIES_TYPE_ID="id_penalty_type";
     public static final String PENALTIES_USER_ID="id_user";
     public static final String PENALTIES_STATUS_ID="id_status";
 

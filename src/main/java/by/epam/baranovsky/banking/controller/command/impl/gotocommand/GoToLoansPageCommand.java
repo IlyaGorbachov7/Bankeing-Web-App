@@ -4,8 +4,7 @@ import by.epam.baranovsky.banking.constant.DBMetadata;
 import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
-import by.epam.baranovsky.banking.controller.constant.RequestParamName;
-import by.epam.baranovsky.banking.controller.constant.SessionParamName;
+import by.epam.baranovsky.banking.controller.constant.SessionAttributeName;
 import by.epam.baranovsky.banking.entity.Account;
 import by.epam.baranovsky.banking.entity.Loan;
 import by.epam.baranovsky.banking.entity.criteria.Criteria;
@@ -20,11 +19,20 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Implementation of Command
+ * used to forward user to the page that lists all their loans.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class GoToLoansPageCommand extends AbstractCommand {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer currentUser = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
+        Integer currentUser = (Integer) request.getSession().getAttribute(SessionAttributeName.USER_ID);
 
         try{
             request.setAttribute(
@@ -42,6 +50,12 @@ public class GoToLoansPageCommand extends AbstractCommand {
 
     }
 
+    /**
+     * Retrieves all loans taken by user.
+     * @param userId ID of loanee.
+     * @return List of instances of Loan taken by user with given ID.
+     * @throws ServiceException
+     */
     private List<Loan> getUserLoans(Integer userId) throws ServiceException {
         Criteria<EntityParameters.LoanParams> criteria = new Criteria<>();
         criteria.add(EntityParameters.LoanParams.USER, new SingularValue<>(userId));
@@ -51,6 +65,13 @@ public class GoToLoansPageCommand extends AbstractCommand {
         return loans;
     }
 
+    /**
+     * Retrieves all accounts that belong to the user
+     * and that can be used to receive payments at given moment.
+     * @param userId User in question.
+     * @return List of accounts ready to accept payments.
+     * @throws ServiceException
+     */
     private List<Account> getUserAccountsToAcceptPayments(Integer userId) throws ServiceException {
         List<Account> accounts = accountService.findByUserId(userId);
 

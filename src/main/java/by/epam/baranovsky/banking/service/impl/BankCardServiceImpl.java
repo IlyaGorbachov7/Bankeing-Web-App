@@ -12,12 +12,21 @@ import by.epam.baranovsky.banking.service.validator.BankCardValidator;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Implementation of BankCardService.
+ * Provides utils for working with BankingCard entities.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class BankCardServiceImpl implements BankCardService {
 
     private final BankCardValidator validator = new BankCardValidator();
     private final BankCardDAO cardDAO = SqlDAOFactory.getInstance().getBankCardDAO();
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BankingCard findById(Integer id) throws ServiceException {
         BankingCard card;
@@ -29,6 +38,9 @@ public class BankCardServiceImpl implements BankCardService {
         return card;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BankingCard findByNumberAndCvc(String number, String cvc) throws ServiceException {
 
@@ -41,6 +53,9 @@ public class BankCardServiceImpl implements BankCardService {
         return card;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<BankingCard>  findByNumber(String number) throws ServiceException{
         List<BankingCard> cards;
@@ -52,6 +67,9 @@ public class BankCardServiceImpl implements BankCardService {
         return cards;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<BankingCard> findByType(Integer typeId) throws ServiceException {
         List<BankingCard> cards;
@@ -63,6 +81,9 @@ public class BankCardServiceImpl implements BankCardService {
         return cards;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<BankingCard> findByUser(Integer userId) throws ServiceException {
         List<BankingCard> cards;
@@ -74,6 +95,9 @@ public class BankCardServiceImpl implements BankCardService {
         return cards;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<BankingCard> findByAccount(Integer accountId) throws ServiceException {
         List<BankingCard> cards;
@@ -85,6 +109,9 @@ public class BankCardServiceImpl implements BankCardService {
         return cards;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean update(BankingCard card) throws ServiceException {
         Integer result;
@@ -102,6 +129,9 @@ public class BankCardServiceImpl implements BankCardService {
         return result>0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BankingCard create(BankingCard card) throws ServiceException {
         BankingCard result;
@@ -116,6 +146,9 @@ public class BankCardServiceImpl implements BankCardService {
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean delete(Integer id) throws ServiceException {
         try {
@@ -125,6 +158,9 @@ public class BankCardServiceImpl implements BankCardService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean delete(BankingCard card) throws ServiceException {
         Integer res;
@@ -139,6 +175,9 @@ public class BankCardServiceImpl implements BankCardService {
         return res>0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<BankingCard> findAll() throws ServiceException {
         List<BankingCard> cards;

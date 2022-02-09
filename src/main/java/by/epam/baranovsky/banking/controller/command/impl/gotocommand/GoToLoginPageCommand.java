@@ -9,7 +9,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Implementation of Command
+ * used to forward user to the authentication page.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class GoToLoginPageCommand extends AbstractCommand {
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher(PageUrls.LOGIN_PAGE);

@@ -6,7 +6,7 @@ import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
-import by.epam.baranovsky.banking.controller.constant.SessionParamName;
+import by.epam.baranovsky.banking.controller.constant.SessionAttributeName;
 import by.epam.baranovsky.banking.entity.BankingCard;
 import by.epam.baranovsky.banking.entity.Operation;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
@@ -17,8 +17,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Implementation of Command
+ * used for locking bank card.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class LockCardCommand extends AbstractCommand {
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     *     Forwards to previous request in case of failure,
+     *     redirects to previous request otherwise.
+     * </p>
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try{
@@ -26,7 +39,8 @@ public class LockCardCommand extends AbstractCommand {
 
             if(card.getStatusId().equals(DBMetadata.CARD_STATUS_EXPIRED)){
                 request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.CANT_ALTER_EXPIRED_CARD);
-                request.getRequestDispatcher(PageUrls.ERROR_PAGE).forward(request,response);
+                RequestDispatcher dispatcher = request.getRequestDispatcher(getPreviousRequestAddress(request));
+                dispatcher.forward(request, response);
                 return;
             }
 
@@ -50,10 +64,15 @@ public class LockCardCommand extends AbstractCommand {
         }
     }
 
-
+    /**
+     * Checks if current user can lock this card.
+     * @param request Servlet request.
+     * @param card Card in question.
+     * @return {@code true} if current user is admin, employee or the owner of the card.
+     */
     private boolean isUserValid(HttpServletRequest request, BankingCard card){
-        Integer userId = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
-        Integer roleId = (Integer) request.getSession().getAttribute(SessionParamName.USER_ROLE_ID);
+        Integer userId = (Integer) request.getSession().getAttribute(SessionAttributeName.USER_ID);
+        Integer roleId = (Integer) request.getSession().getAttribute(SessionAttributeName.USER_ROLE_ID);
 
         if(DBMetadata.USER_ROLE_ADMIN.equals(roleId) || DBMetadata.USER_ROLE_EMPLOYEE.equals(roleId)){
             return true;

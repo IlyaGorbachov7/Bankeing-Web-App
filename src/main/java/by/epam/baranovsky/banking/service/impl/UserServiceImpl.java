@@ -8,6 +8,7 @@ import by.epam.baranovsky.banking.dao.factory.impl.SqlDAOFactory;
 import by.epam.baranovsky.banking.entity.User;
 import by.epam.baranovsky.banking.entity.criteria.Criteria;
 import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
+import by.epam.baranovsky.banking.service.UserService;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
 import by.epam.baranovsky.banking.service.exception.ValidationException;
 import by.epam.baranovsky.banking.service.validator.UserValidator;
@@ -17,12 +18,22 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserService {
+/**
+ * Implementation of UserService.
+ * Provides utils for working with User entities.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
+public class UserServiceImpl implements UserService {
 
     private static final Integer DEFAULT_ROLE = DBMetadata.USER_ROLE_REGULAR;
     private final UserValidator validator = new UserValidator();
     private final UserDAO userDAO = SqlDAOFactory.getInstance().getUserDAO();
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User loginUser(String email, String password) throws ServiceException {
         User user;
@@ -44,6 +55,9 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
         return user;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User registerUser(String userEmail, String userPassword, String surname,
                              String name, String patronymic, String passportSeries,
@@ -77,6 +91,9 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
         return user;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<User> getAll() throws ServiceException {
 
@@ -94,6 +111,9 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
         return users;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User getById(Integer id) throws ServiceException {
 
@@ -109,6 +129,9 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
         return user;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<User> getByCriteria(Criteria<EntityParameters.UserParams> criteria) throws ServiceException {
         List<User> users = new ArrayList<>();
@@ -123,6 +146,9 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
         return users;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean updateUser(User user) throws ServiceException {
 
@@ -148,6 +174,9 @@ public class UserServiceImpl implements by.epam.baranovsky.banking.service.UserS
         return result>0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean deleteUser(User user) throws ServiceException {
         Integer result = 0;

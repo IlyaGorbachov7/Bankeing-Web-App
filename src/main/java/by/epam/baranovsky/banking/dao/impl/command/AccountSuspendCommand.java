@@ -11,10 +11,13 @@ import by.epam.baranovsky.banking.entity.Operation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccountSuspendCommand implements OperationCommand{
-
-    private static final QueryMaster<Operation> queryMaster
-            = new SqlQueryMaster<>(RowMapperFactory.getOperationRowMapper());
+/**
+ * Implementation of OperationCommand
+ * for account suspension operation.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
+public class AccountSuspendCommand extends AbstractOperationCommand{
 
     private static final String SQL_INSERT_OPERATION = String.format(
             "INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (DEFAULT, NULL, 2, ?, NULL, NULL, NULL, NULL, ?, NOW())",
@@ -30,7 +33,16 @@ public class AccountSuspendCommand implements OperationCommand{
             DBMetadata.ACCOUNTS_TABLE, DBMetadata.ACCOUNTS_ACCOUNT_STATUS_ID,
             DBMetadata.ACCOUNTS_ID);
 
-
+    /**
+     * {@inheritDoc}
+     * <p>
+     *     Updates account passed in operation's
+     *     accountId field (changes status to suspended).
+     * </p>
+     * @param operation Operation to save to DB.
+     * @throws DAOException if QueryMaster throws DAOException
+     * or if account id of operation is {@code null}.
+     */
     @Override
     public int create(Operation operation) throws DAOException {
         OperationCommand.testNonNull(operation.getAccountId());

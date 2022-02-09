@@ -3,14 +3,13 @@ package by.epam.baranovsky.banking.controller.command.impl.gotocommand;
 import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
-import by.epam.baranovsky.banking.controller.constant.SessionParamName;
+import by.epam.baranovsky.banking.controller.constant.SessionAttributeName;
 import by.epam.baranovsky.banking.entity.*;
 import by.epam.baranovsky.banking.entity.criteria.Criteria;
 import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
 import by.epam.baranovsky.banking.entity.criteria.SingularValue;
 import by.epam.baranovsky.banking.entity.dto.OperationTransferObject;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
-import by.epam.baranovsky.banking.service.impl.UserServiceImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,12 +19,21 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Implementation of Command
+ * used to forward user to home page.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class GoToHomePageCommand extends AbstractCommand {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Integer userId = (Integer) session.getAttribute(SessionParamName.USER_ID);
+        Integer userId = (Integer) session.getAttribute(SessionAttributeName.USER_ID);
 
         if(userId != null){
             try {
@@ -46,6 +54,13 @@ public class GoToHomePageCommand extends AbstractCommand {
         dispatcher.forward(request, response);
     }
 
+    /**
+     * Collects operations tied to user and parses them into DTOs.
+     * @param id ID of user.
+     * @return List of Instances of OperationTransferObject
+     * parsed from operations tied to user.
+     * @throws ServiceException
+     */
     private List<OperationTransferObject> getUserOperationDTOs(Integer id) throws ServiceException{
 
         List<Integer> userAccs = getUserAccountIds(id);
@@ -69,11 +84,11 @@ public class GoToHomePageCommand extends AbstractCommand {
                         operation.getTargetAccountId()).getAccountNumber());
             }
             if(operation.getBankCardId() != null && operation.getBankCardId() != 0){
-                oto.setCardNumber(maskNumber(cardService.findById(
+                oto.setCardNumber(maskCardNumber(cardService.findById(
                         operation.getBankCardId()).getNumber()));
             }
             if(operation.getTargetBankCardId() != null && operation.getTargetBankCardId() != 0){
-                oto.setTargetCardNumber(maskNumber(cardService.findById(
+                oto.setTargetCardNumber(maskCardNumber(cardService.findById(
                         operation.getTargetBankCardId()).getNumber()));
             }
             oto.setBill(operation.getBillId());
@@ -87,6 +102,13 @@ public class GoToHomePageCommand extends AbstractCommand {
         return operationPackages;
     }
 
+    /**
+     * Retrieves all operations related to passed lists of accounts and cards.
+     * @param accountIds List of account IDs.
+     * @param cardIds List of cards IDs.
+     * @return List of operations that include any cards of account from passed lists.
+     * @throws ServiceException
+     */
     private List<Operation> getOperations(List<Integer> accountIds,
                                           List<Integer> cardIds) throws ServiceException {
         Criteria<EntityParameters.OperationParam> criteria = new Criteria<>(Criteria.SQL_OR);
@@ -113,6 +135,12 @@ public class GoToHomePageCommand extends AbstractCommand {
 
     }
 
+    /**
+     * Retrieves all IDs of accounts of a user.
+     * @param id ID of user.
+     * @return List of IDs of all accounts belonging to user.
+     * @throws ServiceException
+     */
     private List<Integer> getUserAccountIds(Integer id) throws ServiceException {
         List<Account> userAccounts =  accountService.findByUserId(id);
 
@@ -124,6 +152,12 @@ public class GoToHomePageCommand extends AbstractCommand {
         return userAccsIds;
     }
 
+    /**
+     * Retrieves all IDs of cards of a user.
+     * @param id ID of user.
+     * @return List of IDs of all cards belonging to user.
+     * @throws ServiceException
+     */
     private List<Integer> getUserCardsIds(Integer id) throws ServiceException {
         List<BankingCard> userCards =  cardService.findByUser(id);
 

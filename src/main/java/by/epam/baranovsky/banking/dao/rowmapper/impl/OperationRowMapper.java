@@ -7,7 +7,22 @@ import by.epam.baranovsky.banking.entity.Operation;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Implementation of RowMapper
+ * used to build Operation entities.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class OperationRowMapper implements RowMapper<Operation> {
+
+
+    /**
+     * {@inheritDoc}
+     * @param resultSet JDBC ResultSet of a query.
+     * @return instance of Operation.
+     * @throws SQLException
+     */
     @Override
     public Operation map(ResultSet resultSet) throws SQLException {
         Operation operation = new Operation();

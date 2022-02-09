@@ -1,5 +1,9 @@
 package by.epam.baranovsky.banking.service.scheduler.jobs;
 
+import by.epam.baranovsky.banking.constant.ConfigManager;
+import by.epam.baranovsky.banking.constant.ConfigParams;
+import by.epam.baranovsky.banking.constant.DBMetadata;
+import by.epam.baranovsky.banking.entity.Account;
 import by.epam.baranovsky.banking.entity.Bill;
 import by.epam.baranovsky.banking.entity.Operation;
 import by.epam.baranovsky.banking.entity.Penalty;
@@ -9,6 +13,7 @@ import by.epam.baranovsky.banking.entity.criteria.SingularValue;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
 import org.quartz.*;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +26,10 @@ import static org.quartz.TriggerBuilder.newTrigger;
  */
 public class BillStatusCheck extends AbstractJob {
 
+    private static final long DAY_LENGTH=86400000L;
+    /** A margin to postpone bills with due date and with payment account that is blocked */
+    private static final long DELAY_TIME = DAY_LENGTH *
+            Long.parseLong(ConfigManager.getInstance().getValue(ConfigParams.BILL_DELAY_TIME));
     private static final String NAME = "billStatusCheck";
     private static final JobDetail DETAIL = JobBuilder.newJob(BillStatusCheck.class)
             .withIdentity(NAME, GROUP_NAME)
@@ -48,6 +57,7 @@ public class BillStatusCheck extends AbstractJob {
                 checkOverdue(bill);
                 assignPenalties(bill);
                 checkPayment(bill);
+                checkBillsWithLockedAccs(bill);
             }
 
         } catch (ServiceException e) {
@@ -120,6 +130,60 @@ public class BillStatusCheck extends AbstractJob {
             if(penalty.getStatusId().equals(PENALTY_STATUS_UNASSIGNED)
                 && penalty.getUserId().equals(bill.getUserId())){
                 penalty.setStatusId(PENALTY_STATUS_PENDING);
+            }
+        }
+
+    }
+
+    /**
+     * If bill's payment account is locked and thus cannot accept payments,
+     * this method tries to fix it.
+     * <p>
+     *     Steps of fixing:
+     *     <ul>
+     *         <li> Assigns new payment account out of all
+     *         active accounts that belong to the bearer of a bill.</li>
+     *         <li> If no such accounts are found and bill is not overdue,
+     *         postpones it by a set margin.</li>
+     *         <li> If no such accounts are found and bill is overdue,
+     *         payment account changes to bank's own account.</li>
+     *         <li> If bill has no due date, it's ignored.</li>
+     *     </ul>
+     * </p>
+     * @param bill Bill to check and update.
+     * @throws ServiceException
+     */
+    private void checkBillsWithLockedAccs(Bill bill) throws ServiceException{
+        Account paymentAccount = accountService.findById(bill.getPaymentAccountId());
+
+        if(paymentAccount.getStatusId().equals(DBMetadata.ACCOUNT_STATUS_BLOCKED)){
+
+            List<Account> accountOfUser = accountService.findByUserId(bill.getBearerId());
+            accountOfUser.removeIf(account -> account.getStatusId().equals(ACC_STATUS_LOCKED)
+                    || account.getStatusId().equals(ACC_STATUS_PENDING));
+
+            if(accountOfUser.size()>0){
+                bill.setPaymentAccountId(accountOfUser.get(0).getId());
+                billService.update(bill);
+                return;
+            }
+
+            if(bill.getDueDate() != null
+                    && !bill.getStatusId().equals(DBMetadata.BILL_STATUS_OVERDUE)){
+                bill.setDueDate(new Date(bill.getDueDate().getTime()+DELAY_TIME));
+                billService.update(bill);
+                return;
+            }
+
+            if(bill.getStatusId().equals(DBMetadata.BILL_STATUS_OVERDUE)){
+                bill.setPaymentAccountId(DBMetadata.BANK_ACCOUNT_ID);
+                billService.update(bill);
+                Penalty penalty = penaltyService.findById(bill.getPenaltyId());
+
+                if(penalty != null){
+                    penalty.setPaymentAccountId(DBMetadata.BANK_ACCOUNT_ID);
+                    penaltyService.update(penalty);
+                }
             }
         }
 

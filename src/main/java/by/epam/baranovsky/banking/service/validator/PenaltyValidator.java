@@ -15,6 +15,7 @@ public class PenaltyValidator extends AbstractValidator{
      * @param penalty Penalty to validate.
      * @return {@code false} if:
      * <ul>
+     *     <li>Object itself is null</li>
      *     <li>Type id, user id or status id are null.</li>
      *     <li>Penalty value is not null and is negative</li>
      * </ul>
@@ -22,7 +23,7 @@ public class PenaltyValidator extends AbstractValidator{
      */
     public boolean validate(Penalty penalty){
 
-        if(!notNull(penalty.getTypeId(), penalty.getUserId(), penalty.getStatusId())){
+        if(!notNull(penalty, penalty.getTypeId(), penalty.getUserId(), penalty.getStatusId())){
             return false;
         }
 

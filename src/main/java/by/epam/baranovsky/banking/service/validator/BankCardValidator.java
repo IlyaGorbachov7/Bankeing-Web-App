@@ -29,6 +29,7 @@ public class BankCardValidator extends AbstractValidator{
      * @param card BankingCard to validate.
      * @return {@code false} if:
      * <ul>
+     *     <li>Object itself is null</li>
      *     <li>Number, status id, cvc code, pin code, expiration date, registration date are null.</li>
      *     <li>Card is debit or overdraft but has no account tied to it</li>
      *     <li>Card is credit but has no balance</li>
@@ -40,7 +41,7 @@ public class BankCardValidator extends AbstractValidator{
      */
     public boolean validate(BankingCard card){
 
-        if(!notNull(card.getCardTypeId(), card.getStatusId(),
+        if(!notNull(card, card.getCardTypeId(), card.getStatusId(),
                 card.getCvc(), card.getNumber(),
                 card.getExpirationDate(), card.getRegistrationDate(),
                 card.getPin())){

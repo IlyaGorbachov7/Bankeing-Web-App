@@ -12,9 +12,17 @@ import by.epam.baranovsky.banking.entity.BankingCard;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Implementation of BankCardDAO for use with MySQL DB.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class SqlBankCardDAO  implements BankCardDAO {
 
+    /** Mapper to parse ResultSet objects into entities. */
     private static final RowMapper<BankingCard> mapper = RowMapperFactory.getCardRowMapper();
+
+    /** Object that executes SQL queries. */
     private static final QueryMaster<BankingCard> queryMaster = new SqlQueryMaster<>(mapper);
 
     private static final String SQL_SELECT_ALL = String.format(
@@ -73,6 +81,11 @@ public class SqlBankCardDAO  implements BankCardDAO {
             "DELETE FROM %s WHERE %s=?",
             DBMetadata.BANK_CARDS_TABLE, DBMetadata.BANK_CARDS_ID);
 
+    /**
+     * {@inheritDoc}
+     * @return Number of rows affected in DB.
+     * @throws DAOException if DAOException is thrown by QueryMaster.
+     */
     @Override
     public Integer update(BankingCard entity) throws DAOException {
 
@@ -95,6 +108,11 @@ public class SqlBankCardDAO  implements BankCardDAO {
                 entity.getId());
     }
 
+    /**
+     * {@inheritDoc}
+     * @return Generated key of inserted row.
+     * @throws DAOException if DAOException is thrown by QueryMaster.
+     */
     @Override
     public Integer create(BankingCard entity) throws DAOException {
 
@@ -116,31 +134,57 @@ public class SqlBankCardDAO  implements BankCardDAO {
                 entity.getStatusId());
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if DAOException is thrown by QueryMaster.
+     */
     @Override
     public BankingCard findEntityById(Integer id) throws DAOException {
         return queryMaster.executeSingleEntityQuery(SQL_SELECT_BY_ID, id);
     }
 
+    /**
+     * {@inheritDoc}
+     * @return Number of rows affected in DB.
+     * @throws DAOException if DAOException is thrown by QueryMaster.
+     */
     @Override
     public Integer delete(Integer id) throws DAOException {
         return queryMaster.executeUpdate(SQL_DELETE, id);
     }
 
+    /**
+     * {@inheritDoc}
+     * @return Number of rows affected in DB.
+     * @throws DAOException if DAOException is thrown by QueryMaster.
+     */
     @Override
     public Integer delete(BankingCard entity) throws DAOException {
         return delete(entity.getId());
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if DAOException is thrown by QueryMaster.
+     */
     @Override
     public List<BankingCard> findAll() throws DAOException {
         return queryMaster.executeQuery(SQL_SELECT_ALL);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if DAOException is thrown by QueryMaster.
+     */
     @Override
     public List<BankingCard> findByNumber(String number) throws DAOException {
         return queryMaster.executeQuery(SQL_SELECT_BY_NUM, number);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if DAOException is thrown by QueryMaster.
+     */
     @Override
     public BankingCard findByNumberAndCvc(String number, String cvc) throws DAOException {
         return queryMaster.executeSingleEntityQuery(
@@ -149,16 +193,28 @@ public class SqlBankCardDAO  implements BankCardDAO {
                 cvc);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if DAOException is thrown by QueryMaster.
+     */
     @Override
     public List<BankingCard> findByType(Integer typeId) throws DAOException {
         return queryMaster.executeQuery(SQL_SELECT_BY_TYPE, typeId);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if DAOException is thrown by QueryMaster.
+     */
     @Override
     public List<BankingCard> findByUser(Integer userId) throws DAOException {
         return queryMaster.executeQuery(SQL_SELECT_BY_USER, userId);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if DAOException is thrown by QueryMaster.
+     */
     @Override
     public List<BankingCard> findByAccount(Integer accountId) throws DAOException {
         return queryMaster.executeQuery(SQL_SELECT_BY_ACC, accountId);

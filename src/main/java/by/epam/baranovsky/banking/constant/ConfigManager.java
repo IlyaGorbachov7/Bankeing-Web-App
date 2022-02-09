@@ -1,6 +1,7 @@
 package by.epam.baranovsky.banking.constant;
 
 import java.util.ResourceBundle;
+
 /**
  * Utility class that manages retrieving data from config resource bundle.
  * @author Baranovsky E. K.

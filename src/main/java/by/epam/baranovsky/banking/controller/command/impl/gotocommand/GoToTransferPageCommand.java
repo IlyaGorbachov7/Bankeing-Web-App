@@ -6,7 +6,7 @@ import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
-import by.epam.baranovsky.banking.controller.constant.SessionParamName;
+import by.epam.baranovsky.banking.controller.constant.SessionAttributeName;
 import by.epam.baranovsky.banking.entity.*;
 import by.epam.baranovsky.banking.entity.criteria.Criteria;
 import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
@@ -23,12 +23,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Implementation of Command
+ * used to forward user to the transfer page.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class GoToTransferPageCommand extends AbstractCommand {
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer currentUserId = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
+        Integer currentUserId = (Integer) request.getSession().getAttribute(SessionAttributeName.USER_ID);
 
         try {
             setTargetAccIfIsThere(request);
@@ -50,10 +58,17 @@ public class GoToTransferPageCommand extends AbstractCommand {
 
     }
 
-    private Map<BankingCard, String> getUserCardsUpForTransferWithBalance(Integer userId) throws ServiceException {
+    /**
+     * Retrieves all cards of the user that can be used for transfer.
+     * @param userId ID of the user.
+     * @return Map of cards of the user that can be used for transfer,
+     * where key is the balance of the cards and value is instance of BankingCard.
+     * @throws ServiceException
+     */
+    private Map<String, BankingCard> getUserCardsUpForTransferWithBalance(Integer userId) throws ServiceException {
         List<BankingCard> cards = cardService.findByUser(userId);
         cards.removeIf(card -> !card.getStatusId().equals(DBMetadata.CARD_STATUS_UNLOCKED));
-        Map<BankingCard, String> resultMap = new HashMap<>();
+        Map<String, BankingCard> resultMap = new HashMap<>();
         for(BankingCard card : cards){
             if(card.getAccountId() != null
                     && accountService.findById(card.getAccountId())
@@ -62,7 +77,7 @@ public class GoToTransferPageCommand extends AbstractCommand {
             }
 
             String balance;
-            card.setNumber(maskNumber(card.getNumber()));
+            card.setNumber(maskCardNumber(card.getNumber()));
             if(card.getCardTypeId().equals(DBMetadata.CARD_TYPE_DEBIT)){
                 balance = accountService.findById(card.getAccountId()).getBalance().toString();
             } else if(card.getCardTypeId().equals(DBMetadata.CARD_TYPE_CREDIT)){
@@ -70,22 +85,35 @@ public class GoToTransferPageCommand extends AbstractCommand {
             }else{
                 balance = accountService.findById(card.getAccountId()).getBalance() + " + " + getUnspentOverdraft(card) + " overdraft";
             }
-            resultMap.put(card, balance);
+            resultMap.put(balance, card);
 
         }
         return resultMap;
     }
 
-    private Map<Account, String> getUserAccountUpForTransferWithBalance(Integer userId) throws ServiceException {
+    /**
+     * Retrieves all accounts of the user that can be used for transfer.
+     * @param userId ID of the user.
+     * @return Map of accounts of the user that can be used for transfer,
+     * where key is the balance of the account and value is instance of Account.
+     * @throws ServiceException
+     */
+    private Map<String, Account> getUserAccountUpForTransferWithBalance(Integer userId) throws ServiceException {
         List<Account> accounts = accountService.findByUserId(userId);
         accounts.removeIf(account -> !account.getStatusId().equals(DBMetadata.ACCOUNT_STATUS_UNLOCKED));
-        Map<Account, String> resultMap = new HashMap<>();
+        Map<String, Account> resultMap = new HashMap<>();
         for(Account account : accounts){
-            resultMap.put(account, account.getBalance().toString());
+            resultMap.put(account.getBalance().toString(), account);
         }
         return resultMap;
     }
 
+    /**
+     * Calculates overdraft sum that can be spent from a card.
+     * @param card Card to check.
+     * @return Sum available for overdraft.
+     * @throws ServiceException
+     */
     private Double getUnspentOverdraft(BankingCard card) throws ServiceException {
         Double overdraftSum = 0d;
         Criteria<EntityParameters.LoanParams> criteria = new Criteria<>();
@@ -102,6 +130,13 @@ public class GoToTransferPageCommand extends AbstractCommand {
         return card.getOverdraftMax()-overdraftSum;
     }
 
+    /**
+     * If target account of a transfer is predetermined by some means,
+     * puts its data into request. Target account can be predetermined by
+     * bill id or penalty id parameters.
+     * @param request Servlet request.
+     * @throws ServiceException
+     */
     private void setTargetAccIfIsThere(HttpServletRequest request) throws ServiceException {
         String billId = request.getParameter(RequestParamName.BILL_ID);
         String penaltyId = request.getParameter(RequestParamName.PENALTY_ID);

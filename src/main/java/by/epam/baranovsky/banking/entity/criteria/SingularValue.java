@@ -40,7 +40,8 @@ public class SingularValue<T extends Comparable<T>> implements CriteriaValue<T>{
     public String generateSqlCondition(EntityEnum name) {
         StringBuilder builder =new StringBuilder(" (");
 
-        if(value instanceof Date valueDate){
+        if(value instanceof Date){
+            Date valueDate = (Date) value;
             value = (T) new java.sql.Date(valueDate.getTime());
         }
 

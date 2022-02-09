@@ -5,7 +5,7 @@ import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
-import by.epam.baranovsky.banking.controller.constant.SessionParamName;
+import by.epam.baranovsky.banking.controller.constant.SessionAttributeName;
 import by.epam.baranovsky.banking.entity.Account;
 import by.epam.baranovsky.banking.entity.BankingCard;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
@@ -21,15 +21,27 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Implementation of Command
+ * used to forward user to transfer confirmation page.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class GoToConfirmTransferCommand extends AbstractCommand {
 
     private static final String BACK = String.format("%s?%s=%s",
             RequestParamName.CONTROLLER, RequestParamName.COMMAND_NAME,
             CommandName.GOTO_TRANSFER_COMMAND);
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     *     Redirects back to transfer page if something goes wrong.
+     * </p>
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer currentUser = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
+        Integer currentUser = (Integer) request.getSession().getAttribute(SessionAttributeName.USER_ID);
         String targetAccountNumber = request.getParameter(RequestParamName.TRANSFER_TARGET_ACC_NUMBER);
         String targetCardNumber = request.getParameter(RequestParamName.TRANSFER_TARGET_CARD_NUMBER);
         String expireDateString = request.getParameter(RequestParamName.TRANSFER_TARGET_CARD_EXPIRATION);
@@ -119,6 +131,15 @@ public class GoToConfirmTransferCommand extends AbstractCommand {
 
     }
 
+    /**
+     * Validates if passed params are eligible for operation creation.
+     * @param valueStr String representation of transfer value.
+     * @param targetAccountNumber Number of target account.
+     * @param targetCardNumber Number of target card.
+     * @param ownAccountId ID of sender's account.
+     * @param ownCardId ID of sender's card.
+     * @return Error message if some parameters are invalid, {@code null} otherwise.
+     */
     private String checkParams(String valueStr, String targetAccountNumber,
                                String targetCardNumber, String ownAccountId,
                                String ownCardId){
@@ -144,7 +165,14 @@ public class GoToConfirmTransferCommand extends AbstractCommand {
         return null;
     }
 
-
+    /**
+     * Retrieves target card by its number and expiration term.
+     * @param number Number of target card.
+     * @param expireDateString Expiration term of target card.
+     * @return Instance of BankingCard matching passed parameters,
+     * or {@code null} if there is no such card.
+     * @throws ServiceException
+     */
     private BankingCard getTargetCard(String number, String expireDateString) throws ServiceException {
         if(number == null || number.isEmpty()
                 || expireDateString== null || expireDateString.isEmpty()){
@@ -178,6 +206,13 @@ public class GoToConfirmTransferCommand extends AbstractCommand {
         return null;
     }
 
+    /**
+     * Retrieves target account by its number.
+     * @param number Number of target account.
+     * @return Instance of Account matching passed parameters,
+     * or {@code null} if there is no such account.
+     * @throws ServiceException
+     */
     private Account getTargetAccount(String number) throws ServiceException {
         if(number == null || number.isEmpty()){
             return null;
@@ -185,6 +220,14 @@ public class GoToConfirmTransferCommand extends AbstractCommand {
         return accountService.findByNumber(number);
     }
 
+    /**
+     * Retrieves account by id and verifies it against current user id.
+     * @param accountId ID of account.
+     * @param currentUser ID of current user.
+     * @return Instance of Account matching passed parameters,
+     * or {@code null} if there is no such account.
+     * @throws ServiceException
+     */
     private Account getOwnAccount(Integer accountId, Integer currentUser) throws ServiceException {
         Account account = accountService.findById(accountId);
 
@@ -195,6 +238,14 @@ public class GoToConfirmTransferCommand extends AbstractCommand {
         return account;
     }
 
+    /**
+     * Retrieves card by id and verifies it against current user id.
+     * @param cardId ID of card.
+     * @param currentUser ID of current user.
+     * @return Instance of BankingCard matching passed parameters,
+     * or {@code null} if there is no such card.
+     * @throws ServiceException
+     */
     private BankingCard getOwnCard(Integer cardId, Integer currentUser) throws ServiceException {
 
         BankingCard card = cardService.findById(cardId);

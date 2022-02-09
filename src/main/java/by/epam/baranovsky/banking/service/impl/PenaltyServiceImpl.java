@@ -14,11 +14,21 @@ import by.epam.baranovsky.banking.service.validator.PenaltyValidator;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of PenaltyService.
+ * Provides utils for working with Penalty entities.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class PenaltyServiceImpl implements PenaltyService {
 
     private final PenaltyValidator validator = new PenaltyValidator();
     private final PenaltyDAO penaltyDAO = SqlDAOFactory.getInstance().getPenaltyDAO();
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Penalty> findByCriteria(Criteria<? extends EntityParameters.PenaltyParams> criteria) throws ServiceException {
         List<Penalty> penalties = new ArrayList<>();
@@ -30,6 +40,9 @@ public class PenaltyServiceImpl implements PenaltyService {
         return penalties;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Penalty findById(Integer id) throws ServiceException {
         Penalty penalty;
@@ -41,6 +54,9 @@ public class PenaltyServiceImpl implements PenaltyService {
         return penalty;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean update(Penalty penalty) throws ServiceException {
         Integer result;
@@ -58,6 +74,9 @@ public class PenaltyServiceImpl implements PenaltyService {
         return result>0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Penalty create(Penalty penalty) throws ServiceException {
         Penalty result;
@@ -72,6 +91,9 @@ public class PenaltyServiceImpl implements PenaltyService {
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean delete(Integer id) throws ServiceException {
         try {
@@ -81,6 +103,9 @@ public class PenaltyServiceImpl implements PenaltyService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean delete(Penalty penalty) throws ServiceException {
         Integer res;
@@ -95,6 +120,9 @@ public class PenaltyServiceImpl implements PenaltyService {
         return res>0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Penalty> findAll() throws ServiceException {
         List<Penalty> loans;

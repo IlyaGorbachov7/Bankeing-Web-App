@@ -5,7 +5,6 @@ import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
-import by.epam.baranovsky.banking.controller.constant.SessionParamName;
 import by.epam.baranovsky.banking.entity.*;
 import by.epam.baranovsky.banking.entity.criteria.Criteria;
 import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
@@ -25,7 +24,6 @@ public class GoToUserInfoCommand extends AbstractCommand {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Integer userId = Integer.valueOf(request.getParameter(RequestParamName.ID_CHECKED_USER));
-
         try{
             User user = userService.getById(userId);
 
@@ -97,7 +95,7 @@ public class GoToUserInfoCommand extends AbstractCommand {
 
         Map<BankingCard, String> finalMap = new HashMap<>();
         for(BankingCard card : cards){
-            card.setNumber(maskNumber(card.getNumber()));
+            card.setNumber(maskCardNumber(card.getNumber()));
             if(card.getAccountId() != null && card.getAccountId() != 0){
                 finalMap.put(card, accountService.findById(card.getAccountId()).getAccountNumber());
             } else{
@@ -130,11 +128,11 @@ public class GoToUserInfoCommand extends AbstractCommand {
                         operation.getTargetAccountId()).getAccountNumber());
             }
             if(operation.getBankCardId() != null && operation.getBankCardId() != 0){
-                oto.setCardNumber(maskNumber(cardService.findById(
+                oto.setCardNumber(maskCardNumber(cardService.findById(
                         operation.getBankCardId()).getNumber()));
             }
             if(operation.getTargetBankCardId() != null && operation.getTargetBankCardId() != 0){
-                oto.setTargetCardNumber(maskNumber(cardService.findById(
+                oto.setTargetCardNumber(maskCardNumber(cardService.findById(
                         operation.getTargetBankCardId()).getNumber()));
             }
             oto.setBill(operation.getBillId());

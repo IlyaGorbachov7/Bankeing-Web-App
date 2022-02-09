@@ -14,11 +14,21 @@ import by.epam.baranovsky.banking.service.validator.BillValidator;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of BillService.
+ * Provides utils for working with Bill entities.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class BillServiceImpl implements BillService {
 
     private final BillValidator validator = new BillValidator();
     private final BillDAO billDAO = SqlDAOFactory.getInstance().getBillDAO();
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Bill> findByCriteria(Criteria<? extends EntityParameters.BillParam> criteria) throws ServiceException {
         List<Bill> bills = new ArrayList<>();
@@ -30,6 +40,9 @@ public class BillServiceImpl implements BillService {
         return bills;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Bill findById(Integer id) throws ServiceException {
         Bill bill;
@@ -41,6 +54,9 @@ public class BillServiceImpl implements BillService {
         return bill;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean update(Bill bill) throws ServiceException {
         Integer result;
@@ -58,6 +74,9 @@ public class BillServiceImpl implements BillService {
         return result>0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Bill create(Bill bill) throws ServiceException {
         Bill result;
@@ -72,6 +91,9 @@ public class BillServiceImpl implements BillService {
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean delete(Integer id) throws ServiceException {
         try {
@@ -81,6 +103,9 @@ public class BillServiceImpl implements BillService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean delete(Bill bill) throws ServiceException {
         Integer res;
@@ -95,6 +120,9 @@ public class BillServiceImpl implements BillService {
         return res>0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Bill> findAll() throws ServiceException {
         List<Bill> bills;

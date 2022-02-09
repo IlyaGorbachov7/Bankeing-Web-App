@@ -7,17 +7,11 @@ import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
-import by.epam.baranovsky.banking.controller.constant.SessionParamName;
+import by.epam.baranovsky.banking.controller.constant.SessionAttributeName;
 import by.epam.baranovsky.banking.entity.Account;
 import by.epam.baranovsky.banking.entity.BankingCard;
 import by.epam.baranovsky.banking.entity.User;
-import by.epam.baranovsky.banking.service.AccountService;
-import by.epam.baranovsky.banking.service.BankCardService;
-import by.epam.baranovsky.banking.service.UserService;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
-import by.epam.baranovsky.banking.service.impl.AccountServiceImpl;
-import by.epam.baranovsky.banking.service.impl.BankCardServiceImpl;
-import by.epam.baranovsky.banking.service.impl.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +20,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of Command
+ * used to forward user to account info page.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class GoToAccountInfoCommand extends AbstractCommand {
 
     private static final String REDIRECT_TO_ACCS=String.format(
@@ -34,7 +34,18 @@ public class GoToAccountInfoCommand extends AbstractCommand {
             RequestParamName.COMMAND_NAME,
             CommandName.GOTO_ACCOUNTS);
 
-
+    /**
+     * {@inheritDoc}
+     * <p>
+     *     Redirects to all accounts page if user can not view this account,
+     *     or forwards to the error page if no such account was found.
+     * </p>
+     * <p>
+     *     Regular user can view full info on account and can manage the account,
+     *     admins and employees can only view information on account
+     *     and manipulate its status.
+     * </p>
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int accountId = Integer.parseInt(request.getParameter(RequestParamName.ACCOUNT_ID));
@@ -59,14 +70,23 @@ public class GoToAccountInfoCommand extends AbstractCommand {
             }
         } else{
             request.getRequestDispatcher(PageUrls.ERROR_PAGE).forward(request, response);
-
         }
 
     }
 
+    /**
+     * Checks if user can view full or partial info on the account.
+     * <p>
+     *     If current user is an employee or admin viewing
+     *     another user's account, view-only attribute is set in request.
+     * </p>
+     * @param request Servlet request.
+     * @param userList List of users of given account.
+     * @return {@code true} if user can view info on acount, {@code false} otherwise.
+     */
     private boolean checkIfCanView(HttpServletRequest request, List<Integer> userList){
-        Integer currentUserId = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
-        Integer currentUserRole = (Integer) request.getSession().getAttribute(SessionParamName.USER_ROLE_ID);
+        Integer currentUserId = (Integer) request.getSession().getAttribute(SessionAttributeName.USER_ID);
+        Integer currentUserRole = (Integer) request.getSession().getAttribute(SessionAttributeName.USER_ROLE_ID);
 
         if(!userList.contains(currentUserId)){
             if(!currentUserRole.equals(DBMetadata.USER_ROLE_REGULAR)){
@@ -79,6 +99,12 @@ public class GoToAccountInfoCommand extends AbstractCommand {
         return true;
     }
 
+    /**
+     * Retrieves full names of users with given IDs.
+     * @param userIds List of users IDs.
+     * @return List of strings - full names of users.
+     * @throws ServiceException
+     */
     private List<String> getUsersInfo(List<Integer> userIds) throws ServiceException {
         List<String> userInfo = new ArrayList<>();
         StringBuilder builder = new StringBuilder();
@@ -97,11 +123,17 @@ public class GoToAccountInfoCommand extends AbstractCommand {
         return userInfo;
     }
 
+    /**
+     * Retrieves all cards linked to account with given ID.
+     * @param accountId ID of account in question.
+     * @return List of banking cards linked to account with given ID.
+     * @throws ServiceException
+     */
     private List<BankingCard> getCardsForThisAccount(Integer accountId) throws ServiceException{
         List<BankingCard> cards = cardService.findByAccount(accountId);
 
         for(BankingCard card : cards){
-            card.setNumber(maskNumber(card.getNumber()));
+            card.setNumber(maskCardNumber(card.getNumber()));
         }
 
         return cards;

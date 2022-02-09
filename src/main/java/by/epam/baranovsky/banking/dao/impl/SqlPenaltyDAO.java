@@ -1,6 +1,7 @@
 package by.epam.baranovsky.banking.dao.impl;
 
 import by.epam.baranovsky.banking.constant.DBMetadata;
+import by.epam.baranovsky.banking.dao.PenaltyDAO;
 import by.epam.baranovsky.banking.dao.exception.DAOException;
 import by.epam.baranovsky.banking.dao.query.Query;
 import by.epam.baranovsky.banking.dao.query.QueryMaster;
@@ -13,9 +14,17 @@ import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
 
 import java.util.List;
 
-public class SqlPenaltyDAO implements by.epam.baranovsky.banking.dao.PenaltyDAO {
+/**
+ * Implementation of PenaltyDAO for use with MySQL DB.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
+public class SqlPenaltyDAO implements PenaltyDAO {
 
+    /** Mapper to parse ResultSet objects into entities. */
     private static final RowMapper<Penalty> mapper = RowMapperFactory.getPenaltyRowMapper();
+
+    /** Object that executes SQL queries. */
     private static final QueryMaster<Penalty> queryMaster = new SqlQueryMaster<>(mapper);
 
     private static final String SQL_SELECT_ALL = String.format(
@@ -46,6 +55,11 @@ public class SqlPenaltyDAO implements by.epam.baranovsky.banking.dao.PenaltyDAO 
             "DELETE FROM %s WHERE %s=?",
             DBMetadata.PENALTIES_TABLE, DBMetadata.PENALTIES_ID);
 
+    /**
+     * {@inheritDoc}
+     * @return Number of rows affected in DB.
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public Integer update(Penalty entity) throws DAOException {
         return queryMaster.executeUpdate(
@@ -59,6 +73,11 @@ public class SqlPenaltyDAO implements by.epam.baranovsky.banking.dao.PenaltyDAO 
                 entity.getId());
     }
 
+    /**
+     * {@inheritDoc}
+     * @return Generated key of inserted row.
+     * @throws DAOException if DAOException is thrown by QueryMaster.
+     */
     @Override
     public Integer create(Penalty entity) throws DAOException {
         return queryMaster.executeUpdate(
@@ -71,26 +90,48 @@ public class SqlPenaltyDAO implements by.epam.baranovsky.banking.dao.PenaltyDAO 
                 entity.getStatusId());
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public Penalty findEntityById(Integer id) throws DAOException {
         return queryMaster.executeSingleEntityQuery(SQL_SELECT_BY_ID,id);
     }
 
+    /**
+     * {@inheritDoc}
+     * @return Number of rows affected in DB.
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public Integer delete(Integer id) throws DAOException {
         return queryMaster.executeUpdate(SQL_DELETE, id);
     }
 
+    /**
+     * {@inheritDoc}
+     * @return Number of rows affected in DB.
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public Integer delete(Penalty entity) throws DAOException {
         return delete(entity.getId());
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public List<Penalty> findAll() throws DAOException {
         return queryMaster.executeQuery(SQL_SELECT_ALL);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public List<Penalty> findByCriteria(Criteria<? extends EntityParameters.PenaltyParams> criteria) throws DAOException {
         Query query = criteria.generateQuery(SQL_SELECT_ALL);

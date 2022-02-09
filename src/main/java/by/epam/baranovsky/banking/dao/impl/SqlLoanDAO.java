@@ -16,9 +16,17 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of LoanDAO for use with MySQL DB.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class SqlLoanDAO implements LoanDAO {
 
+    /** Mapper to parse ResultSet objects into entities. */
     private static final RowMapper<Loan> mapper = RowMapperFactory.getLoanRowMapper();
+
+    /** Object that executes SQL queries. */
     private static final QueryMaster<Loan> queryMaster = new SqlQueryMaster<>(mapper);
 
     private static final String SQL_SELECT_ALL = String.format(
@@ -56,6 +64,11 @@ public class SqlLoanDAO implements LoanDAO {
             "DELETE FROM %s WHERE %s=? LIMIT 1",
             DBMetadata.LOANS_TABLE, DBMetadata.LOANS_ID);
 
+    /**
+     * {@inheritDoc}
+     * @return Number of rows affected in DB.
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public Integer update(Loan entity) throws DAOException {
         return queryMaster.executeUpdate(
@@ -73,6 +86,17 @@ public class SqlLoanDAO implements LoanDAO {
                 entity.getId());
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     *     Inserts a row into loans table,
+     *     as well as subtracts the value of a loan
+     *     from bank own account and adds it to
+     *     a borrower's account.
+     * </p>
+     * @return Generated key of inserted loan row.
+     * @throws DAOException if DAOException is thrown by QueryMaster.
+     */
     @Override
     public Integer create(Loan entity) throws DAOException {
         List<Query> queries = new ArrayList<>();
@@ -98,26 +122,48 @@ public class SqlLoanDAO implements LoanDAO {
         return queryMaster.executeTransaction(queries);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if DAOException is thrown by QueryMaster.
+     */
     @Override
     public Loan findEntityById(Integer id) throws DAOException {
         return queryMaster.executeSingleEntityQuery(SQL_SELECT_BY_ID, id);
     }
 
+    /**
+     * {@inheritDoc}
+     * @return Number of rows affected in DB.
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public Integer delete(Integer id) throws DAOException {
         return queryMaster.executeUpdate(SQL_DELETE, id);
     }
 
+    /**
+     * {@inheritDoc}
+     * @return Number of rows affected in DB.
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public Integer delete(Loan entity) throws DAOException {
         return delete(entity.getId());
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public List<Loan> findAll() throws DAOException {
         return queryMaster.executeQuery(SQL_SELECT_ALL);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public List<Loan> findByCriteria(Criteria<? extends EntityParameters.LoanParams> criteria) throws DAOException {
         Query query = criteria.generateQuery(SQL_SELECT_ALL);

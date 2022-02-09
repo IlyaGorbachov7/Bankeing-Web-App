@@ -10,7 +10,13 @@ import by.epam.baranovsky.banking.entity.Operation;
 
 import java.util.List;
 
-public abstract class AbstractTransferCommand implements OperationCommand{
+/**
+ * Skeletal implementation of OperationCommand
+ * for operations that involve transfer of money from card/account to card/account.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
+public abstract class AbstractTransferCommand extends AbstractOperationCommand{
 
     protected static final String SQL_INSERT_OPERATION = String.format(
             "INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, NOW(),?)",
@@ -33,9 +39,13 @@ public abstract class AbstractTransferCommand implements OperationCommand{
             DBMetadata.BANK_CARDS_ACCOUNT_ID, DBMetadata.BANK_CARDS_TABLE,
             DBMetadata.BANK_CARDS_ID);
 
-    protected QueryMaster<Operation> master
-            = new SqlQueryMaster<>(RowMapperFactory.getOperationRowMapper());
-
+    /**
+     * Builds a Query object with SQL INSERT statement for passed operation.
+     * @param operation Operation to insert.
+     * @return Instance of Query with prepared SQL INSERT statement
+     * and parameters extracted from operation.
+     * @see Query
+     */
     protected static Query getBasicInsert(Operation operation){
         return new Query(
                 SQL_INSERT_OPERATION,
@@ -50,5 +60,12 @@ public abstract class AbstractTransferCommand implements OperationCommand{
                 operation.getCommission());
     }
 
-    protected abstract List<Query> prepareQuery(Operation operation) throws DAOException;
+    /**
+     * Prepares a list of queries for transactional update.
+     * @param operation operation to prepare transaction for.
+     * @return Ordered list of Queries ready for transaction
+     * @throws DAOException
+     * @see QueryMaster#executeTransaction(List)
+     */
+    protected abstract List<Query> prepareTransaction(Operation operation) throws DAOException;
 }

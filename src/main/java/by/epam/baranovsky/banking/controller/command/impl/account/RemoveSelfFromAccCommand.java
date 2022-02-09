@@ -7,11 +7,9 @@ import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
-import by.epam.baranovsky.banking.controller.constant.SessionParamName;
+import by.epam.baranovsky.banking.controller.constant.SessionAttributeName;
 import by.epam.baranovsky.banking.entity.Account;
-import by.epam.baranovsky.banking.service.AccountService;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
-import by.epam.baranovsky.banking.service.impl.AccountServiceImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,8 +17,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
+/**
+ * Implementation of Command
+ * used for removing current user
+ * from account's list of users.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class RemoveSelfFromAccCommand extends AbstractCommand {
 
     private static final String REDIRECT_TO_ACCS=String.format(
@@ -29,9 +33,16 @@ public class RemoveSelfFromAccCommand extends AbstractCommand {
             RequestParamName.COMMAND_NAME,
             CommandName.GOTO_ACCOUNTS);
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     *     Forwards to previous request in case of failure,
+     *     redirects to previous request otherwise.
+     * </p>
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer userId = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
+        Integer userId = (Integer) request.getSession().getAttribute(SessionAttributeName.USER_ID);
 
         Integer accountId = Integer.valueOf(request.getParameter(RequestParamName.ACCOUNT_ID));
         try{
@@ -61,6 +72,14 @@ public class RemoveSelfFromAccCommand extends AbstractCommand {
         }
     }
 
+    /**
+     * Checks if current user is the only user left in account's list of users.
+     * @param userId ID of current user.
+     * @param accountId ID of the account in question.
+     * @return {@code true} if current user is the only user left in account's list of users,
+     * {@code false} otherwise.
+     * @throws ServiceException
+     */
     private boolean isOnlyUser(Integer userId, Integer accountId) throws ServiceException {
         List<Integer> users = accountService.findUsers(accountId);
         if(users.contains(userId) && users.size()==1){

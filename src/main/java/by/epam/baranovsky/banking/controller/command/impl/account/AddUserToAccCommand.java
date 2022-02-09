@@ -7,7 +7,7 @@ import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
-import by.epam.baranovsky.banking.controller.constant.SessionParamName;
+import by.epam.baranovsky.banking.controller.constant.SessionAttributeName;
 import by.epam.baranovsky.banking.entity.Account;
 import by.epam.baranovsky.banking.entity.User;
 import by.epam.baranovsky.banking.entity.criteria.Criteria;
@@ -24,6 +24,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Implementation of Command
+ * used for adding users to the list of account's users.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class AddUserToAccCommand extends AbstractCommand {
 
     private static final String REDIRECT_TO_ACC_INFO=String.format(
@@ -32,13 +38,16 @@ public class AddUserToAccCommand extends AbstractCommand {
             RequestParamName.COMMAND_NAME,
             CommandName.GOTO_ACC_INFO_COMMAND);
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User user;
+
         try{
             Account account = accountService.findById(Integer.valueOf(request.getParameter(RequestParamName.ACCOUNT_ID)));
             account.setUsers(accountService.findUsers(account.getId()));
-            Integer currentUser = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
+            Integer currentUser = (Integer) request.getSession().getAttribute(SessionAttributeName.USER_ID);
             if(account.getStatusId().equals(DBMetadata.ACCOUNT_STATUS_BLOCKED)){
                 request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.ACCOUNT_LOCKED);
                 request.getRequestDispatcher(PageUrls.ACCOUNT_INFO_PAGE).forward(request,response);
@@ -72,6 +81,14 @@ public class AddUserToAccCommand extends AbstractCommand {
 
     }
 
+    /**
+     * Checks if there are errors in results of a query
+     * and sets error messages in request if there are.
+     * @param list List of User objects retrieved by query.
+     * @param request Servlet request.
+     * @return {@code true} if only one unbanned user was retrieved,
+     * {@code false} otherwise.
+     */
     private boolean handleQueryErrors(List<User> list, HttpServletRequest request) {
 
         if(list.isEmpty()){
@@ -91,6 +108,12 @@ public class AddUserToAccCommand extends AbstractCommand {
         return true;
     }
 
+    /**
+     * Generates Criteria object to find user by parameters
+     * that are retrieved from request.
+     * @param request Servlet request.
+     * @return Instance of Criteria.
+     */
     private Criteria<EntityParameters.UserParams> createUserCriteria(HttpServletRequest request){
         Criteria<EntityParameters.UserParams> criteria = new Criteria<>();
 

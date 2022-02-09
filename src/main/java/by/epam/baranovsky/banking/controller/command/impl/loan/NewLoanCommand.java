@@ -8,7 +8,7 @@ import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
-import by.epam.baranovsky.banking.controller.constant.SessionParamName;
+import by.epam.baranovsky.banking.controller.constant.SessionAttributeName;
 import by.epam.baranovsky.banking.entity.Loan;
 import by.epam.baranovsky.banking.entity.criteria.Criteria;
 import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
@@ -23,25 +23,45 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
+/**
+ * Implementation of Command
+ * used for taking a loan.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class NewLoanCommand extends AbstractCommand {
 
+    /** Minimal loan term. */
     private static final Integer MIN_TIME = Integer.valueOf(
             ConfigManager.getInstance().getValue(ConfigParams.LOANS_MIN_TIME));
+    /** Maximal loan term. */
     private static final Integer MAX_TIME = Integer.valueOf(
             ConfigManager.getInstance().getValue(ConfigParams.LOANS_MAX_TIME));
+    /** Minimal loan interest rate. */
     private static final Double MAX_INTEREST = Double.valueOf(
             ConfigManager.getInstance().getValue(ConfigParams.LOANS_MAX_INTEREST));
+    /** Minimal loan interest rate. */
     private static final Double MIN_INTEREST = Double.valueOf(
             ConfigManager.getInstance().getValue(ConfigParams.LOANS_MIN_INTEREST));
+
+    /** Minimal loan value. */
     private static final Double MIN_VALUE = Double.valueOf(
             ConfigManager.getInstance().getValue(ConfigParams.LOAN_MIN_VALUE));
+
+    /** Maximal amount of active loans for one user. */
     private static final Integer MAX_ACTIVE_LOANS = Integer.valueOf(
             ConfigManager.getInstance().getValue(ConfigParams.LOANS_MAX_LOANS));
 
-
+    /**
+    * {@inheritDoc}
+     * <p>
+     *     Forwards to previous request page if loan was taken unsuccessfully,
+     *     redirects to previous request page otherwise.
+     * </p>
+    */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer currentUser = (Integer) request.getSession().getAttribute(SessionParamName.USER_ID);
+        Integer currentUser = (Integer) request.getSession().getAttribute(SessionAttributeName.USER_ID);
         Integer accountId = Integer.valueOf(request.getParameter(RequestParamName.ACCOUNT_ID));
         Double startingValue = Double.parseDouble(request.getParameter(RequestParamName.LOAN_STARTING));
 
@@ -90,6 +110,14 @@ public class NewLoanCommand extends AbstractCommand {
 
     }
 
+    /**
+     * Checks if user can take a new loan.
+     * User with too much active loans can not take a new one.
+     * @param currentUser Current user's ID.
+     * @return {@code true} if current user can take a new loan,
+     * {@code false} otherwise.
+     * @throws ServiceException
+     */
     private boolean checkIfCanGetLoan(Integer currentUser) throws ServiceException {
         Criteria<EntityParameters.LoanParams> criteria = new Criteria<>();
         criteria.add(EntityParameters.LoanParams.USER, new SingularValue<>(currentUser));
@@ -101,6 +129,18 @@ public class NewLoanCommand extends AbstractCommand {
         return  loanService.findByCriteria(criteria).size()<MAX_ACTIVE_LOANS;
     }
 
+    /**
+     * Calculates loan parameters:
+     * <ul>
+     *     <li>Total value.</li>
+     *     <li>Interest rate</li>
+     *     <li>Singular payment value.</li>
+     * </ul>
+     * And builds a Loan entity with them.
+     * @param startingValue Starting value of a loan.
+     * @param time Term of a loan.
+     * @return Instance of Loan.
+     */
     private Loan calculateLoan(Double startingValue, Integer time){
         Loan loan = new Loan();
         loan.setStartingValue(startingValue);

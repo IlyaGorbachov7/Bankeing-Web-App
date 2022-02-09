@@ -7,9 +7,21 @@ import by.epam.baranovsky.banking.entity.Bill;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Implementation of RowMapper
+ * used to build Bill entities.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class BillRowMapper implements RowMapper<Bill> {
 
-
+    /**
+     * {@inheritDoc}
+     * @param resultSet JDBC ResultSet of a query.
+     * @return instance of Bill.
+     * @throws SQLException
+     */
     @Override
     public Bill map(ResultSet resultSet) throws SQLException {
         Bill bill = new Bill();

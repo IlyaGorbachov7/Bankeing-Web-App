@@ -8,6 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Front controller servlet that processes all incoming requests.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class Controller extends HttpServlet {
 
     @Override
@@ -22,6 +27,13 @@ public class Controller extends HttpServlet {
         process(req, resp);
     }
 
+    /**
+     * Executes the command from request.
+     * @param request Servlet request.
+     * @param response Servlet response.
+     * @throws ServletException
+     * @throws IOException
+     */
     private void process(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
         Command command = CommandProvider.getInstance().getCommand(request);

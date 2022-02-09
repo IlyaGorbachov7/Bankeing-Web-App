@@ -2,6 +2,11 @@ package by.epam.baranovsky.banking.dao.connectionpool;
 
 import java.util.ResourceBundle;
 
+/**
+ * Utility class that manages retrieving data from database parameters resource bundle.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class DBResourceManager {
 
     private static final DBResourceManager instance = new DBResourceManager();

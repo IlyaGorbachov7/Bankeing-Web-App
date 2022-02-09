@@ -14,9 +14,18 @@ import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
 
 import java.util.List;
 
+/**
+ * Implementation of UserDAO for use with MySQL DB.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class SqlUserDAO implements UserDAO {
 
+
+    /** Mapper to parse ResultSet objects into entities. */
     private static final RowMapper<User> mapper = RowMapperFactory.getUserRowMapper();
+
+    /** Object that executes SQL queries. */
     private static final QueryMaster<User> queryMaster = new SqlQueryMaster<>(mapper);
 
     private static final String SQL_SELECT_ALL = String.format(
@@ -57,6 +66,10 @@ public class SqlUserDAO implements UserDAO {
             "DELETE FROM %s WHERE %s=? LIMIT 1",
             DBMetadata.USERS_TABLE, DBMetadata.USERS_ID);
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public User findByEmail(String userEmail) throws DAOException {
         return queryMaster.executeSingleEntityQuery(
@@ -64,12 +77,20 @@ public class SqlUserDAO implements UserDAO {
                 userEmail);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public List<User> findByCriteria(Criteria<? extends EntityParameters.UserParams> criteria) throws DAOException {
         Query query = criteria.generateQuery(SQL_SELECT_ALL);
         return queryMaster.executeQuery(query.getSqlQueryString(), query.getParameters());
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public User findEntityById(Integer id) throws DAOException {
         return queryMaster.executeSingleEntityQuery(
@@ -77,11 +98,20 @@ public class SqlUserDAO implements UserDAO {
                 id);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public List<User> findAll() throws DAOException {
         return queryMaster.executeQuery(SQL_SELECT_ALL);
     }
 
+    /**
+     * {@inheritDoc}
+     * @return Number of rows affected in DB.
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public Integer update(User user) throws DAOException {
 
@@ -103,6 +133,12 @@ public class SqlUserDAO implements UserDAO {
                 user.getId());
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>Password of passed user is not hashed or encoded in any way or manner.</p>
+     * @return Generated key of inserted row.
+     * @throws DAOException if DAOException is thrown by QueryMaster.
+     */
     @Override
     public Integer create(User user) throws DAOException {
         return queryMaster.executeUpdate(
@@ -118,11 +154,21 @@ public class SqlUserDAO implements UserDAO {
                 user.getRoleId());
     }
 
+    /**
+     * {@inheritDoc}
+     * @return Number of rows affected in DB.
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public Integer delete(Integer id) throws DAOException {
         return queryMaster.executeUpdate(SQL_DELETE, id);
     }
 
+    /**
+     * {@inheritDoc}
+     * @return Number of rows affected in DB.
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public Integer delete(User entity) throws DAOException {
         return delete(entity.getId());

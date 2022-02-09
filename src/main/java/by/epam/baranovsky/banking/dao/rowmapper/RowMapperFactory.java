@@ -2,6 +2,12 @@ package by.epam.baranovsky.banking.dao.rowmapper;
 
 import by.epam.baranovsky.banking.dao.rowmapper.impl.*;
 
+/**
+ * Factory class for row mappers.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class RowMapperFactory {
 
     private static final UserRowMapper USER_ROW_MAPPER = new UserRowMapper();

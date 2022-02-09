@@ -14,11 +14,21 @@ import by.epam.baranovsky.banking.service.validator.OperationValidator;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of OperationService.
+ * Provides utils for working with Operation entities.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class OperationServiceImpl implements OperationService {
 
     private final OperationValidator validator = new OperationValidator();
     private final OperationDAO operationDAO = SqlDAOFactory.getInstance().getOperationDAO();
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Operation> findByCriteria(Criteria<? extends EntityParameters.OperationParam> criteria) throws ServiceException {
         List<Operation> operations = new ArrayList<>();
@@ -30,6 +40,9 @@ public class OperationServiceImpl implements OperationService {
         return operations;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Operation findById(Integer id) throws ServiceException {
         Operation operation;
@@ -41,6 +54,9 @@ public class OperationServiceImpl implements OperationService {
         return operation;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean update(Operation operation) throws ServiceException {
         Integer result;
@@ -58,6 +74,9 @@ public class OperationServiceImpl implements OperationService {
         return result>0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Operation create(Operation operation) throws ServiceException {
         Operation result;
@@ -72,6 +91,9 @@ public class OperationServiceImpl implements OperationService {
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean delete(Integer id) throws ServiceException {
         try {
@@ -81,6 +103,9 @@ public class OperationServiceImpl implements OperationService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean delete(Operation operation) throws ServiceException {
         Integer res;
@@ -95,6 +120,9 @@ public class OperationServiceImpl implements OperationService {
         return res>0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Operation> findAll() throws ServiceException {
         List<Operation> operations;

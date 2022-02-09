@@ -6,12 +6,10 @@ import by.epam.baranovsky.banking.controller.command.AbstractCommand;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestAttributeNames;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
-import by.epam.baranovsky.banking.controller.constant.SessionParamName;
+import by.epam.baranovsky.banking.controller.constant.SessionAttributeName;
 import by.epam.baranovsky.banking.entity.User;
-import by.epam.baranovsky.banking.service.UserService;
 import by.epam.baranovsky.banking.service.exception.ServiceException;
 import by.epam.baranovsky.banking.service.exception.ValidationException;
-import by.epam.baranovsky.banking.service.impl.UserServiceImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -24,6 +22,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Implementation of Command
+ * used for user registration.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class RegisterCommand extends AbstractCommand {
 
     private static final String REDIRECT_TO_HOME=String.format(
@@ -32,6 +36,16 @@ public class RegisterCommand extends AbstractCommand {
             RequestParamName.COMMAND_NAME,
             CommandName.GOTO_MAIN);
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     *     If registration is successful, redirects to home page,
+     *     otherwise forwards back to registration page.
+     * </p>
+     * <p>
+     *     Puts created user data to session.
+     * </p>
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -41,8 +55,8 @@ public class RegisterCommand extends AbstractCommand {
             try{
                user = registerUser(request);
                HttpSession session = request.getSession();
-               session.setAttribute(SessionParamName.USER_ID, user.getId());
-               session.setAttribute(SessionParamName.USER_ROLE_ID, user.getRoleId());
+               session.setAttribute(SessionAttributeName.USER_ID, user.getId());
+               session.setAttribute(SessionAttributeName.USER_ROLE_ID, user.getRoleId());
                response.sendRedirect(REDIRECT_TO_HOME);
             } catch (ValidationException e){
                 request.setAttribute(RequestAttributeNames.ERROR_MSG, e.getMessage());
@@ -54,7 +68,7 @@ public class RegisterCommand extends AbstractCommand {
                 RequestDispatcher dispatcher = request.getRequestDispatcher(PageUrls.REGISTER_PAGE);
                 dispatcher.forward(request,response);
             }
-        }else{
+        } else {
             request.setAttribute(RequestAttributeNames.ERROR_MSG, Message.REGISTER_PASS_MISMATCH);
             RequestDispatcher dispatcher = request.getRequestDispatcher(PageUrls.REGISTER_PAGE);
             dispatcher.forward(request,response);
@@ -62,6 +76,12 @@ public class RegisterCommand extends AbstractCommand {
 
     }
 
+    /**
+     * Validates if password input matches password confirmation.
+     * @param request Servlet request.
+     * @return {@code true} if password input matches password confirmation,
+     * {@code false} otherwise.
+     */
     private boolean validatePassword(HttpServletRequest request){
         String pass = request.getParameter(RequestParamName.PASSWORD);
         String passConfirm = request.getParameter(RequestParamName.CONF_PASSWORD);
@@ -69,6 +89,12 @@ public class RegisterCommand extends AbstractCommand {
         return !pass.isBlank() && pass.equals(passConfirm);
     }
 
+    /**
+     * Builds user entity and saves it to database.
+     * @param request Servlet request.
+     * @return Registered user.
+     * @throws ServiceException if userService throws ServiceException.
+     */
     private User registerUser(HttpServletRequest request) throws ServiceException {
         String email = request.getParameter(RequestParamName.EMAIL);
         String password = request.getParameter(RequestParamName.PASSWORD);

@@ -4,7 +4,7 @@ import by.epam.baranovsky.banking.constant.CommandName;
 import by.epam.baranovsky.banking.constant.DBMetadata;
 import by.epam.baranovsky.banking.controller.constant.PageUrls;
 import by.epam.baranovsky.banking.controller.constant.RequestParamName;
-import by.epam.baranovsky.banking.controller.constant.SessionParamName;
+import by.epam.baranovsky.banking.controller.constant.SessionAttributeName;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -12,12 +12,25 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Servlet filter that controls access to servlet commands depending on user's role.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class AccessFilter implements Filter {
 
+    /** List of commands accessible to regular user*/
     private final List<String> regularUserCommands = new ArrayList<>();
+    /** List of commands accessible to an employee*/
     private final List<String> employeeCommands = new ArrayList<>();
+
+    /** List of commands accessible to guest*/
     private final List<String> guestCommands = new ArrayList<>();
 
+    /**
+     * {@inheritDoc}
+     * <p>Initializes filter and puts command names into access lists.</p>
+     */
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         guestCommands.add(CommandName.LOGIN_COMMAND);
@@ -62,12 +75,19 @@ public class AccessFilter implements Filter {
         regularUserCommands.add(CommandName.NEW_LOAN);
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     *     Determines if current user has access to the command they're trying to execute.
+     *     If they have no access rights, they are forwarded to error page instead.
+     * </p>
+     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
 
-        Integer currentUserRoleId = (Integer) request.getSession().getAttribute(SessionParamName.USER_ROLE_ID);
+        Integer currentUserRoleId = (Integer) request.getSession().getAttribute(SessionAttributeName.USER_ROLE_ID);
         String command = request.getParameter(RequestParamName.COMMAND_NAME);
 
         if(!checkIfAllowed(command, currentUserRoleId)){
@@ -77,11 +97,22 @@ public class AccessFilter implements Filter {
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void destroy() {
 
     }
 
+    /**
+     * Checks if execution of a command is allowed to current user.
+     * @param command Name of command in question.
+     * @param role Role of current user.
+     * @return {@code true} if command is within the list
+     * that correlates with current user's role or if current user is administrator,
+     * {@code false} otherwise.
+     */
     private boolean checkIfAllowed(String command, Integer role){
         if (command==null || command.isBlank()){
             return false;

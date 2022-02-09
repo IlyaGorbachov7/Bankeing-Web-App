@@ -7,7 +7,21 @@ import by.epam.baranovsky.banking.entity.Penalty;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Implementation of RowMapper
+ * used to build Penalty entities.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class PenaltyRowMapper implements RowMapper<Penalty> {
+
+    /**
+     * {@inheritDoc}
+     * @param resultSet JDBC ResultSet of a query.
+     * @return instance of Penalty.
+     * @throws SQLException
+     */
     @Override
     public Penalty map(ResultSet resultSet) throws SQLException {
         Penalty penalty = new Penalty();

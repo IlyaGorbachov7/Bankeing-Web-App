@@ -15,6 +15,7 @@ public class OperationValidator extends AbstractValidator{
      * @param operation Operation to validate.
      * @return {@code false} if:
      * <ul>
+     *     <li>Object itself is null</li>
      *     <li>Type id is null</li>
      *     <li>Bill id and penalty id are not null at the same time</li>
      *     <li>Value is not null and value is infinite or NaN</li>
@@ -23,7 +24,7 @@ public class OperationValidator extends AbstractValidator{
      */
     public boolean validate(Operation operation){
 
-        if(!notNull(operation.getTypeId())){
+        if(!notNull(operation, operation.getTypeId())){
             return false;
         }
 

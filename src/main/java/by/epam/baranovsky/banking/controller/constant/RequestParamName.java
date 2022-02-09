@@ -1,5 +1,11 @@
 package by.epam.baranovsky.banking.controller.constant;
 
+/**
+ * Utility class that stores constant strings
+ * that represent names of request parameters.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public final class RequestParamName {
     public static final String CONTROLLER="controller";
     public static final String COMMAND_NAME="command";

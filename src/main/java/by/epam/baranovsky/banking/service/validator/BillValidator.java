@@ -15,6 +15,7 @@ public class BillValidator extends AbstractValidator {
      * @param william Bill to validate.
      * @return {@code false} if:
      * <ul>
+     *     <li>Object itself is null</li>
      *     <li>Issue date, status id, user id, payment account id or value are null</li>
      *     <li>Value is negative</li>
      * </ul>
@@ -22,7 +23,7 @@ public class BillValidator extends AbstractValidator {
      */
     public boolean validate(Bill william){
 
-        if(!notNull( william.getIssueDate(), william.getStatusId(),
+        if(!notNull( william, william.getIssueDate(), william.getStatusId(),
                 william.getUserId(), william.getPaymentAccountId(),
                 william.getValue())){
             return false;

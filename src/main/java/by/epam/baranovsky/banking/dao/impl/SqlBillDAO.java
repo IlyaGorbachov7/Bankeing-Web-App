@@ -15,9 +15,17 @@ import by.epam.baranovsky.banking.entity.criteria.EntityParameters;
 import java.sql.Date;
 import java.util.List;
 
+/**
+ * Implementation of BillDAO for use with MySQL DB.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class SqlBillDAO implements BillDAO {
 
+    /** Mapper to parse ResultSet objects into entities. */
     private static final RowMapper<Bill> mapper = RowMapperFactory.getBillRowMapper();
+
+    /** Object that executes SQL queries. */
     private static final QueryMaster<Bill> queryMaster = new SqlQueryMaster<>(mapper);
 
     private static final String SQL_SELECT_ALL = String.format(
@@ -53,6 +61,11 @@ public class SqlBillDAO implements BillDAO {
             DBMetadata.BILLS_TABLE, DBMetadata.BILLS_ID
     );
 
+    /**
+     * {@inheritDoc}
+     * @return Number of rows affected in DB.
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public Integer update(Bill entity) throws DAOException {
 
@@ -71,6 +84,11 @@ public class SqlBillDAO implements BillDAO {
                 entity.getId());
     }
 
+    /**
+     * {@inheritDoc}
+     * @return Generated key of inserted row.
+     * @throws DAOException if DAOException is thrown by QueryMaster.
+     */
     @Override
     public Integer create(Bill entity) throws DAOException {
         return queryMaster.executeUpdate(
@@ -87,26 +105,48 @@ public class SqlBillDAO implements BillDAO {
                 entity.getNotice());
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public Bill findEntityById(Integer id) throws DAOException {
         return queryMaster.executeSingleEntityQuery(SQL_SELECT_BY_ID, id);
     }
 
+    /**
+     * {@inheritDoc}
+     * @return Number of rows affected in DB.
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public Integer delete(Integer id) throws DAOException {
         return queryMaster.executeUpdate(SQL_DELETE, id);
     }
 
+    /**
+     * {@inheritDoc}
+     * @return Number of rows affected in DB.
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public Integer delete(Bill entity) throws DAOException {
         return delete(entity.getId());
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public List<Bill> findAll() throws DAOException {
         return queryMaster.executeQuery(SQL_SELECT_ALL);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws DAOException if QueryMaster throws DAOException
+     */
     @Override
     public List<Bill> findByCriteria(Criteria<? extends EntityParameters.BillParam> criteria) throws DAOException {
         Query query = criteria.generateQuery(SQL_SELECT_ALL);

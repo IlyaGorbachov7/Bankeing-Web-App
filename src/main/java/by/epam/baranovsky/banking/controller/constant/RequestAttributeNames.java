@@ -1,7 +1,12 @@
 package by.epam.baranovsky.banking.controller.constant;
 
+/**
+ * Utility class that stores constant strings
+ * that represent names of request attributes.
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public final class RequestAttributeNames {
-    private RequestAttributeNames(){}
 
     public static final String USER_DATA = "USER_DATA";
     public static final String OPERATIONS_DATA = "OPERATIONS_DATA";
@@ -45,4 +50,5 @@ public final class RequestAttributeNames {
     public static final String ACQUIRED_BILLS="ACQUIRED_BILLS";
     public static final String BILL_REQUESTS="BILL_REQUESTS";
 
+    private RequestAttributeNames(){}
 }

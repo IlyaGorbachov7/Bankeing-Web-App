@@ -7,8 +7,21 @@ import by.epam.baranovsky.banking.entity.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Implementation of RowMapper
+ * used to build User entities.
+ *
+ * @author Baranovsky E. K.
+ * @version 1.0.0
+ */
 public class UserRowMapper implements RowMapper<User> {
 
+    /**
+     * {@inheritDoc}
+     * @param resultSet JDBC ResultSet of a query.
+     * @return instance of User.
+     * @throws SQLException
+     */
     @Override
     public User map(ResultSet resultSet) throws SQLException {
         User user = new User();
